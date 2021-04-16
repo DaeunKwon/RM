@@ -13,11 +13,11 @@ const router = new VueRouter({
     routes: [
         {
             path: '/',
-            component: login,
+            component: join,
         },
         {
-            path: '/join',
-            component: join,
+            path: '/login',
+            component: login,
         },
 
         {

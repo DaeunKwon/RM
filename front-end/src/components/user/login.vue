@@ -23,7 +23,7 @@
       >
 
       <b-button type="submit" variant="primary">Login</b-button>
-      <b-button variant="info" href="/join">Join</b-button>
+      <b-button variant="info" href="/">Join</b-button>
     </b-form>
   </div>
 </template>
