@@ -1,19 +1,11 @@
 package com.example.demo.service;
 
-import java.util.Map;
+import com.example.demo.domain.UserVO;
 
-import com.example.demo.dao.UserDAO;
+public interface UserService {
+    public void join(UserVO uvo);
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+    public void modify(UserVO uvo);
 
-@Service
-public class UserService {
-
-    @Autowired
-    private UserDAO userDAO;
-
-    public Map<String, Object> getUserInfo(int userSeq) {
-        return userDAO.getUserInfo(userSeq);
-    }
+    public void remove(String email);
 }

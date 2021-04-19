@@ -18,7 +18,7 @@ public class DataSourceConfig {
         sqlSessionFactory.setDataSource(datasource);
         // mapper 워치에 따라서 classpath*:static/mappers/**/*Mapper.xml 이부분을 조정
         sqlSessionFactory.setMapperLocations(
-                new PathMatchingResourcePatternResolver().getResources("classpath*:mappers/*Mapper.xml"));
+                new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*Mapper.xml"));
         return sqlSessionFactory.getObject();
     }
 
