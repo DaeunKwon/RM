@@ -5,7 +5,7 @@ const instance = axios.create({
 });
 
 function joinUser(userData) {
-    return instance.post('join', userData);
+    return instance.post('joinPOST', userData);
 }
 
 export { joinUser };

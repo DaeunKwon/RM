@@ -22,12 +22,17 @@ public class UserCtrl {
     @Autowired
     private UserService userSvc;
 
-    @GetMapping
-    public ModelAndView index() {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("index");
-        return mav;
+    @GetMapping(value = "/")
+    public String home() {
+        return "index.html";
     }
+
+    // @GetMapping
+    // public ModelAndView index() {
+    // ModelAndView mav = new ModelAndView();
+    // mav.setViewName("index");
+    // return mav;
+    // }
 
     @GetMapping(value = "login")
     public String login() {
@@ -52,6 +57,7 @@ public class UserCtrl {
     @ResponseBody
     public String joinPOST(@RequestBody UserVO uvo) {
         log.info(">>>>>>>>>>>>>>>>>joinPOST");
+        log.info(uvo.getEmail());
         userSvc.join(uvo);
         log.info(">>>>>>>>>>>>>>>>>join 성공");
         return "index.html";

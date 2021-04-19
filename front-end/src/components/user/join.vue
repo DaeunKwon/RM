@@ -63,14 +63,22 @@ export default {
     onSubmit() {
       //event.preventDefault();
       alert(JSON.stringify(this.user));
-      this.user.email = this.email;
-      this.user.name = this.name;
-      this.user.password = this.password;
-      this.$axios.post("/joinPOST", JSON.stringify(this.user), {
-        headers: {
-          "Content-Type": "application/json",
+      // this.user.email = this.email;
+      // this.user.name = this.name;
+      // this.user.password = this.password;
+      this.$axios.post(
+        "/joinPOST",
+        {
+          email: this.email,
+          name: this.name,
+          password: this.password,
         },
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
     },
 
     onReset(event) {
