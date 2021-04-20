@@ -1,14 +1,13 @@
 package com.example.demo.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class UserVO {
     private String email;
     private String name;
     private String password;
+    private String rmv_YN;
 
     public UserVO() {
     }
@@ -19,5 +18,4 @@ public class UserVO {
         this.password = password;
     }
 
-    
 }

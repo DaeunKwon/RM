@@ -19,7 +19,7 @@ public class UserDAOImp implements UserDAO {
 
     @Override
     public void join(UserVO uvo) {
-        log.info(">>>>>>>>>>>>>>>>>uservo 진입");
+        log.info(">>>>>>>>>>>>>>>>>userdao 진입");
         sql.insert(ns + ".join", uvo);
         log.info(">>>>>>>>>>>>>>>>>user 정보 넣기 성공");
     }
@@ -34,6 +34,11 @@ public class UserDAOImp implements UserDAO {
     public void delete(String email) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public int loginCheck(UserVO uvo) {
+        return sql.selectOne(ns + ".loginCheck", uvo);
     }
 
 }

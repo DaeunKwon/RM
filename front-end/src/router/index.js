@@ -5,12 +5,17 @@ import test1 from '../views/test1.vue';
 import hello from '../components/HelloWorld.vue';
 import login from '../components/user/login.vue';
 import join from '../components/user/join.vue'
+import prjList from '../views/project/list.vue';
 
 Vue.use(VueRouter);
 
 const router = new VueRouter({
     mode: 'history',
     routes: [
+        {
+            path: '/project/list',
+            component: prjList,
+        },
         {
             path: '/',
             component: join,

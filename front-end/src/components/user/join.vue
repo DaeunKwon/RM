@@ -27,6 +27,7 @@
 
       <b-form-group id="input-group-3" label="Password:" label-for="input-3">
         <b-form-input
+          type="password"
           id="input-3"
           v-model="user.password"
           placeholder="Enter password"
@@ -39,6 +40,7 @@
       >
       <b-button type="button" variant="danger" @click="onReset">Reset</b-button>
       <b-button variant="info" href="/login">Login</b-button>
+      <b-button variant="warning" href="/project/list">prjList</b-button>
     </b-form>
     <b-card class="mt-3" header="Form Data Result">
       <pre class="m-0">{{ user }}</pre>
@@ -63,22 +65,25 @@ export default {
     onSubmit() {
       //event.preventDefault();
       alert(JSON.stringify(this.user));
-      // this.user.email = this.email;
-      // this.user.name = this.name;
-      // this.user.password = this.password;
-      this.$axios.post(
-        "/joinPOST",
-        {
-          email: this.email,
-          name: this.name,
-          password: this.password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      this.$axios
+        .post(
+          "/joinPOST",
+          JSON.stringify({
+            email: this.user.email,
+            name: this.user.name,
+            password: this.user.password,
+          }),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          alert("환영합니다.");
+          this.$router.push("/project/list");
+        });
     },
 
     onReset(event) {

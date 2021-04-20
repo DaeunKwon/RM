@@ -9,4 +9,6 @@ public interface UserDAO {
 
     public void delete(String email);
 
+    public int loginCheck(UserVO uvo);
+
 }

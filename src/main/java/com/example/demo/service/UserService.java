@@ -8,4 +8,6 @@ public interface UserService {
     public void modify(UserVO uvo);
 
     public void remove(String email);
+
+    public int loginCheck(UserVO uvo);
 }

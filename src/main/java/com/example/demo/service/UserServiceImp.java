@@ -34,4 +34,9 @@ public class UserServiceImp implements UserService {
 
     }
 
+    @Override
+    public int loginCheck(UserVO uvo) {
+        return udao.loginCheck(uvo);
+    }
+
 }
