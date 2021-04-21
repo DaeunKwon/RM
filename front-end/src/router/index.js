@@ -6,6 +6,7 @@ import hello from '../components/HelloWorld.vue';
 import login from '../components/user/login.vue';
 import join from '../components/user/join.vue'
 import prjList from '../views/project/list.vue';
+import prjWrite from '../views/project/write.vue';
 
 Vue.use(VueRouter);
 
@@ -13,7 +14,11 @@ const router = new VueRouter({
     mode: 'history',
     routes: [
         {
-            path: '/project/list',
+            path: '/prjWrite',
+            component: prjWrite,
+        },
+        {
+            path: '/prjList',
             component: prjList,
         },
         {

@@ -25,10 +25,10 @@ public class UserCtrl {
     @Autowired
     private UserService userSvc;
 
-    @GetMapping(value = "/")
-    public String home() {
-        return "index.html";
-    }
+    // @GetMapping(value = "/")
+    // public String home() {
+    // return "index.html";
+    // }
 
     // @GetMapping
     // public ModelAndView index() {
@@ -37,18 +37,18 @@ public class UserCtrl {
     // return mav;
     // }
 
-    @GetMapping(value = "login")
-    public String login() {
-        return "index.html";
-    }
+    // @GetMapping(value = "login")
+    // public String login() {
+    // return "index.html";
+    // }
 
-    @RequestMapping(value = "join", method = RequestMethod.GET)
-    public ModelAndView join() {
-        log.info(">>>>>>>>>>>>>join 페이지 출력");
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("join");
-        return mav;
-    }
+    // @RequestMapping(value = "join", method = RequestMethod.GET)
+    // public ModelAndView join() {
+    // log.info(">>>>>>>>>>>>>join 페이지 출력");
+    // ModelAndView mav = new ModelAndView();
+    // mav.setViewName("join");
+    // return mav;
+    // }
 
     // @GetMapping(value = "/join")
     // public String join() {
@@ -75,7 +75,7 @@ public class UserCtrl {
         log.info(">>>>>>>>>>>>>>>>>>>로그인 검사 완료");
         if (flag > 0) {
             log.info(">>>>>>>>>>>>>>>이메일 있음 확인");
-            return "forward:/project/list";
+            return "index.html";
         }
         return null;
     }

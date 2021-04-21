@@ -1,50 +1,54 @@
 <template>
   <div>
-    <b-form v-if="show">
-      <b-form-group
-        id="input-group-1"
-        label="Email address:"
-        label-for="input-1"
-        description="We'll never share your email with anyone else."
-      >
-        <b-form-input
-          id="input-1"
-          v-model="user.email"
-          type="email"
-          placeholder="Enter email"
-          required
-        ></b-form-input>
-      </b-form-group>
+    <b-container fluid="md">
+      <b-form v-if="show">
+        <b-form-group
+          id="input-group-1"
+          label="Email address:"
+          label-for="input-1"
+          description="We'll never share your email with anyone else."
+        >
+          <b-form-input
+            id="input-1"
+            v-model="user.email"
+            type="email"
+            placeholder="Enter email"
+            required
+          ></b-form-input>
+        </b-form-group>
 
-      <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
-        <b-form-input
-          id="input-2"
-          v-model="user.name"
-          placeholder="Enter name"
-          required
-        ></b-form-input>
-      </b-form-group>
+        <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
+          <b-form-input
+            id="input-2"
+            v-model="user.name"
+            placeholder="Enter name"
+            required
+          ></b-form-input>
+        </b-form-group>
 
-      <b-form-group id="input-group-3" label="Password:" label-for="input-3">
-        <b-form-input
-          type="password"
-          id="input-3"
-          v-model="user.password"
-          placeholder="Enter password"
-          required
-        ></b-form-input>
-      </b-form-group>
+        <b-form-group id="input-group-3" label="Password:" label-for="input-3">
+          <b-form-input
+            type="password"
+            id="input-3"
+            v-model="user.password"
+            placeholder="Enter password"
+            required
+          ></b-form-input>
+        </b-form-group>
 
-      <b-button type="button" variant="primary" @click="onSubmit"
-        >Submit</b-button
-      >
-      <b-button type="button" variant="danger" @click="onReset">Reset</b-button>
-      <b-button variant="info" href="/login">Login</b-button>
-      <b-button variant="warning" href="/project/list">prjList</b-button>
-    </b-form>
-    <b-card class="mt-3" header="Form Data Result">
-      <pre class="m-0">{{ user }}</pre>
-    </b-card>
+        <b-button type="button" variant="primary" @click="onSubmit"
+          >Submit</b-button
+        >
+        <b-button type="button" variant="danger" @click="onReset"
+          >Reset</b-button
+        >
+        <b-button variant="info" href="/login">Login</b-button>
+        <b-button variant="warning" href="/prjList">prjList</b-button>
+      </b-form>
+      <b-card class="mt-3" header="Form Data Result">
+        <pre class="m-0">{{ user }}</pre>
+      </b-card>
+    </b-container>
   </div>
 </template>
 
@@ -82,7 +86,7 @@ export default {
         .then((res) => {
           console.log(res);
           alert("환영합니다.");
-          this.$router.push("/project/list");
+          this.$router.push("/login");
         });
     },
 

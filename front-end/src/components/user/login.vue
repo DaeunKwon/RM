@@ -61,7 +61,7 @@ export default {
         .then((res) => {
           console.log(res);
           alert("로그인 성공");
-          this.$router.push("/");
+          this.$router.push("/prjList");
         })
         .catch((err) => {
           console.log(err);
