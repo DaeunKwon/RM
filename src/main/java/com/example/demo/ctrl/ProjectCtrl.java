@@ -44,13 +44,10 @@ public class ProjectCtrl {
 
     @PostMapping(value = "/prjWrite", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public void write(@RequestBody ProjectVO pvo, @RequestBody ProjectInVO pINvo, @RequestBody AuthorityVO authvo) {
+    public void write(@RequestBody ProjectVO pvo) {
         log.info(">>>>>>>>>>>>project write POST 요청");
         prjSvc.write(pvo);
         log.info(">>>>>>>>>>>>project db에 넣기 성공");
-        prjINSvc.write(pINvo);
-        log.info(">>>>>>>>>>>>projectin db에 넣기 성공");
-        authSvc.write(authvo);
-        log.info(">>>>>>>>>>>auth db에 넣기 성공");
+
     }
 }
