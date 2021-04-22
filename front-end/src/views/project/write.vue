@@ -49,7 +49,7 @@
         <b-form-group id="input-group-1" label="팀장" label-for="input-1">
           <b-form-input
             id="input-1"
-            v-model="project.leader"
+            v-model="project.leader_email"
             placeholder="팀장"
             required
           ></b-form-input>
@@ -84,7 +84,7 @@
         <b-form-group id="input-group-1" label="팀원" label-for="input-1">
           <b-form-input
             id="input-1"
-            v-model="project.follower"
+            v-model="project.follower_email"
             placeholder="팀원"
             required
           ></b-form-input>
@@ -133,7 +133,7 @@
         </b-form-group>
         <p>.<span v-html="strHtml"></span></p>
 
-        <b-button type="button" variant="primary" @click="prjWritePOST"
+        <b-button type="button" variant="primary" @click="prjWrite"
           >저장</b-button
         >
         <b-button type="button" variant="danger">취소</b-button>
@@ -163,10 +163,10 @@ export default {
         cond: "",
         start_d8: "",
         end_d8: "",
-        prj_leader: "",
+        leader_email: "",
         lead_prj_in_d8: "",
         lead_prj_out_d8: "",
-        prj_follower: "",
+        follower_email: "",
         follow_prj_in_d8: "",
         follow_prj_out_d8: "",
         prj_content: "",
@@ -176,29 +176,36 @@ export default {
     };
   },
   methods: {
-    prjWritePOST() {
-      this.$axios.POST(
-        "/joinPOST",
-        JSON.stringify({
-          prj_title: this.project.prj_title,
-          cond: this.project.cond,
-          start_d8: this.project.start_d8,
-          end_d8: this.project.end_d8,
-          prj_leader: this.project.prj_leader,
-          lead_prj_in_d8: this.project.lead_prj_in_d8,
-          lead_prj_out_d8: this.project.lead_prj_out_d8,
-          prj_follower: this.project.prj_follower,
-          follow_prj_in_d8: this.project.follow_prj_in_d8,
-          follow_prj_out_d8: this.project.follow_prj_out_d8,
-          prj_content: this.project.prj_content,
-          prj_remark: this.project.prj_remark,
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+    prjWrite() {
+      alert(JSON.stringify(this.project));
+      this.$axios
+        .post(
+          "/prjWrite",
+          JSON.stringify({
+            prj_title: this.project.prj_title,
+            cond: this.project.cond,
+            start_d8: this.project.start_d8,
+            end_d8: this.project.end_d8,
+            leader_email: this.project.leader_email,
+            lead_prj_in_d8: this.project.lead_prj_in_d8,
+            lead_prj_out_d8: this.project.lead_prj_out_d8,
+            follower_email: this.project.follower_email,
+            follow_prj_in_d8: this.project.follow_prj_in_d8,
+            follow_prj_out_d8: this.project.follow_prj_out_d8,
+            prj_content: this.project.prj_content,
+            prj_remark: this.project.prj_remark,
+          }),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          alert("프로젝트 등록 성공");
+          this.$router.push("/prjList");
+        });
     },
   },
 };

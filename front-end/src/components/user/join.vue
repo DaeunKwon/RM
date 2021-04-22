@@ -45,9 +45,6 @@
         <b-button variant="info" href="/login">Login</b-button>
         <b-button variant="warning" href="/prjList">prjList</b-button>
       </b-form>
-      <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ user }}</pre>
-      </b-card>
     </b-container>
   </div>
 </template>

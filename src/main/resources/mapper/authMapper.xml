@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.AuthorityMapper">
+    <insert id="write" parameterType="com.example.demo.domain.AuthorityVO">
+        insert into tbl_auth (auth_name)
+        when auth_id = 0 then values ('팀원')
+        when auth_id = 1 then values ('팀장')
+    </insert>
+</mapper>

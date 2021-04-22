@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.ReportMapper">
+    <insert id="write" parameterType="com.example.demo.domain.ReportVO">
+		insert into tbl_report (rpt_no, prj_no, rpt_title, rpt_content, rpt_remark, rmv_YN, rpt_write_d8, rpt_writer, rpt_mod_d8, rpt_mod_writer,)
+        values (tbl_report_seq.nextval, 0, #{rpt_title}, #{rpt_content}, #{rpt_remark}, 'N', sysdate, 'test', sysdate, 'test')
+	</insert>
+</mapper>

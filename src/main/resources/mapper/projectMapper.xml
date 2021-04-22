@@ -1,3 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo.dao.ProjectMapper"></mapper>
+<mapper namespace="com.example.demo.dao.ProjectMapper">
+    <insert id="write" parameterType="com.example.demo.domain.ProjectVO">
+        insert into tbl_project 
+        (prj_no,
+         prj_title, 
+         start_d8, 
+         end_d8, 
+         prj_writer, 
+         prj_mod_writer, 
+         prj_write_d8, 
+         prj_mod_d8, 
+         prj_content, 
+         prj_remark, 
+         cond, 
+         rmv_yn)
+        values (
+            tbl_project_seq.nextval,
+            #{prj_title},
+            #{start_d8},
+            #{end_d8},
+            'test',
+            'test',
+            sysdate,
+            sysdate,
+            #{prj_content},
+            #{prj_remark},
+            #{cond},
+            'N')
+
+    </insert>
+</mapper>

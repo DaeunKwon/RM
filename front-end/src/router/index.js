@@ -7,12 +7,22 @@ import login from '../components/user/login.vue';
 import join from '../components/user/join.vue'
 import prjList from '../views/project/list.vue';
 import prjWrite from '../views/project/write.vue';
+import rptList from '../views/report/list.vue';
+import rptWrite from '../views/report/write.vue';
 
 Vue.use(VueRouter);
 
 const router = new VueRouter({
     mode: 'history',
     routes: [
+        {
+            path: '/rptWrite',
+            component: rptWrite,
+        },
+        {
+            path: '/rptList',
+            component: rptList,
+        },
         {
             path: '/prjWrite',
             component: prjWrite,

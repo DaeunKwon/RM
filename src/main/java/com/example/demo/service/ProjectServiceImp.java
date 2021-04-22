@@ -1,16 +1,20 @@
 package com.example.demo.service;
 
+import com.example.demo.dao.ProjectDAO;
 import com.example.demo.domain.ProjectVO;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProjectServiceImp implements ProjectService {
 
+    @Autowired
+    private ProjectDAO pdao;
+
     @Override
     public void write(ProjectVO pvo) {
-        // TODO Auto-generated method stub
-
+        pdao.insert(pvo);
     }
 
     @Override

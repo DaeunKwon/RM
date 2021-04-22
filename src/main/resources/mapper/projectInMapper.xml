@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.ProjectInMapper">
+    <insert id="leaderin" parameterType="com.example.demo.domain.ProjectInVO">
+        insert into tbl_project_in 
+        (prj_in_no,
+        email,
+        auth_id,
+        prj_in_d8,
+        prj_out_d8,
+        prj_no)
+        values (
+            tbl_project_in_seq.nextval,
+            #{leader_email},
+            1,
+            #{lead_prj_in_d8},
+            #{lead_prj_out_d8},
+            #{prj_no})
+    </insert>
+    <insert id="followerin" parameterType="com.example.demo.domain.ProjectInVO">
+        insert into tbl_project_in 
+        (prj_in_no,
+        email,
+        auth_id,
+        prj_in_d8,
+        prj_out_d8,
+        prj_no)
+        values (
+            tbl_project_in_seq.nextval,
+            #{follower_email},
+            0,
+            #{follow_prj_in_d8},
+            #{follow_prj_out_d8},
+            #{prj_no})
+    </insert>
+</mapper>
