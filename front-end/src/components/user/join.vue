@@ -6,15 +6,21 @@
           id="input-group-1"
           label="Email address:"
           label-for="input-1"
-          description="We'll never share your email with anyone else."
         >
           <b-form-input
             id="input-1"
             v-model="user.email"
+            :state="validation"
             type="email"
             placeholder="Enter email"
             required
           ></b-form-input>
+          <b-form-invalid-feedback :state="validation">
+            이메일을 입력하세요.
+          </b-form-invalid-feedback>
+          <b-form-valid-feedback :state="validation">
+            사용 가능한 이메일입니다.
+          </b-form-valid-feedback>
         </b-form-group>
 
         <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
@@ -61,6 +67,11 @@ export default {
       },
       show: true,
     };
+  },
+  computed: {
+    validation() {
+      return this.user.email.length > 0;
+    },
   },
   methods: {
     onSubmit() {

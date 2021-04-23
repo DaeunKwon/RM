@@ -1,6 +1,7 @@
 package com.example.demo.domain;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -18,6 +19,7 @@ public class ProjectVO {
     private String prj_remark;
     private String cond;
     private String rmv_YN;
+    private List<ProjectInVO> ulist;
 
     public ProjectVO() {
     }

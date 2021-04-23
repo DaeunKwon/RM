@@ -48,7 +48,7 @@
         <b-button type="button" variant="primary" @click="rptWrite"
           >저장</b-button
         >
-        <b-button type="button" variant="danger">취소</b-button>
+        <b-button type="button" variant="danger" @click="reset">취소</b-button>
         <b-button variant="info" href="/rptList">목록</b-button>
       </b-form>
       <p>.<span v-html="strHtml"></span></p>
@@ -102,6 +102,19 @@ export default {
           alert("업무 일지 등록 성공");
           this.$router.push("/rptList");
         });
+    },
+    reset(event) {
+      event.preventDefault();
+      // Reset our form values
+      this.report.rpt_title = "";
+      this.report.prj_title = "";
+      this.report.rpt_content = "";
+      this.report.rpt_remark = "";
+      // Trick to reset/clear native browser form validation state
+      this.show = false;
+      this.$nextTick(() => {
+        this.show = true;
+      });
     },
   },
 };

@@ -18,4 +18,9 @@ public class UserVO {
         this.password = password;
     }
 
+    public UserVO(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
 }

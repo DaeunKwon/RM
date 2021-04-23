@@ -49,7 +49,7 @@
         <b-form-group id="input-group-1" label="팀장" label-for="input-1">
           <b-form-input
             id="input-1"
-            v-model="project.leader_email"
+            v-model="leader.email"
             placeholder="팀장"
             required
           ></b-form-input>
@@ -62,7 +62,7 @@
         >
           <b-form-datepicker
             id="input-1"
-            v-model="project.lead_prj_in_d8"
+            v-model="leader.prj_in_d8"
             placeholder="참여 시작 날짜"
             required
           ></b-form-datepicker>
@@ -75,7 +75,7 @@
         >
           <b-form-datepicker
             id="input-1"
-            v-model="project.lead_prj_out_d8"
+            v-model="leader.prj_out_d8"
             placeholder="참여 종료 날짜"
             required
           ></b-form-datepicker>
@@ -84,7 +84,7 @@
         <b-form-group id="input-group-1" label="팀원" label-for="input-1">
           <b-form-input
             id="input-1"
-            v-model="project.follower_email"
+            v-model="follower.email"
             placeholder="팀원"
             required
           ></b-form-input>
@@ -97,7 +97,7 @@
         >
           <b-form-datepicker
             id="input-1"
-            v-model="project.follow_prj_in_d8"
+            v-model="follower.prj_in_d8"
             placeholder="참여 시작 날짜"
             required
           ></b-form-datepicker>
@@ -106,7 +106,7 @@
         <b-form-group id="input-group-1" label="종료 날짜" label-for="input-1">
           <b-form-datepicker
             id="input-1"
-            v-model="project.follow_prj_out_d8"
+            v-model="follower.prj_out_d8"
             placeholder="참여 종료 날짜"
             required
           ></b-form-datepicker>
@@ -136,7 +136,7 @@
         <b-button type="button" variant="primary" @click="prjWrite"
           >저장</b-button
         >
-        <b-button type="button" variant="danger">취소</b-button>
+        <b-button type="button" variant="danger" @click="reset">취소</b-button>
         <b-button variant="info" href="/prjList">목록</b-button>
       </b-form>
       <p>.<span v-html="strHtml"></span></p>
@@ -163,14 +163,18 @@ export default {
         cond: "",
         start_d8: "",
         end_d8: "",
-        leader_email: "",
-        lead_prj_in_d8: "",
-        lead_prj_out_d8: "",
-        follower_email: "",
-        follow_prj_in_d8: "",
-        follow_prj_out_d8: "",
         prj_content: "",
         prj_remark: "",
+      },
+      leader: {
+        email: "",
+        prj_in_d8: "",
+        prj_out_d8: "",
+      },
+      follower: {
+        email: "",
+        prj_in_d8: "",
+        prj_out_d8: "",
       },
       show: true,
     };
@@ -178,34 +182,59 @@ export default {
   methods: {
     prjWrite() {
       alert(JSON.stringify(this.project));
+      var leader = {
+        email: this.leader.email,
+        prj_in_d8: this.leader.prj_in_d8,
+        prj_out_d8: this.leader.prj_out_d8,
+      };
+      var follower = {
+        email: this.follower.email,
+        prj_in_d8: this.follower.prj_in_d8,
+        prj_out_d8: this.follower.prj_out_d8,
+      };
+      var project = {
+        prj_title: this.project.prj_title,
+        cond: this.project.cond,
+        start_d8: this.project.start_d8,
+        end_d8: this.project.end_d8,
+        prj_content: this.project.prj_content,
+        prj_remark: this.project.prj_remark,
+        leader: leader,
+        follower: follower,
+      };
+
       this.$axios
-        .post(
-          "/prjWrite",
-          JSON.stringify({
-            prj_title: this.project.prj_title,
-            cond: this.project.cond,
-            start_d8: this.project.start_d8,
-            end_d8: this.project.end_d8,
-            leader_email: this.project.leader_email,
-            lead_prj_in_d8: this.project.lead_prj_in_d8,
-            lead_prj_out_d8: this.project.lead_prj_out_d8,
-            follower_email: this.project.follower_email,
-            follow_prj_in_d8: this.project.follow_prj_in_d8,
-            follow_prj_out_d8: this.project.follow_prj_out_d8,
-            prj_content: this.project.prj_content,
-            prj_remark: this.project.prj_remark,
-          }),
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
+        .post("/prjWrite", JSON.stringify(project), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
         .then((res) => {
           console.log(res);
           alert("프로젝트 등록 성공");
           this.$router.push("/prjList");
         });
+    },
+    reset(event) {
+      event.preventDefault();
+      // Reset our form values
+      this.project.prj_title = "";
+      this.project.cond = "";
+      this.project.start_d8 = "";
+      this.project.end_d8 = "";
+      this.project.prj_content = "";
+      this.project.prj_remark = "";
+      this.leader.email = "";
+      this.leader.prj_in_d8 = "";
+      this.leader.prj_out_d8 = "";
+      this.follower.email = "";
+      this.follower.prj_in_d8 = "";
+      this.follower.prj_out_d8 = "";
+      // Trick to reset/clear native browser form validation state
+      this.show = false;
+      this.$nextTick(() => {
+        this.show = true;
+      });
     },
   },
 };

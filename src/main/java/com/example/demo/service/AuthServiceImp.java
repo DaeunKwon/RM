@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImp implements AuthService {
 
     @Override
-    public void write(AuthorityVO authvo) {
+    public void add(AuthorityVO authvo) {
 
     }
 
