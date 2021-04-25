@@ -21,12 +21,11 @@ public class UserCtrl {
 
     @PostMapping(value = "/joinPOST", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String joinPOST(@RequestBody UserVO uvo) {
+    public void joinPOST(@RequestBody UserVO uvo) {
         log.info(">>>>>>>>>>>>>>>>>joinPOST");
         log.info(uvo.getEmail());
         userSvc.join(uvo);
         log.info(">>>>>>>>>>>>>>>>>join 성공");
-        return "index.html";
     }
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
