@@ -30,7 +30,8 @@ public class ProjectCtrl {
     private ProjectInService prjINSvc;
     private AuthService authSvc;
 
-    @RequestMapping(value = "prjList", method = RequestMethod.GET)
+    // @RequestMapping(value = "prjList", method = RequestMethod.GET)
+    @GetMapping(value = "/prjList")
     public String list() {
         log.info(">>>>>>>>>>>>>project list 페이지 출력");
         return "index.html";

@@ -111,6 +111,10 @@
             required
           ></b-form-datepicker>
         </b-form-group>
+        <div id="add" class="text-center">
+          <b-button variant="secondary" @click="add">추가</b-button>
+        </div>
+        <p>.<span v-html="strHtml"></span></p>
 
         <b-form-group id="input-group-1" label="내용" label-for="input-1">
           <b-form-textarea
