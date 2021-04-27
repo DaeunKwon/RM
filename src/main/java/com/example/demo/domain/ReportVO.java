@@ -25,4 +25,11 @@ public class ReportVO {
         this.rpt_content = rpt_content;
         this.rpt_remark = rpt_remark;
     }
+
+    public ReportVO(int rpt_no, int prj_no, Date rpt_write_d8, String rpt_writer) {
+        this.rpt_no = rpt_no;
+        this.prj_no = prj_no;
+        this.rpt_write_d8 = rpt_write_d8;
+        this.rpt_writer = rpt_writer;
+    }
 }

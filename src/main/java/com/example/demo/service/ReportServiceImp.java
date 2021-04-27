@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import com.example.demo.dao.ReportDAO;
 import com.example.demo.domain.ReportVO;
 
@@ -20,6 +22,12 @@ public class ReportServiceImp implements ReportService {
         log.info(">>>>>>>>>>>> report service 진입");
         rdao.write(rvo);
         log.info(">>>>>>>>>>>>>report service 성공");
+    }
+
+    @Override
+    public List<ReportVO> list() {
+        log.info(">>>>>>>>>>>>>>>>>>report service list 진입");
+        return rdao.selectList();
     }
 
 }

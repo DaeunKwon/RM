@@ -110,6 +110,10 @@ export default {
         this.show = true;
       });
     },
+
+    // prjList() {
+    //   this.$axios.get("/prjList");
+    // },
   },
 };
 </script>

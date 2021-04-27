@@ -26,6 +26,8 @@
 import Header from "../../views/common/00_header"; //import 헤더 추가
 import Footer from "../../views/common/90_footer"; //import 풋터 추가
 
+// var reportVO ${list};
+
 export default {
   name: "rptList",
   components: {

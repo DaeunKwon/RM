@@ -4,4 +4,7 @@
 	<insert id="write" parameterType="com.example.demo.domain.ReportVO">
 		insert into tbl_report values (tbl_report_seq.nextval, 7, #{rpt_title}, #{rpt_content}, #{rpt_remark}, 'N', sysdate, 6, sysdate, 6)
 	</insert>
+	<select id="list" resultType="com.example.demo.domain.ReportVO">
+		select rpt_no, prj_no, rpt_write_d8, rpt_writer from tbl_report
+	</select>
 </mapper>
