@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @CrossOrigin
 @Controller
+@RequestMapping("/api/report")
 // @RequestMapping("/report")
 public class ReportCtrl {
     private final Logger log = LoggerFactory.getLogger(ReportCtrl.class);
@@ -37,7 +39,7 @@ public class ReportCtrl {
      * @throws Exception
      */
     @ResponseBody
-    @GetMapping(value = "/rptList", headers = "Accept=application/json")
+    @GetMapping(value = "/list", headers = "Accept=application/json")
     public void list(Model model) throws Exception {
         log.info(">>>>>>>>>>>>>>>>report list 페이지 출력");
         List<ReportVO> rlist = rptSvc.list();
@@ -66,6 +68,12 @@ public class ReportCtrl {
         log.info(">>>>>>>>>>>>>>>report 작성");
         rptSvc.write(rvo);
         return "index.html";
+    }
+
+    @GetMapping(value = "/detail")
+    public void detail(@RequestParam int rpt_no) {
+        log.info(">>>>>>>>>>report list");
+        rptSvc.detail(rpt_no);
     }
 
 }

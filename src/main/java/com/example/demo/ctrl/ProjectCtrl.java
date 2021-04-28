@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @CrossOrigin
 @Controller
-// @RequestMapping("/project")
+@RequestMapping("/api/project")
 public class ProjectCtrl {
     private final Logger log = LoggerFactory.getLogger(ProjectCtrl.class);
 

@@ -79,7 +79,7 @@ export default {
       alert(JSON.stringify(this.user));
       this.$axios
         .post(
-          "/joinPOST",
+          "/api/user/join",
           JSON.stringify({
             email: this.user.email,
             name: this.user.name,

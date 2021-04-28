@@ -8,31 +8,38 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class UserCtrl {
     private final Logger log = LoggerFactory.getLogger(UserCtrl.class);
 
     @Autowired
     private UserService userSvc;
 
-    // @RequestMapping(value = "/joinPOST", method = RequestMethod.POST)
-    @PostMapping(value = "/joinPOST", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public void joinPOST(@RequestBody UserVO uvo) {
-        log.info(">>>>>>>>>>>>>>>>>joinPOST");
-        log.info(uvo.getEmail());
-        log.info(uvo.getPassword());
-        userSvc.join(uvo);
-        log.info(">>>>>>>>>>>>>>>>>join 성공");
+    @GetMapping(value = "/")
+    public void home() {
+        log.info(">>>>>>>>>home");
     }
 
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    // @RequestMapping(value = "/join", method = { RequestMethod.POST })
+    @PostMapping(value = "/api/user/join", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void join(@RequestBody UserVO uvo) {
+        log.info(">>>>>>>>>>>>>>>>>join");
+        log.info(">>>>>>>>>>>>>>>uvo: " + uvo.toString());
+        log.info(uvo.getPassword());
+        // userSvc.join(uvo);
+        // log.info(">>>>>>>>>>>>>>>>>join 성공");
+    }
+
+    @PostMapping(value = "/api/user/login", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void login(@RequestBody UserVO uvo) {
         log.info(">>>>>>>>>>>>>>>>>>login post userctrl 진입");

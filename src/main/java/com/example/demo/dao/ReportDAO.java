@@ -9,4 +9,6 @@ public interface ReportDAO {
 
     public List<ReportVO> selectList();
 
+    public ReportVO selectOne(int rpt_no);
+
 }

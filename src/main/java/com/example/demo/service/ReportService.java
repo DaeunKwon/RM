@@ -9,4 +9,6 @@ public interface ReportService {
 
     public List<ReportVO> list();
 
+    public ReportVO detail(int rpt_no);
+
 }

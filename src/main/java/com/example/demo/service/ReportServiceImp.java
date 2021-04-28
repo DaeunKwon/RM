@@ -30,4 +30,10 @@ public class ReportServiceImp implements ReportService {
         return rdao.selectList();
     }
 
+    @Override
+    public ReportVO detail(int rpt_no) {
+        log.info(">>>>>>>>>>report detail service");
+        return rdao.selectOne(rpt_no);
+    }
+
 }

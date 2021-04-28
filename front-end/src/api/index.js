@@ -8,8 +8,8 @@ const instance = axios.create({
  * 회원가입
  * @param {*} params
  */
-function join(params) {
-    return instance.get('/user/join', params)
+function join(user) {
+    return instance.post('/user/join', user)
 }
 
 /**

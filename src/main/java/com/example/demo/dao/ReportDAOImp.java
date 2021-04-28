@@ -33,4 +33,10 @@ public class ReportDAOImp implements ReportDAO {
 
     }
 
+    @Override
+    public ReportVO selectOne(int rpt_no) {
+        log.info(">>>>>>>>>report detail dao");
+        return sql.selectOne(ns + ".detail");
+    }
+
 }
