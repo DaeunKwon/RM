@@ -5,4 +5,10 @@
     <mappers>
         <mapper resource="mapper/userMapper.xml" />
     </mappers>
+    <mappers>
+        <mapper resource="mapper/reportMapper.xml" />
+    </mappers>
+    <mappers>
+        <mapper resource="mapper/projectMapper.xml" />
+    </mappers>
 </configuration>

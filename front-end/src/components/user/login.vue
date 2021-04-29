@@ -47,7 +47,7 @@ export default {
     login() {
       this.$axios
         .post(
-          "/login",
+          "/api/login",
           JSON.stringify({
             email: this.user.email,
             password: this.user.password,

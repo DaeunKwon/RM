@@ -1,5 +1,7 @@
 package com.example.demo.dao;
 
+import java.util.List;
+
 import com.example.demo.domain.ReportVO;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -22,6 +24,12 @@ public class ReportDAOImp implements ReportDAO {
         log.info(">>>>>>>>>>>>report dao 진입");
         sql.insert(ns + ".write", rvo);
         log.info(">>>>>>>>>>>>>report db에 넣기 성공");
+    }
+
+    @Override
+    public List<ReportVO> list() {
+        log.info(">>>>>>>>>>>report list dao");
+        return sql.selectList(ns + ".list");
     }
 
 }

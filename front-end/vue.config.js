@@ -1,4 +1,5 @@
 module.exports = {
+  lintOnSave: false,
   transpileDependencies: [
     'vuetify'
   ],
@@ -6,7 +7,7 @@ module.exports = {
   indexPath: "../static/index.html",
   devServer: {
     proxy: {
-      '/*': {
+      '/api': {
         target: 'http://localhost:8090',
         changeOrigin: true,
         pathRewrite: {
@@ -15,4 +16,9 @@ module.exports = {
       }
     }
   },
+  configureWebpack: {
+    devServer: {
+      historyApiFallback: true
+    }
+  }
 }
