@@ -51,4 +51,10 @@ public class ProjectCtrl {
         log.info(">>>>>>>>>>>>project db에 넣기 성공");
 
     }
+
+    @GetMapping(value = "/prjDetail")
+    public String detail() {
+        log.info(">>>>>>>>>>>>>project detail 페이지 출력");
+        return "index.html";
+    }
 }

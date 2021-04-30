@@ -15,7 +15,7 @@
           <b-card-group deck>
             <b-card class="text-center" title="Project title">
               <b-card-text>Project abstract</b-card-text>
-              <b-button href="#" variant="primary">Detail</b-button>
+              <b-button href="/prjDetail" variant="primary">Detail</b-button>
             </b-card>
 
             <b-card class="text-center" title="Project title">
