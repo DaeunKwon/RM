@@ -3,7 +3,6 @@ package com.example.demo.ctrl;
 import com.example.demo.domain.UserVO;
 import com.example.demo.service.UserService;
 
-import org.apache.ibatis.io.ResolverUtil.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/user")
 public class UserCtrl {
     private final Logger log = LoggerFactory.getLogger(UserCtrl.class);
 

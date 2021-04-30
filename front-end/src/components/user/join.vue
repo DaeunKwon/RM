@@ -78,7 +78,7 @@ export default {
       alert(JSON.stringify(this.user));
       this.$axios
         .post(
-          "/login",
+          "/join",
           JSON.stringify({
             email: this.user.email,
             name: this.user.name,
