@@ -38,11 +38,11 @@ const router = new VueRouter({
         },
         {
             path: '/',
-            component: join,
+            component: login,
         },
         {
-            path: '/login',
-            component: login,
+            path: '/join',
+            component: join,
         },
 
         {

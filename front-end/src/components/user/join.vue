@@ -47,7 +47,7 @@
         >Submit</b-button
       >
       <b-button type="button" variant="danger" @click="onReset">Reset</b-button>
-      <b-button variant="info" href="/login">Login</b-button>
+      <b-button variant="info" href="/">Login</b-button>
       <b-button variant="warning" href="/prjList">prjList</b-button>
     </b-container>
   </div>
@@ -78,7 +78,7 @@ export default {
       alert(JSON.stringify(this.user));
       this.$axios
         .post(
-          "/join",
+          "http://localhost:8090/api/user/join",
           JSON.stringify({
             email: this.user.email,
             name: this.user.name,
