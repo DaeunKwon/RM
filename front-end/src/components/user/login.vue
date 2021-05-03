@@ -25,7 +25,7 @@
       >
 
       <b-button type="button" variant="primary" @click="login">Login</b-button>
-      <b-button variant="info" href="/">Join</b-button>
+      <b-button variant="info" href="/join">Join</b-button>
       <b-button variant="warning" href="/prjList">prjList</b-button>
     </b-form>
   </div>

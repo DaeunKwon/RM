@@ -10,7 +10,6 @@ import prjWrite from '../views/project/write.vue';
 import rptList from '../views/report/list.vue';
 import rptWrite from '../views/report/write.vue';
 import prjDetail from '../views/project/detail.vue';
-import rptDetail from '../views/report/detail.vue';
 
 Vue.use(VueRouter);
 
@@ -20,10 +19,6 @@ const router = new VueRouter({
         {
             path: '/prjDetail',
             component: prjDetail,
-        },
-        {
-            path: '/rptDetail',
-            component: rptDetail,
         },
         {
             path: '/rptWrite',
@@ -43,11 +38,11 @@ const router = new VueRouter({
         },
         {
             path: '/',
-            component: join,
+            component: login,
         },
         {
-            path: '/login',
-            component: login,
+            path: '/join',
+            component: join,
         },
 
         {

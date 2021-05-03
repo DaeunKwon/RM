@@ -48,10 +48,8 @@
           </b-card-group>
         </div>
       </div>
-
       <p>.<span v-html="strHtml"></span></p>
       <p>.<span v-html="strHtml"></span></p>
-
       <Footer />
     </b-container>
   </div>

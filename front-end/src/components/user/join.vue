@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-container fluid="md">
-      <b-form v-if="show">
+      <b-form v-if="show" action="/join" method="post">
         <b-form-group
           id="input-group-1"
           label="Email address:"
@@ -41,22 +41,21 @@
             required
           ></b-form-input>
         </b-form-group>
-
-        <b-button type="button" variant="primary" @click="onSubmit"
-          >Submit</b-button
-        >
-        <b-button type="button" variant="danger" @click="onReset"
-          >Reset</b-button
-        >
-        <b-button variant="info" href="/login">Login</b-button>
-        <b-button variant="warning" href="/prjList">prjList</b-button>
       </b-form>
+
+      <b-button type="button" variant="primary" @click="onSubmit"
+        >Submit</b-button
+      >
+      <b-button type="button" variant="danger" @click="onReset">Reset</b-button>
+      <b-button variant="info" href="/">Login</b-button>
+      <b-button variant="warning" href="/prjList">prjList</b-button>
     </b-container>
   </div>
 </template>
 
 <script>
 console.log("join.vue 진입");
+
 export default {
   data() {
     return {
@@ -74,12 +73,12 @@ export default {
     },
   },
   methods: {
-    onSubmit() {
+    onSubmit: function () {
       //event.preventDefault();
       alert(JSON.stringify(this.user));
       this.$axios
         .post(
-          "/api/user/join",
+          "http://localhost:8090/api/user/join",
           JSON.stringify({
             email: this.user.email,
             name: this.user.name,
@@ -110,10 +109,6 @@ export default {
         this.show = true;
       });
     },
-
-    // prjList() {
-    //   this.$axios.get("/prjList");
-    // },
   },
 };
 </script>

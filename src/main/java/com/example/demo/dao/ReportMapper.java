@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface ReportMapper {
     void write(ReportVO rvo);
 
-    List<ReportVO> list();
+    List<ReportVO> list() throws Exception;
 }

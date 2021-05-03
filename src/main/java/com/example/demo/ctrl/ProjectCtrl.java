@@ -1,7 +1,5 @@
 package com.example.demo.ctrl;
 
-import java.util.List;
-
 import com.example.demo.domain.AuthorityVO;
 import com.example.demo.domain.ProjectInVO;
 import com.example.demo.domain.ProjectVO;
@@ -14,20 +12,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RestController(value = "/api")
 @Controller
-@RequestMapping("/api/project")
 public class ProjectCtrl {
     private final Logger log = LoggerFactory.getLogger(ProjectCtrl.class);
 
@@ -36,20 +30,11 @@ public class ProjectCtrl {
     private ProjectInService prjINSvc;
     private AuthService authSvc;
 
-    /**
-     * 프로젝트 목록 조회
-     * 
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
-
     // @RequestMapping(value = "prjList", method = RequestMethod.GET)
     @GetMapping(value = "/prjList")
     public String list() {
         log.info(">>>>>>>>>>>>>project list 페이지 출력");
-        return "index";
+        return "index.html";
     }
 
     // @RequestMapping(value = "prjWrite", method = RequestMethod.GET)
@@ -65,5 +50,11 @@ public class ProjectCtrl {
         prjSvc.write(pvo);
         log.info(">>>>>>>>>>>>project db에 넣기 성공");
 
+    }
+
+    @GetMapping(value = "/prjDetail")
+    public String detail() {
+        log.info(">>>>>>>>>>>>>project detail 페이지 출력");
+        return "index.html";
     }
 }

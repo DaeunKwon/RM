@@ -4,5 +4,7 @@
     <!-- 데이터 소스 관리는 Spring Boot에서 하기 때문에 여기에 작성하지 않는다. -->
     <mappers>
         <mapper resource="mapper/userMapper.xml" />
+        <mapper resource="mapper/reportMapper.xml" />
+        <mapper resource="mapper/projectMapper.xml" />
     </mappers>
 </configuration>

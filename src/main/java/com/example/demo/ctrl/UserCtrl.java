@@ -6,42 +6,39 @@ import com.example.demo.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@RequestMapping(value = "/api/user")
 public class UserCtrl {
     private final Logger log = LoggerFactory.getLogger(UserCtrl.class);
 
     @Autowired
     private UserService userSvc;
 
-    @GetMapping(value = "/")
-    public void home() {
-        log.info(">>>>>>>>>home");
-    }
-
-    // @RequestMapping(value = "/join", method = { RequestMethod.POST })
-    @PostMapping(value = "/api/user/join", produces = MediaType.APPLICATION_JSON_VALUE)
+    // @RequestMapping(value = "/joinPOST", method = RequestMethod.POST)
+    @PostMapping(value = "/join", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public void join(@RequestBody UserVO uvo) {
-        log.info(">>>>>>>>>>>>>>>>>join");
-        log.info(">>>>>>>>>>>>>>>uvo: " + uvo.toString());
+    public void joinPOST(@RequestBody UserVO uvo) {
+        log.info(">>>>>>>>>>>>>>>>>joinPOST");
+        log.info(uvo.getEmail());
         log.info(uvo.getPassword());
-        // userSvc.join(uvo);
-        // log.info(">>>>>>>>>>>>>>>>>join 성공");
+        userSvc.join(uvo);
+        log.info(">>>>>>>>>>>>>>>>>join 성공");
     }
 
-    @PostMapping(value = "/api/user/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public void login(@RequestBody UserVO uvo) {
+    public ResponseEntity<?> login(@RequestBody UserVO uvo) {
         log.info(">>>>>>>>>>>>>>>>>>login post userctrl 진입");
         int flag = userSvc.loginCheck(uvo);
         log.info(Integer.toString(flag));
@@ -49,6 +46,7 @@ public class UserCtrl {
         if (flag > 0) {
             log.info(">>>>>>>>>>>>>>>이메일 있음 확인");
         }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

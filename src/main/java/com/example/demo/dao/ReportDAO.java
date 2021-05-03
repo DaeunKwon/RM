@@ -7,8 +7,6 @@ import com.example.demo.domain.ReportVO;
 public interface ReportDAO {
     public void write(ReportVO rvo);
 
-    public List<ReportVO> selectList();
-
-    public ReportVO selectOne(int rpt_no);
+    public List<ReportVO> list();
 
 }
