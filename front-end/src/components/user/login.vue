@@ -47,13 +47,14 @@ export default {
     login() {
       this.$axios
         .post(
-          "/api/user/login",
+          "http://localhost:8090/api/user/login",
           JSON.stringify({
             email: this.user.email,
             password: this.user.password,
           }),
           {
             headers: {
+              "Access-Control-Allow-Origin": "*",
               "Content-Type": "application/json",
             },
           }

@@ -6,4 +6,15 @@
         when auth_id = 0 then values ('팀원')
         when auth_id = 1 then values ('팀장')
     </insert>
+    <select id="getUserAuthority" parameterType="java.lang.String" resultType="java.lang.String">
+        select roles.authority from authorities
+        join roles on roles.authority = authorities.roles_authority
+        where member_email = #{email};
+    </select>
+    <insert id="insertAuthority" parameterType="com.example.demo.domain.Authorities">
+        insert authorities (member_email, roles_authority) values (#{member_email}, #{roles_authority})
+    </insert>
+    <delete id="deleteAllAuthority" parameterType="java.lang.String">
+        delete from authorities where member_email = #{email}
+    </delete>
 </mapper>

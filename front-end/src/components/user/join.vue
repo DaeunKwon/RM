@@ -93,7 +93,7 @@ export default {
         .then((res) => {
           console.log(res);
           alert("환영합니다.");
-          this.$router.push("/login");
+          this.$router.push("/");
         });
     },
 

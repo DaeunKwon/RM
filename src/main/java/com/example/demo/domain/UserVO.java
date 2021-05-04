@@ -1,5 +1,7 @@
 package com.example.demo.domain;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -8,6 +10,7 @@ public class UserVO {
     private String name;
     private String password;
     private String rmv_YN;
+    private List<String> roles;
 
     public UserVO() {
     }

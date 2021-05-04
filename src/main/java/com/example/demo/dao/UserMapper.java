@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface UserMapper {
     void join(UserVO uvo);
 
-    int loginCheck(UserVO uvo);
+    UserVO loginCheck(String email);
 }

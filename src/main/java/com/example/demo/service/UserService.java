@@ -1,13 +1,18 @@
 package com.example.demo.service;
 
+import java.util.Collection;
+
 import com.example.demo.domain.UserVO;
 
-public interface UserService {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+public interface UserService extends UserDetailsService {
     public void join(UserVO uvo);
 
     public void modify(UserVO uvo);
 
     public void remove(String email);
 
-    public int loginCheck(UserVO uvo);
+    Collection<GrantedAuthority> getAuthorities(String email);
 }

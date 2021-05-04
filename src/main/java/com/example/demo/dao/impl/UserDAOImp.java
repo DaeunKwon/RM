@@ -40,8 +40,8 @@ public class UserDAOImp implements UserDAO {
     }
 
     @Override
-    public int loginCheck(UserVO uvo) {
-        return sql.selectOne(ns + ".loginCheck", uvo);
+    public UserVO loginCheck(String email) {
+        return sql.selectOne(ns + ".loginCheck", email);
     }
 
 }
