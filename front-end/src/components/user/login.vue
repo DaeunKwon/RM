@@ -1,5 +1,49 @@
 <template>
-  <div>
+  <v-container>
+    <v-card elevation="4" tile>
+      <v-card-title class="justify-center">업무 일지 관리</v-card-title>
+      <v-card-text>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-text-field
+            v-model="email"
+            :rules="emailRules"
+            label="E-mail"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            v-model="password"
+            :counter="10"
+            :rules="passwordRules"
+            label="Password"
+            required
+            type="password"
+          ></v-text-field>
+
+          <v-checkbox
+            v-model="checkbox"
+            :rules="[(v) => !!v || 'You must agree to continue!']"
+            label="Do you agree?"
+            required
+          ></v-checkbox>
+
+          <v-btn
+            :disabled="!valid"
+            color="success"
+            class="mr-4"
+            @click="validate"
+          >
+            Validate
+          </v-btn>
+
+          <v-btn color="primary" class="mr-4" @click="login"> Login </v-btn>
+
+          <v-btn color="warning" href="/join"> Join </v-btn>
+        </v-form>
+      </v-card-text>
+    </v-card>
+  </v-container>
+  <!-- <div>
     <b-form inline>
       <label class="sr-only" for="inline-form-input-email">Email</label>
       <b-form-input
@@ -28,7 +72,7 @@
       <b-button variant="info" href="/join">Join</b-button>
       <b-button variant="warning" href="/prjList">prjList</b-button>
     </b-form>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -49,8 +93,8 @@ export default {
         .post(
           "http://localhost:8090/api/user/login",
           JSON.stringify({
-            email: this.user.email,
-            password: this.user.password,
+            email: this.email,
+            password: this.password,
           }),
           {
             headers: {

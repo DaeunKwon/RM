@@ -50,20 +50,20 @@
       </div>
       <p>.<span v-html="strHtml"></span></p>
       <p>.<span v-html="strHtml"></span></p>
-      <Footer />
+      <vfooter />
     </b-container>
   </div>
 </template>
 
 <script>
 import Header from "../../views/common/00_header"; //import 헤더 추가
-import Footer from "../../views/common/90_footer"; //import 풋터 추가
+import vfooter from "@/views/common/90_footer"; //import 풋터 추가
 
 export default {
   name: "prjList",
   components: {
     Header, //헤더 컴포넌트 추가
-    Footer, //풋터 컴포넌트 추가
+    vfooter, //풋터 컴포넌트 추가
   },
   methods: {
     prjWrite() {

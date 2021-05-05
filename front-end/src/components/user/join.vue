@@ -1,5 +1,50 @@
 <template>
-  <div>
+  <v-container>
+    <v-card elevation="4" tile>
+      <v-card-title>업무 일지 관리</v-card-title>
+      <v-card-subtitle>회원가입</v-card-subtitle>
+      <v-card-text>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-text-field
+            v-model="name"
+            :rules="nameRules"
+            label="Name"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            v-model="email"
+            :rules="emailRules"
+            label="E-mail"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            v-model="password"
+            :counter="10"
+            :rules="passwordRules"
+            label="Password"
+            required
+            type="password"
+          ></v-text-field>
+
+          <v-btn
+            :disabled="!valid"
+            color="success"
+            class="mr-4"
+            @click="validate"
+          >
+            Validate
+          </v-btn>
+
+          <v-btn color="primary" class="mr-4" @click="join"> Join </v-btn>
+
+          <v-btn color="warning" href="/"> Login </v-btn>
+        </v-form>
+      </v-card-text>
+    </v-card>
+  </v-container>
+  <!-- <div>
     <b-container fluid="md">
       <b-form v-if="show" action="/join" method="post">
         <b-form-group
@@ -50,7 +95,7 @@
       <b-button variant="info" href="/">Login</b-button>
       <b-button variant="warning" href="/prjList">prjList</b-button>
     </b-container>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -80,9 +125,9 @@ export default {
         .post(
           "http://localhost:8090/api/user/join",
           JSON.stringify({
-            email: this.user.email,
-            name: this.user.name,
-            password: this.user.password,
+            email: this.email,
+            name: this.name,
+            password: this.password,
           }),
           {
             headers: {
