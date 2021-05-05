@@ -50,6 +50,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        log.info(">>>>>>>>>>>email: " + email);
         UserVO user = udao.loginCheck(email);
         log.info(">>>>>>>>>" + user);
         if (user == null) {
