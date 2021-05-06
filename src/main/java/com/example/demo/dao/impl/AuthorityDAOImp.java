@@ -15,7 +15,7 @@ public class AuthorityDAOImp implements AuthorityDAO {
     @Autowired
     private SqlSessionTemplate sql;
 
-    private String ns = "com.example.demo.dao.AuthMapper";
+    private String ns = "com.example.demo.mapper.auth";
 
     @Override
     public void write(AuthorityVO authvo) {

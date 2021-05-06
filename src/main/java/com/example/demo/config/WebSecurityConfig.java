@@ -6,6 +6,7 @@ import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,6 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // auth.authenticationProvider(authenticationProvider());
 
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
 
@@ -50,8 +52,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/").permitAll().antMatchers("/user/**").authenticated()
-                .antMatchers("/admin/**").authenticated();
+        http.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/**").permitAll().antMatchers(HttpMethod.POST, "/**").permitAll()
+                .antMatchers("/").permitAll().antMatchers("/api/user/**").authenticated().antMatchers("/api/admin/**")
+                .authenticated();
 
         http.formLogin().usernameParameter("email").passwordParameter("password").loginPage("/")
                 .defaultSuccessUrl("/prjList").successHandler(customAuthenticationSuccessHandler()).permitAll();
@@ -60,5 +64,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true);
 
     }
+
+    // @Bean
+    // public DaoAuthenticationProvider authenticationProvider() {
+    // DaoAuthenticationProvider authenticationProvider = new
+    // DaoAuthenticationProvider();
+    // authenticationProvider.setUserDetailsService(userDetailsService());
+    // authenticationProvider.setPasswordEncoder(passwordEncoder());
+    // return authenticationProvider;
+    // }
 
 }

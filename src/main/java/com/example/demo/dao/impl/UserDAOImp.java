@@ -1,6 +1,5 @@
 package com.example.demo.dao.impl;
 
-import com.example.demo.dao.CustomUserDetails;
 import com.example.demo.dao.UserDAO;
 import com.example.demo.domain.UserVO;
 
@@ -19,7 +18,7 @@ public class UserDAOImp implements UserDAO {
     @Autowired
     private SqlSessionTemplate sql;
 
-    private String ns = "com.example.demo.dao.UserMapper";
+    private String ns = "com.example.demo.mapper.user";
 
     @Override
     public void join(UserVO uvo) {
@@ -41,7 +40,7 @@ public class UserDAOImp implements UserDAO {
     }
 
     @Override
-    public CustomUserDetails loginCheck(String email) {
+    public UserVO loginCheck(String email) {
         return sql.selectOne(ns + ".loginCheck", email);
     }
 

@@ -6,16 +6,19 @@ import com.example.demo.dao.UserAuthoritiesDAO;
 import com.example.demo.domain.Authorities;
 
 import org.mybatis.spring.SqlSessionTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserAuthoritiesDAOImp implements UserAuthoritiesDAO {
+    private final Logger log = LoggerFactory.getLogger(UserAuthoritiesDAOImp.class);
 
     @Autowired
     private SqlSessionTemplate sql;
 
-    private String ns = "com.example.demo.mapper.dao.AuthorityMapper";
+    private String ns = "com.example.demo.mapper.auth";
 
     @Override
     public List<String> getUserRoles(String email) {
@@ -24,6 +27,7 @@ public class UserAuthoritiesDAOImp implements UserAuthoritiesDAO {
 
     @Override
     public void insertAuthority(Authorities authorities) {
+        log.info(">>>>>>>auth: " + authorities.getRoles_authority());
         sql.insert(ns + ".insertAuthority", authorities);
     }
 

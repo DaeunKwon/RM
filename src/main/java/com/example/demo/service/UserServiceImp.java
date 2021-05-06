@@ -19,7 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImp implements UserService, UserDetailsService {
+public class UserServiceImp implements UserService {
     private final Logger log = LoggerFactory.getLogger(UserServiceImp.class);
 
     @Autowired
@@ -50,15 +50,15 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Override
     public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         log.info(">>>>>>>>>>>email: " + email);
-        CustomUserDetails user = udao.loginCheck(email);
+        UserVO user = udao.loginCheck(email);
         log.info(">>>>>>>>>" + user);
         if (user == null) {
-            return null;
+            throw new UsernameNotFoundException(email);
         } else {
             CustomUserDetails customUserDetails = new CustomUserDetails();
-            customUserDetails.setUsername(user.getUsername());
+            customUserDetails.setUsername(user.getEmail());
             customUserDetails.setPassword(user.getPassword());
-            customUserDetails.setAuthorities(getAuthorities(user.getUsername()));
+            customUserDetails.setAuthorities(getAuthorities(user.getEmail()));
             customUserDetails.setEnabled(true);
             customUserDetails.setAccountNonExpired(true);
             customUserDetails.setAccountNonLocked(true);
@@ -78,6 +78,11 @@ public class UserServiceImp implements UserService, UserDetailsService {
         }
 
         return authorities;
+    }
+
+    @Override
+    public UserVO loginCheck(String email) {
+        return udao.loginCheck(email);
     }
 
 }

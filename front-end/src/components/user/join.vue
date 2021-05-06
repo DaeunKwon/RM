@@ -47,7 +47,7 @@
 
           <v-btn color="primary" class="mr-4" @click="submit"> Submit </v-btn>
 
-          <v-btn color="warning" href="/"> Login </v-btn>
+          <v-btn color="warning" @click="$router.replace('/')"> Login </v-btn>
         </v-form>
       </v-card-text>
     </v-card>
