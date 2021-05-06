@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -49,17 +48,17 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         log.info(">>>>>>>>>>>email: " + email);
-        UserVO user = udao.loginCheck(email);
+        CustomUserDetails user = udao.loginCheck(email);
         log.info(">>>>>>>>>" + user);
         if (user == null) {
             return null;
         } else {
             CustomUserDetails customUserDetails = new CustomUserDetails();
-            customUserDetails.setUsername(user.getEmail());
+            customUserDetails.setUsername(user.getUsername());
             customUserDetails.setPassword(user.getPassword());
-            customUserDetails.setAuthorities(getAuthorities(user.getEmail()));
+            customUserDetails.setAuthorities(getAuthorities(user.getUsername()));
             customUserDetails.setEnabled(true);
             customUserDetails.setAccountNonExpired(true);
             customUserDetails.setAccountNonLocked(true);

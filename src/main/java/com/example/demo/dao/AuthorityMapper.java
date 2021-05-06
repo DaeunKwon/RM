@@ -15,7 +15,7 @@ public interface AuthorityMapper {
 
     List<String> getUserRoles(String email);
 
-    int insertAuthority(Authorities authorities);
+    void insertAuthority(Authorities authorities);
 
     int deleteAllAuthority(String email);
 }

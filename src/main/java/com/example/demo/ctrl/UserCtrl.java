@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 
 import com.example.demo.dao.CustomUserDetails;
 import com.example.demo.dao.UserAuthoritiesDAO;
+import com.example.demo.domain.Authorities;
 import com.example.demo.domain.UserVO;
 import com.example.demo.service.UserService;
 
@@ -45,6 +46,8 @@ public class UserCtrl {
         log.info(uvo.getEmail());
         log.info(uvo.getPassword());
         userSvc.join(uvo);
+        authoritiesDAO.insertAuthority(
+                Authorities.builder().member_email(uvo.getEmail()).roles_authority("ROLE_USER").build());
         log.info(">>>>>>>>>>>>>>>>>join 성공");
     }
 

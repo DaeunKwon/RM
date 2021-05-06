@@ -1,11 +1,9 @@
 package com.example.demo.dao.impl;
 
-import java.util.HashMap;
 import java.util.List;
 
 import com.example.demo.dao.UserAuthoritiesDAO;
 import com.example.demo.domain.Authorities;
-import com.example.demo.domain.UserVO;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +23,8 @@ public class UserAuthoritiesDAOImp implements UserAuthoritiesDAO {
     }
 
     @Override
-    public int insertAuthority(Authorities authorities) {
-        return sql.insert(ns + ".insertAuthority", authorities);
+    public void insertAuthority(Authorities authorities) {
+        sql.insert(ns + ".insertAuthority", authorities);
     }
 
     @Override

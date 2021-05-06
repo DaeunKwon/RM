@@ -50,7 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/user/**").authenticated().antMatchers("/admin/**").authenticated();
+        http.authorizeRequests().antMatchers("/").permitAll().antMatchers("/user/**").authenticated()
+                .antMatchers("/admin/**").authenticated();
 
         http.formLogin().usernameParameter("email").passwordParameter("password").loginPage("/")
                 .defaultSuccessUrl("/prjList").successHandler(customAuthenticationSuccessHandler()).permitAll();
