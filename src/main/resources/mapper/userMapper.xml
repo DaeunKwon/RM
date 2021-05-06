@@ -4,7 +4,7 @@
 	<insert id="join" parameterType="com.example.demo.domain.UserVO">
 		insert into tbl_member (email, name, password, rmv_YN) values (#{email}, #{name}, #{password}, 'N')
 	</insert>
-	<select id="loginCheck" parameterType="com.example.demo.domain.UserVO" resultType="java.lang.Integer">
-	select count(*) from tbl_member where email = #{email} and password = #{password}
+	<select id="loginCheck" resultType="com.example.demo.domain.UserVO">
+	select * from tbl_member where email = #{email}
 	</select>
 </mapper>

@@ -1,10 +1,10 @@
 package com.example.demo.ctrl;
 
-import com.example.demo.domain.AuthorityVO;
-import com.example.demo.domain.ProjectInVO;
+// import com.example.demo.domain.AuthorityVO;
+// import com.example.demo.domain.ProjectInVO;
 import com.example.demo.domain.ProjectVO;
-import com.example.demo.service.AuthService;
-import com.example.demo.service.ProjectInService;
+// import com.example.demo.service.AuthService;
+// import com.example.demo.service.ProjectInService;
 import com.example.demo.service.ProjectService;
 
 import org.slf4j.Logger;
@@ -27,8 +27,8 @@ public class ProjectCtrl {
 
     @Autowired
     private ProjectService prjSvc;
-    private ProjectInService prjINSvc;
-    private AuthService authSvc;
+    // private ProjectInService prjINSvc;
+    // private AuthService authSvc;
 
     // @RequestMapping(value = "prjList", method = RequestMethod.GET)
     @GetMapping(value = "/prjList")

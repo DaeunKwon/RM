@@ -1,56 +1,57 @@
 <template>
-  <div>
-    <b-container fluid="md">
-      <b-form v-if="show" action="/join" method="post">
-        <b-form-group
-          id="input-group-1"
-          label="Email address:"
-          label-for="input-1"
-        >
-          <b-form-input
-            id="input-1"
-            v-model="user.email"
-            :state="validation"
-            type="email"
-            placeholder="Enter email"
+  <v-container>
+    <v-card>
+      <v-card-title>업무 일지 관리</v-card-title>
+      <v-card-subtitle>회원가입</v-card-subtitle>
+      <v-card-text>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-text-field
+            v-model="name"
+            :counter="10"
+            :rules="nameRules"
+            label="Name"
             required
-          ></b-form-input>
-          <b-form-invalid-feedback :state="validation">
-            이메일을 입력하세요.
-          </b-form-invalid-feedback>
-          <b-form-valid-feedback :state="validation">
-            사용 가능한 이메일입니다.
-          </b-form-valid-feedback>
-        </b-form-group>
+          ></v-text-field>
 
-        <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
-          <b-form-input
-            id="input-2"
-            v-model="user.name"
-            placeholder="Enter name"
+          <v-text-field
+            v-model="email"
+            :counter="10"
+            :rules="nameRules"
+            label="E-mail"
             required
-          ></b-form-input>
-        </b-form-group>
+          ></v-text-field>
 
-        <b-form-group id="input-group-3" label="Password:" label-for="input-3">
-          <b-form-input
+          <v-text-field
+            v-model="password"
+            :rules="emailRules"
+            label="Password"
+            required
             type="password"
-            id="input-3"
-            v-model="user.password"
-            placeholder="Enter password"
-            required
-          ></b-form-input>
-        </b-form-group>
-      </b-form>
+          ></v-text-field>
 
-      <b-button type="button" variant="primary" @click="onSubmit"
-        >Submit</b-button
-      >
-      <b-button type="button" variant="danger" @click="onReset">Reset</b-button>
-      <b-button variant="info" href="/">Login</b-button>
-      <b-button variant="warning" href="/prjList">prjList</b-button>
-    </b-container>
-  </div>
+          <v-checkbox
+            v-model="checkbox"
+            :rules="[(v) => !!v || 'You must agree to continue!']"
+            label="Do you agree?"
+            required
+          ></v-checkbox>
+
+          <v-btn
+            :disabled="!valid"
+            color="success"
+            class="mr-4"
+            @click="validate"
+          >
+            Validate
+          </v-btn>
+
+          <v-btn color="primary" class="mr-4" @click="submit"> Submit </v-btn>
+
+          <v-btn color="warning" href="/"> Login </v-btn>
+        </v-form>
+      </v-card-text>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -59,11 +60,9 @@ console.log("join.vue 진입");
 export default {
   data() {
     return {
-      user: {
-        email: "",
-        name: "",
-        password: "",
-      },
+      email: "",
+      name: "",
+      password: "",
       show: true,
     };
   },
@@ -73,16 +72,15 @@ export default {
     },
   },
   methods: {
-    onSubmit: function () {
+    submit: function () {
       //event.preventDefault();
-      alert(JSON.stringify(this.user));
       this.$axios
         .post(
           "http://localhost:8090/api/user/join",
           JSON.stringify({
-            email: this.user.email,
-            name: this.user.name,
-            password: this.user.password,
+            email: this.email,
+            name: this.name,
+            password: this.password,
           }),
           {
             headers: {
@@ -93,7 +91,7 @@ export default {
         .then((res) => {
           console.log(res);
           alert("환영합니다.");
-          this.$router.push("/login");
+          this.$router.push("/");
         });
     },
 

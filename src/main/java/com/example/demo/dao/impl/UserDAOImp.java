@@ -1,5 +1,6 @@
 package com.example.demo.dao.impl;
 
+import com.example.demo.dao.CustomUserDetails;
 import com.example.demo.dao.UserDAO;
 import com.example.demo.domain.UserVO;
 
@@ -40,8 +41,8 @@ public class UserDAOImp implements UserDAO {
     }
 
     @Override
-    public int loginCheck(UserVO uvo) {
-        return sql.selectOne(ns + ".loginCheck", uvo);
+    public CustomUserDetails loginCheck(String email) {
+        return sql.selectOne(ns + ".loginCheck", email);
     }
 
 }
