@@ -15,7 +15,7 @@ public class ProjectDAOImp implements ProjectDAO {
     @Autowired
     private SqlSessionTemplate sql;
 
-    private String ns = "com.example.demo.dao.ProjectMapper";
+    private String ns = "com.example.demo.mapper.project";
 
     @Override
     public void insert(ProjectVO pvo) {

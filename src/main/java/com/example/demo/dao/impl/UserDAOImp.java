@@ -18,7 +18,7 @@ public class UserDAOImp implements UserDAO {
     @Autowired
     private SqlSessionTemplate sql;
 
-    private String ns = "com.example.demo.dao.UserMapper";
+    private String ns = "com.example.demo.mapper.user";
 
     @Override
     public void join(UserVO uvo) {

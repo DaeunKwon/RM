@@ -18,4 +18,5 @@ public class Authorities {
         this.member_email = member_email;
         this.roles_authority = roles_authority;
     }
+
 }

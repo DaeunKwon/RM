@@ -14,13 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImp implements UserService, UserDetailsService {
+public class UserServiceImp implements UserService {
     private final Logger log = LoggerFactory.getLogger(UserServiceImp.class);
 
     @Autowired
@@ -49,12 +48,12 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         log.info(">>>>>>>>>>>email: " + email);
         UserVO user = udao.loginCheck(email);
         log.info(">>>>>>>>>" + user);
         if (user == null) {
-            return null;
+            throw new UsernameNotFoundException(email);
         } else {
             CustomUserDetails customUserDetails = new CustomUserDetails();
             customUserDetails.setUsername(user.getEmail());
@@ -79,6 +78,11 @@ public class UserServiceImp implements UserService, UserDetailsService {
         }
 
         return authorities;
+    }
+
+    @Override
+    public UserVO loginCheck(String email) {
+        return udao.loginCheck(email);
     }
 
 }

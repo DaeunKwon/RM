@@ -15,4 +15,6 @@ public interface UserService extends UserDetailsService {
     public void remove(String email);
 
     Collection<GrantedAuthority> getAuthorities(String email);
+
+    public UserVO loginCheck(String email);
 }
