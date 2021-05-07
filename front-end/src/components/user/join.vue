@@ -64,7 +64,7 @@ export default {
     },
   },
   methods: {
-    submit: function () {
+    join: function () {
       //event.preventDefault();
       this.$axios
         .post(

@@ -1,6 +1,9 @@
 package com.example.demo.config;
 
+import com.example.demo.dao.CustomUserDetails;
 import com.example.demo.handler.CustomAuthenticationSuccessHandler;
+import com.example.demo.security.AuthEntryPointJwt;
+import com.example.demo.security.AuthTokenFilter;
 import com.example.demo.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CustomUserDetails userDetails;
+    @Autowired
+    private AuthEntryPointJwt unauthorizedHandler;
+
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -1,5 +1,9 @@
 package com.example.demo.ctrl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.example.demo.dao.CustomUserDetails;
 import com.example.demo.dao.UserAuthoritiesDAO;
 import com.example.demo.domain.Authorities;
 import com.example.demo.domain.UserVO;
@@ -9,6 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,10 +49,22 @@ public class UserCtrl {
         log.info(">>>>>>>>>>>>>>>>>join 성공");
     }
 
-    // @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    // public void login() {
+    @PostMapping("/login")
+    public ResponseEntity<?> authenticateUser(@RequestBody UserVO uvo) {
 
-    // }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(uvo.getEmail(), uvo.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(
+                new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getPassword()), roles));
+    }
 
     // @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     // @ResponseBody

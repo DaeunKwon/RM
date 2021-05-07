@@ -59,58 +59,35 @@ export default {
   },
   methods: {
     login() {
-      this.$axios
-        .post(
-          "http://localhost:8090/api/user/login",
-          JSON.stringify({
-            email: this.email,
-            password: this.password,
-          }),
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          alert("로그인 성공");
-          this.$router.push("/prjList");
+      // this.$axios
+      //   .post(
+      //     "http://localhost:8090/api/user/login",
+      //     JSON.stringify({
+      //       email: this.email,
+      //       password: this.password,
+      //     }),
+      //     {
+      //       headers: {
+      //         "Access-Control-Allow-Origin": "*",
+      //         "Content-Type": "application/json",
+      //       },
+      //     }
+      //   )
+      //   .then((res) => {
+      //     console.log(res);
+      //     alert("로그인 성공");
+      //     this.$router.push("/prjList");
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+      this.$store
+        .dispatch("login", {
+          email: this.email,
+          password: this.password,
         })
-        .catch((err) => {
-          console.log(err);
-        });
-      this.$store.dispatch("login", {
-        email: this.email,
-        password: this.password,
-      });
-      // .then((res) => {
-      //   this.$router.push("/prjList");
+        .then(() => this.$router.push("/prjList"));
     },
-
-    // this.$axios
-    //   .post(
-    //     "http://localhost:8090/api/user/login",
-    //     JSON.stringify({
-    //       email: this.email,
-    //       password: this.password,
-    //     }),
-    //     {
-    //       headers: {
-    //         "Access-Control-Allow-Origin": "*",
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   )
-    //   .then((res) => {
-    //     console.log(res);
-    //     alert("로그인 성공");
-    //     this.$router.push("/prjList");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   },
 };
 </script>
