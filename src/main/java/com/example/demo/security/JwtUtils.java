@@ -4,21 +4,21 @@ import java.security.SignatureException;
 import java.util.Date;
 
 import com.example.demo.dao.CustomUserDetails;
+import com.example.demo.service.UserServiceImp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import lombok.Value;
+
 @Component
 public class JwtUtils {
     private static final Logger log = LoggerFactory.getLogger(JwtUtils.class);
 
-    // @Value("${bezkoder.app.jwtSecret}")
-    private String jwtSecret;
-
-    // @Value("${bezkoder.app.jwtExpirationMs}")
-    private int jwtExpirationMs;
+    private String jwtSecret = "bezKoderSecretKey";
+    private int jwtExpirationMs = 86400000;
 
     public String generateJwtToken(Authentication authentication) {
 

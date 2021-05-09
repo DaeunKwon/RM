@@ -28,10 +28,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private CustomUserDetails userDetails;
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    // @Autowired
+    // private CustomUserDetails userDetails;
+    // @Autowired
+    // private AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -66,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable();
         http.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/**").permitAll().antMatchers(HttpMethod.POST, "/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/**").authenticated().antMatchers(HttpMethod.POST, "/**").permitAll()
                 .antMatchers("/").permitAll().antMatchers("/api/user/**").authenticated().antMatchers("/api/admin/**")
                 .authenticated();
 

@@ -48,6 +48,7 @@
           </b-card-group>
         </div>
       </div>
+
       <p>.<span v-html="strHtml"></span></p>
       <p>.<span v-html="strHtml"></span></p>
       <vfooter />

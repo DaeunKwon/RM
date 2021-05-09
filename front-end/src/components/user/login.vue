@@ -5,14 +5,14 @@
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
-            v-model="email"
+            v-model="user.email"
             :rules="emailRules"
             label="E-mail"
             required
           ></v-text-field>
 
           <v-text-field
-            v-model="password"
+            v-model="user.password"
             :counter="10"
             :rules="passwordRules"
             label="Password"
@@ -52,41 +52,20 @@ export default {
   name: "Login",
   data() {
     return {
-      email: "",
-      password: "",
+      user: {
+        email: "",
+        password: "",
+      },
       show: true,
     };
   },
   methods: {
     login() {
-      // this.$axios
-      //   .post(
-      //     "http://localhost:8090/api/user/login",
-      //     JSON.stringify({
-      //       email: this.email,
-      //       password: this.password,
-      //     }),
-      //     {
-      //       headers: {
-      //         "Access-Control-Allow-Origin": "*",
-      //         "Content-Type": "application/json",
-      //       },
-      //     }
-      //   )
-      //   .then((res) => {
-      //     console.log(res);
-      //     alert("로그인 성공");
-      //     this.$router.push("/prjList");
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
-      this.$store
-        .dispatch("login", {
-          email: this.email,
-          password: this.password,
-        })
-        .then(() => this.$router.push("/prjList"));
+      if (this.user.email && this.user.password)
+        this.$store.dispatch("login", this.user).then(() => {
+          alert("로그인 성공");
+          this.$router.push("/prjList");
+        });
     },
   },
 };

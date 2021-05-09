@@ -28,67 +28,70 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/user")
 public class UserCtrl {
-    private final Logger log = LoggerFactory.getLogger(UserCtrl.class);
+        private final Logger log = LoggerFactory.getLogger(UserCtrl.class);
 
-    @Autowired
-    private UserService userService;
+        @Autowired
+        private UserService userService;
 
-    @Autowired
-    private UserAuthoritiesDAO authoritiesDAO;
+        @Autowired
+        private UserAuthoritiesDAO authoritiesDAO;
 
-    // @RequestMapping(value = "/joinPOST", method = RequestMethod.POST)
-    @PostMapping(value = "/join", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public void joinPOST(@RequestBody UserVO uvo) {
-        log.info(">>>>>>>>>>>>>>>>>joinPOST");
-        log.info(uvo.getEmail());
-        log.info(uvo.getPassword());
-        userService.join(uvo);
-        authoritiesDAO.insertAuthority(
-                Authorities.builder().member_email(uvo.getEmail()).roles_authority("ROLE_USER").build());
-        log.info(">>>>>>>>>>>>>>>>>join 성공");
-    }
+        // @RequestMapping(value = "/joinPOST", method = RequestMethod.POST)
+        @PostMapping(value = "/join", produces = MediaType.APPLICATION_JSON_VALUE)
+        @ResponseBody
+        public void joinPOST(@RequestBody UserVO uvo) {
+                log.info(">>>>>>>>>>>>>>>>>joinPOST");
+                log.info(uvo.getEmail());
+                log.info(uvo.getPassword());
+                userService.join(uvo);
+                authoritiesDAO.insertAuthority(Authorities.builder().member_email(uvo.getEmail())
+                                .roles_authority("ROLE_USER").build());
+                log.info(">>>>>>>>>>>>>>>>>join 성공");
+        }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody UserVO uvo) {
+        // @PostMapping("/login")
+        // public ResponseEntity<?> authenticateUser(@RequestBody UserVO uvo) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(uvo.getEmail(), uvo.getPassword()));
+        // Authentication authentication = authenticationManager.authenticate(
+        // new UsernamePasswordAuthenticationToken(uvo.getEmail(), uvo.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+        // SecurityContextHolder.getContext().setAuthentication(authentication);
+        // String jwt = jwtUtils.generateJwtToken(authentication);
 
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+        // CustomUserDetails userDetails = (CustomUserDetails)
+        // authentication.getPrincipal();
+        // List<String> roles = userDetails.getAuthorities().stream().map(item ->
+        // item.getAuthority())
+        // .collect(Collectors.toList());
 
-        return ResponseEntity.ok(
-                new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getPassword()), roles));
-    }
+        // return ResponseEntity.ok(
+        // new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
+        // userDetails.getPassword()), roles));
+        // }
 
-    // @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    // @ResponseBody
-    // public ResponseEntity<?> login(@RequestBody UserVO uvo, HttpSession session)
-    // {
-    // log.info(">>>>>>>>>>>>>>>>>>login post userctrl 진입");
-    // UserVO user = userService.loginCheck(uvo.getEmail());
-    // log.info(">>>>>>>>>>>> user: " + user);
-    // log.info(">>>>>>>>>>>>>>>>>>>로그인 검사 완료");
-    // UsernamePasswordAuthenticationToken token = new
-    // UsernamePasswordAuthenticationToken(uvo.getEmail(),
-    // uvo.getPassword());
+        // @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+        // @ResponseBody
+        // public ResponseEntity<?> login(@RequestBody UserVO uvo, HttpSession session)
+        // {
+        // log.info(">>>>>>>>>>>>>>>>>>login post userctrl 진입");
+        // UserVO user = userService.loginCheck(uvo.getEmail());
+        // log.info(">>>>>>>>>>>> user: " + user);
+        // log.info(">>>>>>>>>>>>>>>>>>>로그인 검사 완료");
+        // UsernamePasswordAuthenticationToken token = new
+        // UsernamePasswordAuthenticationToken(uvo.getEmail(),
+        // uvo.getPassword());
 
-    // Authentication authentication = authenticationManager.authenticate(token);
+        // Authentication authentication = authenticationManager.authenticate(token);
 
-    // SecurityContextHolder.getContext().setAuthentication(authentication);
+        // SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    // session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-    // SecurityContextHolder.getContext());
+        // session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+        // SecurityContextHolder.getContext());
 
-    // //
-    // user.setTokenId(RequestContextHolder.currentRequestAttributes().getSessionId());
+        // //
+        // user.setTokenId(RequestContextHolder.currentRequestAttributes().getSessionId());
 
-    // return ResponseEntity.ok(HttpStatus.OK);
-    // }
+        // return ResponseEntity.ok(HttpStatus.OK);
+        // }
 
 }

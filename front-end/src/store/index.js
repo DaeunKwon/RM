@@ -1,54 +1,65 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import api from '../api/index.js'
-
+import UserService from '../service/UserService'
 
 Vue.use(Vuex)
 
+const user = JSON.parse(localStorage.getItem('user'));
+const initialState = user
+    ? { status: { loggedIn: true }, user }
+    : { status: { loggedIn: false }, user: null };
+
+
 export default new Vuex.Store({
-    state: {
-        loginSuccess: false,
-        loginError: false,
-        userName: null,
-        userPass: null
-    },
+    state: initialState,
     mutations: {
-        login_success(state, payload) {
-            state.loginSuccess = true;
-            state.userName = payload.userName;
-            state.userPass = payload.userPass;
+        loginSuccess(state, user) {
+            state.status.loggedIn = true;
+            state.user = user;
         },
-        login_error(state, payload) {
-            state.loginError = true;
-            state.userName = payload.userName;
+        loginFailure(state) {
+            state.status.loggedIn = false;
+            state.user = null;
+        },
+        logout(state) {
+            state.status.loggedIn = false;
+            state.user = null;
+        },
+        registerSuccess(state) {
+            state.status.loggedIn = false;
+        },
+        registerFailure(state) {
+            state.status.loggedIn = false;
         }
     },
     actions: {
-        login({ commit }, { email, password }) {
-            return new Promise((resolve, reject) => {
-                console.log("Accessing backend with user: '" + email);
-                api.getSecured()
-                    .then(response => {
-                        console.log("Response: '" + response.data + "' with Statuscode " + response.status);
-                        if (response.status == 200) {
-                            console.log("Login successful");
-                            // place the loginSuccess state into our vuex store
-                            commit('login_success', {
-                                userName: email,
-                                userPass: password
-                            });
-                        }
-                        resolve(response)
-                    })
-                    .catch(error => {
-                        console.log("Error: " + error);
-                        // place the loginError state into our vuex store
-                        commit('login_error', {
-                            userName: email
-                        });
-                        reject("Invalid credentials!")
-                    })
-            })
+        login({ commit }, user) {
+            return UserService.login(user).then(
+                user => {
+                    commit('loginSuccess', user);
+                    return Promise.resolve(user);
+                },
+                error => {
+                    commit('loginFailure');
+                    return Promise.reject(error);
+                }
+            );
+        },
+        logout({ commit }) {
+            UserService.logout();
+            commit('logout');
+        },
+        join({ commit }, user) {
+            return UserService.join(user).then(
+                response => {
+                    commit('joinSuccess');
+                    return Promise.resolve(response.data);
+                },
+                error => {
+                    commit('joinFailure');
+                    return Promise.reject(error);
+                }
+            );
         }
     },
     getters: {
