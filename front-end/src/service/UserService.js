@@ -4,8 +4,9 @@ const API_URL = 'http://localhost:8090/api/user/';
 
 class UserService {
     login(user) {
+        console.log(user)
         return axios
-            .post(API_URL + 'login', {
+            .post('http://localhost:8090/' + 'login', {
                 email: user.email,
                 password: user.password
             })

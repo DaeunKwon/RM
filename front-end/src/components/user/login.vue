@@ -37,6 +37,7 @@
           </v-btn>
 
           <v-btn color="primary" class="mr-4" @click="login"> Login </v-btn>
+          <v-btn color="primary" class="mr-4" @click="login2"> Login2 </v-btn>
 
           <v-btn color="warning" @click="$router.replace('/join')">
             Join
@@ -64,8 +65,14 @@ export default {
       if (this.user.email && this.user.password)
         this.$store.dispatch("login", this.user).then(() => {
           alert("로그인 성공");
-          this.$router.push("/prjList");
+          // this.$router.push("/prjList");
         });
+    },
+    login2() {
+      this.$axios.post("http://localhost:8090/login", {
+        email: "11111111",
+        password: "121212",
+      });
     },
   },
 };

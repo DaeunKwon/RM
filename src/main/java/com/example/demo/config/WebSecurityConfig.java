@@ -1,8 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.dao.CustomUserDetails;
 import com.example.demo.handler.CustomAuthenticationSuccessHandler;
-import com.example.demo.security.AuthEntryPointJwt;
 import com.example.demo.security.AuthTokenFilter;
 import com.example.demo.service.UserService;
 
@@ -68,10 +66,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/**").authenticated().antMatchers(HttpMethod.POST, "/**").permitAll()
                 .antMatchers("/").permitAll().antMatchers("/api/user/**").authenticated().antMatchers("/api/admin/**")
-                .authenticated();
+                .authenticated().and().cors().and();
 
         http.formLogin().usernameParameter("email").passwordParameter("password").loginPage("/")
-                .defaultSuccessUrl("/prjList").successHandler(customAuthenticationSuccessHandler()).permitAll();
+                .loginProcessingUrl("/login").defaultSuccessUrl("/prjList")
+                .successHandler(customAuthenticationSuccessHandler()).permitAll();
 
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/")
                 .invalidateHttpSession(true);

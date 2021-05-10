@@ -11,7 +11,16 @@ module.exports = {
         target: 'http://localhost:8090',
         changeOrigin: true,
 
+      },
+      '/login': {
+        target: 'https://localhost:8090',
+        changeOrigin: true,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+        }
       }
+
     }
   },
   configureWebpack: {
