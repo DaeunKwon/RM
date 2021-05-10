@@ -1,13 +1,10 @@
 <template>
-    <dir>test page 1</dir>
+  <dir>test page 1</dir>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
 <style>
-
 </style>

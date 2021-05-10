@@ -16,5 +16,4 @@ public interface UserService extends UserDetailsService {
 
     Collection<GrantedAuthority> getAuthorities(String email);
 
-    public UserVO loginCheck(String email);
 }

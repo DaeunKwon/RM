@@ -31,11 +31,11 @@ public class ProjectCtrl {
     // private AuthService authSvc;
 
     // @RequestMapping(value = "prjList", method = RequestMethod.GET)
-    @GetMapping(value = "/prjList")
-    public String list() {
-        log.info(">>>>>>>>>>>>>project list 페이지 출력");
-        return "index.html";
-    }
+    // @GetMapping(value = "/prjList")
+    // public String list() {
+    // log.info(">>>>>>>>>>>>>project list 페이지 출력");
+    // return "index";
+    // }
 
     // @RequestMapping(value = "prjWrite", method = RequestMethod.GET)
     // public String write() {

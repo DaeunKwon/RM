@@ -3,12 +3,19 @@
     <v-card>
       <v-card-title>업무 일지 관리</v-card-title>
       <v-card-text>
-        <v-form ref="form" v-model="valid" lazy-validation>
+        <v-form
+          ref="form"
+          v-model="valid"
+          lazy-validation
+          method="post"
+          action="/login"
+        >
           <v-text-field
             v-model="user.email"
             :rules="emailRules"
             label="E-mail"
             required
+            name="email"
           ></v-text-field>
 
           <v-text-field
@@ -18,6 +25,7 @@
             label="Password"
             required
             type="password"
+            name="password"
           ></v-text-field>
 
           <v-checkbox
@@ -36,8 +44,7 @@
             Validate
           </v-btn>
 
-          <v-btn color="primary" class="mr-4" @click="login"> Login </v-btn>
-          <v-btn color="primary" class="mr-4" @click="login2"> Login2 </v-btn>
+          <v-btn color="primary" class="mr-4" type="submit"> Login </v-btn>
 
           <v-btn color="warning" @click="$router.replace('/join')">
             Join
@@ -65,14 +72,8 @@ export default {
       if (this.user.email && this.user.password)
         this.$store.dispatch("login", this.user).then(() => {
           alert("로그인 성공");
-          // this.$router.push("/prjList");
+          this.$router.push("/prjList");
         });
-    },
-    login2() {
-      this.$axios.post("http://localhost:8090/login", {
-        email: "11111111",
-        password: "121212",
-      });
     },
   },
 };

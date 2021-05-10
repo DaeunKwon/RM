@@ -16,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,12 +29,29 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Autowired
     private UserAuthoritiesDAO userAuthdao;
 
-    @Override
-    public void join(UserVO uvo) {
-        log.info(">>>>>>>>>>>>>>userservice join 진입");
-        udao.join(uvo);
-        log.info(">>>>>>>>>>>>>>userservice join 성공");
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserServiceImp(UserDAO udao, PasswordEncoder passwordEncoder) {
+        this.udao = udao;
+        this.passwordEncoder = passwordEncoder;
     }
+
+    public void join(UserVO uvo) {
+
+        // **** 해싱하는 부분 ****
+        String encodePassword = passwordEncoder.encode(uvo.getPassword());
+        UserVO user = UserVO.builder().email(uvo.getEmail()).name(uvo.getName()).password(encodePassword).build();
+        udao.join(user);
+    }
+
+    // @Override
+    // public void join(UserVO uvo) {
+    // log.info(">>>>>>>>>>>>>>userservice join 진입");
+    // udao.join(uvo);
+    // log.info(">>>>>>>>>>>>>>userservice join 성공");
+    // }
 
     @Override
     public void modify(UserVO uvo) {
@@ -55,6 +73,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(email);
         } else {
+            log.info(">>>>>>> customuserdetails 생성");
             CustomUserDetails customUserDetails = new CustomUserDetails();
             customUserDetails.setUsername(user.getEmail());
             customUserDetails.setPassword(user.getPassword());
@@ -63,7 +82,6 @@ public class UserServiceImp implements UserService, UserDetailsService {
             customUserDetails.setAccountNonExpired(true);
             customUserDetails.setAccountNonLocked(true);
             customUserDetails.setCredentialsNonExpired(true);
-
             return customUserDetails;
         }
 
@@ -78,11 +96,6 @@ public class UserServiceImp implements UserService, UserDetailsService {
         }
 
         return authorities;
-    }
-
-    @Override
-    public UserVO loginCheck(String email) {
-        return udao.loginCheck(email);
     }
 
 }

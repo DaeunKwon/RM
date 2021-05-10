@@ -41,49 +41,4 @@ public class UserCtrl {
                 log.info(">>>>>>>>>>>>>>>>>join 성공");
         }
 
-        // @PostMapping("/login")
-        // public ResponseEntity<?> authenticateUser(@RequestBody UserVO uvo) {
-
-        // Authentication authentication = authenticationManager.authenticate(
-        // new UsernamePasswordAuthenticationToken(uvo.getEmail(), uvo.getPassword()));
-
-        // SecurityContextHolder.getContext().setAuthentication(authentication);
-        // String jwt = jwtUtils.generateJwtToken(authentication);
-
-        // CustomUserDetails userDetails = (CustomUserDetails)
-        // authentication.getPrincipal();
-        // List<String> roles = userDetails.getAuthorities().stream().map(item ->
-        // item.getAuthority())
-        // .collect(Collectors.toList());
-
-        // return ResponseEntity.ok(
-        // new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
-        // userDetails.getPassword()), roles));
-        // }
-
-        // @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-        // @ResponseBody
-        // public ResponseEntity<?> login(@RequestBody UserVO uvo, HttpSession session)
-        // {
-        // log.info(">>>>>>>>>>>>>>>>>>login post userctrl 진입");
-        // UserVO user = userService.loginCheck(uvo.getEmail());
-        // log.info(">>>>>>>>>>>> user: " + user);
-        // log.info(">>>>>>>>>>>>>>>>>>>로그인 검사 완료");
-        // UsernamePasswordAuthenticationToken token = new
-        // UsernamePasswordAuthenticationToken(uvo.getEmail(),
-        // uvo.getPassword());
-
-        // Authentication authentication = authenticationManager.authenticate(token);
-
-        // SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-        // SecurityContextHolder.getContext());
-
-        // //
-        // user.setTokenId(RequestContextHolder.currentRequestAttributes().getSessionId());
-
-        // return ResponseEntity.ok(HttpStatus.OK);
-        // }
-
 }

@@ -13,7 +13,7 @@ module.exports = {
 
       },
       '/login': {
-        target: 'https://localhost:8090',
+        target: 'http://localhost:8090',
         changeOrigin: true,
         headers: {
           'Access-Control-Allow-Origin': '*',

@@ -10,15 +10,19 @@ import javax.servlet.http.HttpSession;
 import com.example.demo.dao.UserDAO;
 import com.example.demo.domain.UserVO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
 public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+    private final Logger log = LoggerFactory.getLogger(CustomAuthenticationSuccessHandler.class);
     @Autowired
     private UserDAO udao;
 
     public CustomAuthenticationSuccessHandler(String defaultTargetUrl) {
+        log.info(">>>>>>sucesshandler 진입");
         setDefaultTargetUrl(defaultTargetUrl);
     }
 
