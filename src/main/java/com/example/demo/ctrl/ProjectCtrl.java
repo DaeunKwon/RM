@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RestController(value = "/api")
+@RestController(value = "/api/project")
 @Controller
 public class ProjectCtrl {
     private final Logger log = LoggerFactory.getLogger(ProjectCtrl.class);
@@ -43,7 +43,7 @@ public class ProjectCtrl {
     // return "index.html";
     // }
 
-    @PostMapping(value = "/prjWrite", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/write", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void write(@RequestBody ProjectVO pvo) {
         log.info(">>>>>>>>>>>>project write POST 요청");
@@ -52,7 +52,7 @@ public class ProjectCtrl {
 
     }
 
-    @GetMapping(value = "/prjDetail")
+    @GetMapping(value = "/detail")
     public String detail() {
         log.info(">>>>>>>>>>>>>project detail 페이지 출력");
         return "index.html";

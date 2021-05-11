@@ -41,4 +41,11 @@ public class UserCtrl {
                 log.info(">>>>>>>>>>>>>>>>>join 성공");
         }
 
+        @PostMapping(value = "/emailCheck", produces = MediaType.APPLICATION_JSON_VALUE)
+        @ResponseBody
+        public boolean emailCheck(@RequestBody String email) {
+                log.info(">>>>>return : " + userService.emailCheck(email));
+                return userService.emailCheck(email);
+        }
+
 }

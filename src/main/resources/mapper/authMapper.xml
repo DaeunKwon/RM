@@ -4,7 +4,7 @@
     <select id="getUserAuthority" parameterType="java.lang.String" resultType="java.lang.String">
         select roles.authority from authorities
         join roles on roles.authority = authorities.roles_authority
-        where member_email = #{email};
+        where member_email = #{email}
     </select>
     <insert id="insertAuthority" parameterType="com.example.demo.domain.Authorities">
         insert into authorities values (#{member_email}, #{roles_authority})

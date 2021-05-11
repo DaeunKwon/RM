@@ -16,4 +16,6 @@ public interface UserService extends UserDetailsService {
 
     Collection<GrantedAuthority> getAuthorities(String email);
 
+    public boolean emailCheck(String email);
+
 }

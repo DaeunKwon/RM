@@ -2,14 +2,14 @@
   <div>
     <Header />
     <v-container>
-      <p>.<span v-html="strHtml"></span></p>
+      <br />
       <h6>프로젝트 목록</h6>
       <div align="right">
         <button type="submit" class="btn btn-warning" @click="prjWrite">
           작성
         </button>
       </div>
-      <p>.<span v-html="strHtml"></span></p>
+      <br />
       <div>
         <div>
           <v-sheet class="mx-auto" elevation="8" max-width="1000">
@@ -191,11 +191,10 @@
             </v-slide-group>
           </v-sheet>
         </div>
-        <p>.<span v-html="strHtml"></span></p>
+        <br />
       </div>
 
-      <p>.<span v-html="strHtml"></span></p>
-      <p>.<span v-html="strHtml"></span></p>
+      <br /><br />
       <vfooter />
     </v-container>
   </div>

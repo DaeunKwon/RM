@@ -68,7 +68,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Override
     public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         log.info(">>>>>>>>>>>email: " + email);
-        UserVO user = udao.loginCheck(email);
+        UserVO user = udao.getUserfindByEmail(email);
         log.info(">>>>>>>>>" + user);
         if (user == null) {
             throw new UsernameNotFoundException(email);
@@ -96,6 +96,12 @@ public class UserServiceImp implements UserService, UserDetailsService {
         }
 
         return authorities;
+    }
+
+    @Override
+    public boolean emailCheck(String email) {
+        log.info(">>>>>>" + email);
+        return (udao.getUserfindByEmail(email) == null) ? true : false;
     }
 
 }

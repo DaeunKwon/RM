@@ -9,6 +9,6 @@ public interface UserDAO {
 
     public void delete(String email);
 
-    public UserVO loginCheck(String email);
+    public UserVO getUserfindByEmail(String email);
 
 }
