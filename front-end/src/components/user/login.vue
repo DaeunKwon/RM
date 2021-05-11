@@ -60,6 +60,10 @@ export default {
     passwordRules: [(v) => !!v || "Password is required"],
   }),
   methods: {
+    login(e) {
+      e.preventDefault();
+      alert("로그인");
+    },
     //   login() {
     //     if (this.email && this.password) {
     //       let user = {
