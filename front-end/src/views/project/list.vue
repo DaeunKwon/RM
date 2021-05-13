@@ -40,8 +40,6 @@
 
                         <!-- <v-chip>업무일지</v-chip> -->
 
-                        <v-chip>상세보기</v-chip>
-
                         <v-chip>
                           <v-dialog
                             v-model="dialog"
@@ -50,7 +48,7 @@
                           >
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn
-                                color="grey lighten-1"
+                                color="grey lighten-2"
                                 v-bind="attrs"
                                 v-on="on"
                               >
@@ -182,7 +180,6 @@
                         active-class="deep-purple accent-4 white--text"
                         column
                       >
-                        <v-chip>상세보기</v-chip>
                       </v-chip-group>
                     </v-card-text>
                   </v-card-content>
