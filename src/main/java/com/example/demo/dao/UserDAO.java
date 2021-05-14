@@ -1,5 +1,7 @@
 package com.example.demo.dao;
 
+import java.util.List;
+
 import com.example.demo.domain.UserVO;
 
 public interface UserDAO {
@@ -10,5 +12,7 @@ public interface UserDAO {
     public void delete(String email);
 
     public UserVO getUserfindByEmail(String email);
+
+    public List<UserVO> getUserList();
 
 }

@@ -1,5 +1,7 @@
 package com.example.demo.ctrl;
 
+import java.util.List;
+
 import com.example.demo.dao.UserAuthoritiesDAO;
 import com.example.demo.domain.Authorities;
 import com.example.demo.domain.UserVO;
@@ -10,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,9 +39,16 @@ public class UserCtrl {
                 log.info(uvo.getEmail());
                 log.info(uvo.getPassword());
                 userService.join(uvo);
-                authoritiesDAO.insertAuthority(Authorities.builder().member_email(uvo.getEmail())
-                                .roles_authority("ROLE_USER").build());
-                log.info(">>>>>>>>>>>>>>>>>join 성공");
+                if (uvo.getEmail().equals("root")) {
+                        authoritiesDAO.insertAuthority(Authorities.builder().member_email(uvo.getEmail())
+                                        .roles_authority("ROLE_ROOT").build());
+                        log.info(">>>>>>>>>>>>>>>>>root join 성공");
+                } else {
+                        authoritiesDAO.insertAuthority(Authorities.builder().member_email(uvo.getEmail())
+                                        .roles_authority("ROLE_USER").build());
+                        log.info(">>>>>>>>>>>>>>>>>join 성공");
+                }
+
         }
 
         @PostMapping(value = "/emailCheck", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -46,6 +56,13 @@ public class UserCtrl {
         public boolean emailCheck(@RequestBody String email) {
                 log.info(">>>>>return : " + userService.emailCheck(email));
                 return userService.emailCheck(email);
+        }
+
+        @GetMapping(value = "/list")
+        public List<UserVO> userList() {
+                log.info(">>>>>> get user list");
+                log.info(">>>>>>>>user list: " + userService.getlist());
+                return null;
         }
 
 }

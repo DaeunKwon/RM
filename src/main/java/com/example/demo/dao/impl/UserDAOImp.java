@@ -1,5 +1,7 @@
 package com.example.demo.dao.impl;
 
+import java.util.List;
+
 import com.example.demo.dao.UserDAO;
 import com.example.demo.domain.UserVO;
 
@@ -43,6 +45,11 @@ public class UserDAOImp implements UserDAO {
     public UserVO getUserfindByEmail(String email) {
         log.info(">>>>>>" + email);
         return sql.selectOne(ns + ".getUserfindByEmail", email);
+    }
+
+    @Override
+    public List<UserVO> getUserList() {
+        return sql.selectList(ns + ".getUserList");
     }
 
 }

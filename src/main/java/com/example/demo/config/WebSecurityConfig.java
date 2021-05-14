@@ -59,17 +59,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable();
         http.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll().antMatchers(HttpMethod.GET, "/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/**").permitAll().antMatchers("/prjList").hasRole("USER")
+                .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll().antMatchers(HttpMethod.GET, "/**")
+                .authenticated().antMatchers(HttpMethod.POST, "/**").permitAll().antMatchers("/prjList").hasRole("USER")
                 // .antMatchers("/api/user/**").permitAll().antMatchers("/api/admin/**").authenticated()
                 .and().cors().and();
 
         http.formLogin().usernameParameter("email").passwordParameter("password").loginPage("/")
-                .loginProcessingUrl("/login").defaultSuccessUrl("/prjList").permitAll()
+                .loginProcessingUrl("/login").defaultSuccessUrl("/prjList")
                 .successHandler(customAuthenticationSuccessHandler()).permitAll();
 
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true).deleteCookies("JSESSIONID");
 
     }
 

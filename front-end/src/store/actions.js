@@ -1,4 +1,5 @@
 //import axios from 'axios';
+import axios from 'axios';
 import UserService from '../service/UserService'
 
 export default {
@@ -29,5 +30,14 @@ export default {
                 return Promise.reject(error);
             }
         );
+    },
+    get_user_list({ commit }, { }) {
+        return axios.get('/api/user/list').then(data => {
+            if (data.status === 200) {
+                return {
+                    "userList": data.data.data.userList
+                }
+            }
+        })
     }
 }
