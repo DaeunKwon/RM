@@ -3,7 +3,7 @@
     <Header />
     <v-container>
       <br />
-      <h6>프로젝트 목록</h6>
+      <v-header>프로젝트 목록</v-header>
       <div align="right">
         <button type="submit" class="btn btn-warning" @click="prjWrite">
           작성
@@ -21,7 +21,7 @@
             >
               <v-slide-item v-for="n in 8" :key="n" v-slot="{ active, toggle }">
                 <v-card
-                  :color="active ? undefined : 'green'"
+                  :color="active ? 'undefined' : 'green'"
                   class="ma-4"
                   height="200"
                   width="200"
@@ -31,124 +31,132 @@
 
                   <v-card-content>
                     <v-card-text>
-                      <v-chip-group
-                        v-model="selection"
-                        active-class="deep-purple accent-4 white--text"
-                        column
+                      <v-btn
+                        color="grey lighten-2"
+                        light
+                        @click="dialog = true"
                       >
-                        <v-chip>출근</v-chip>
+                        출근 </v-btn
+                      >&nbsp;
 
-                        <!-- <v-chip>업무일지</v-chip> -->
+                      <v-dialog v-model="dialog" max-width="290">
+                        <v-card>
+                          <v-card-title>출근하시겠습니까?</v-card-title>
 
-                        <v-chip>
-                          <v-dialog
-                            v-model="dialog"
-                            persistent
-                            max-width="600px"
-                          >
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-btn
-                                color="grey lighten-2"
-                                v-bind="attrs"
-                                v-on="on"
-                              >
-                                업무일지
-                              </v-btn>
-                            </template>
-                            <v-card>
-                              <v-card-title>
-                                <span class="headline">업무 일지 작성</span>
-                              </v-card-title>
-                              <v-card-text>
-                                <v-container>
-                                  <v-row>
-                                    <v-col cols="12" sm="6" md="4">
-                                      <v-text-field
-                                        label="Legal first name*"
-                                        required
-                                      ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                      <v-text-field
-                                        label="Legal middle name"
-                                        hint="example of helper text only on focus"
-                                      ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                      <v-text-field
-                                        label="Legal last name*"
-                                        hint="example of persistent helper text"
-                                        persistent-hint
-                                        required
-                                      ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12">
-                                      <v-text-field
-                                        label="Email*"
-                                        required
-                                      ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12">
-                                      <v-text-field
-                                        label="Password*"
-                                        type="password"
-                                        required
-                                      ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6">
-                                      <v-select
-                                        :items="[
-                                          '0-17',
-                                          '18-29',
-                                          '30-54',
-                                          '54+',
-                                        ]"
-                                        label="Age*"
-                                        required
-                                      ></v-select>
-                                    </v-col>
-                                    <v-col cols="12" sm="6">
-                                      <v-autocomplete
-                                        :items="[
-                                          'Skiing',
-                                          'Ice hockey',
-                                          'Soccer',
-                                          'Basketball',
-                                          'Hockey',
-                                          'Reading',
-                                          'Writing',
-                                          'Coding',
-                                          'Basejump',
-                                        ]"
-                                        label="Interests"
-                                        multiple
-                                      ></v-autocomplete>
-                                    </v-col>
-                                  </v-row>
-                                </v-container>
-                                <small>*indicates required field</small>
-                              </v-card-text>
-                              <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                  color="blue darken-1"
-                                  text
-                                  @click="dialog = false"
-                                >
-                                  Close
-                                </v-btn>
-                                <v-btn
-                                  color="blue darken-1"
-                                  text
-                                  @click="dialog = false"
-                                >
-                                  Save
-                                </v-btn>
-                              </v-card-actions>
-                            </v-card>
-                          </v-dialog>
-                        </v-chip>
-                      </v-chip-group>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+
+                            <v-btn
+                              color="red darken-1"
+                              text
+                              @click="dialog = false"
+                            >
+                              취소
+                            </v-btn>
+
+                            <v-btn color="green darken-1" text @click="onWork">
+                              확인
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+
+                      <v-btn
+                        color="grey lighten-2"
+                        light
+                        @click="dialog2 = true"
+                      >
+                        업무일지
+                      </v-btn>
+
+                      <v-dialog v-model="dialog2" persistent max-width="600px">
+                        <v-card>
+                          <v-card-title>
+                            <span class="headline">업무 일지 작성</span>
+                          </v-card-title>
+                          <v-card-text>
+                            <v-container>
+                              <v-row>
+                                <v-col cols="12" sm="6" md="4">
+                                  <v-text-field
+                                    label="Legal first name*"
+                                    required
+                                  ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="6" md="4">
+                                  <v-text-field
+                                    label="Legal middle name"
+                                    hint="example of helper text only on focus"
+                                  ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="6" md="4">
+                                  <v-text-field
+                                    label="Legal last name*"
+                                    hint="example of persistent helper text"
+                                    persistent-hint
+                                    required
+                                  ></v-text-field>
+                                </v-col>
+                                <v-col cols="12">
+                                  <v-text-field
+                                    label="Email*"
+                                    required
+                                  ></v-text-field>
+                                </v-col>
+                                <v-col cols="12">
+                                  <v-text-field
+                                    label="Password*"
+                                    type="password"
+                                    required
+                                  ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="6">
+                                  <v-select
+                                    :items="['0-17', '18-29', '30-54', '54+']"
+                                    label="Age*"
+                                    required
+                                  ></v-select>
+                                </v-col>
+                                <v-col cols="12" sm="6">
+                                  <v-autocomplete
+                                    :items="[
+                                      'Skiing',
+                                      'Ice hockey',
+                                      'Soccer',
+                                      'Basketball',
+                                      'Hockey',
+                                      'Reading',
+                                      'Writing',
+                                      'Coding',
+                                      'Basejump',
+                                    ]"
+                                    label="Interests"
+                                    multiple
+                                  ></v-autocomplete>
+                                </v-col>
+                              </v-row>
+                            </v-container>
+                            <small>*indicates required field</small>
+                          </v-card-text>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="dialog2 = false"
+                            >
+                              Close
+                            </v-btn>
+                            <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="dialog2 = false"
+                            >
+                              Save
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
                     </v-card-text>
                   </v-card-content>
                 </v-card>
@@ -164,24 +172,21 @@
               active-class="success"
               show-arrows
             >
-              <v-slide-item v-for="n in 8" :key="n" v-slot="{ active, toggle }">
+              <v-slide-item
+                v-for="n in 8"
+                :key="n"
+                v-slot="{ active, toggle2 }"
+              >
                 <v-card
                   :color="active ? undefined : 'grey lighten-1'"
                   class="ma-4"
                   height="200"
                   width="200"
-                  @click="toggle"
+                  @click="toggle2"
                 >
                   <v-card-title>Project title</v-card-title>
                   <v-card-content>
-                    <v-card-text>
-                      <v-chip-group
-                        v-model="selection"
-                        active-class="deep-purple accent-4 white--text"
-                        column
-                      >
-                      </v-chip-group>
-                    </v-card-text>
+                    <v-card-text> </v-card-text>
                   </v-card-content>
                 </v-card>
               </v-slide-item>
@@ -206,6 +211,7 @@ export default {
   data: () => ({
     model: null,
     dialog: false,
+    dialog2: false,
   }),
   components: {
     Header, //헤더 컴포넌트 추가
@@ -214,6 +220,9 @@ export default {
   methods: {
     prjWrite() {
       this.$router.push("/prjWrite");
+    },
+    onWork() {
+      this.dialog = false;
     },
   },
 };

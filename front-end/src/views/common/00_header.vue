@@ -1,21 +1,18 @@
 <template>
   <div>
     <v-app-bar>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
-
-      <v-toolbar-title>업무 일지 관리</v-toolbar-title>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <v-toolbar-title>Report Management</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
+      <v-btn text> 업무일지 </v-btn>
 
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
+      <v-btn text> 근태관리 </v-btn>
 
-      <v-menu left bottom>
+      <v-subheader>Username 님</v-subheader>
+
+      <!-- <v-menu left bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
@@ -23,7 +20,6 @@
         </template>
 
         <v-list rounded>
-          <v-subheader>Username</v-subheader>
           <v-list-item-group v-model="selectedItem" color="primary">
             <v-list-item v-for="(item, i) in items" :key="i">
               <v-list-item-icon>
@@ -35,6 +31,28 @@
             </v-list-item>
           </v-list-item-group>
         </v-list>
+      </v-menu> -->
+
+      <v-menu
+        v-model="value"
+        :close-on-click="closeOnClick"
+        :close-on-content-click="closeOnContentClick"
+        :offset-y="offsetY"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in items"
+            :key="index"
+            @click="menuActionClick(item.action)"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
       </v-menu>
     </v-app-bar>
   </div>
@@ -43,12 +61,23 @@
 <script>
 export default {
   data: () => ({
-    selectedItem: 1,
     items: [
-      { text: "UserInfo", icon: "mdi-account" },
-      { text: "Logout", icon: "mdi-flag" },
+      { title: "UserInfo", action: "userInfo" },
+      { title: "Logout", action: "logout" },
     ],
+    closeOnClick: true,
+    closeOnContentClick: true,
+    offsetY: true,
   }),
+  methods: {
+    menuActionClick(action) {
+      if (action === "userInfo") {
+        alert("UserInfo");
+      } else if (action === "logout") {
+        alert("logout");
+      }
+    },
+  },
 };
 </script>
  
