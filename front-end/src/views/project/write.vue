@@ -16,7 +16,7 @@
           ></v-text-field>
 
           <v-select
-            :items="cond"
+            :items="cond_items"
             v-model="cond"
             :rules="nameRules"
             label="진행상황"
@@ -94,14 +94,6 @@
             </v-col>
           </v-row>
 
-          <!-- <v-text-field
-            v-model="lead_email"
-            :rules="nameRules"
-            label="Name"
-            required
-            outlined
-          ></v-text-field> -->
-
           <v-select
             outlined
             v-model="lead_email"
@@ -109,8 +101,8 @@
             label="팀장"
             required
           >
-            <option :key="i" :value="d.v" v-for="(d, i) in options">
-              {{ d.t }}
+            <option v-for="data in resultList" :key="data">
+              {{ data.email }}
             </option></v-select
           >
 
@@ -183,13 +175,17 @@
               </v-menu>
             </v-col>
           </v-row>
-          <v-text-field
+          <v-select
+            outlined
             v-model="follow_email"
             :rules="nameRules"
-            label="Name"
+            label="팀원"
             required
-            outlined
-          ></v-text-field>
+          >
+            <option v-for="data in resultList" :key="data">
+              {{ data.email }}
+            </option></v-select
+          >
 
           <v-row>
             <v-col cols="12" lg="6">
@@ -260,6 +256,25 @@
               </v-menu>
             </v-col>
           </v-row>
+          <v-btn
+            class="sm-2 mr-4"
+            fab
+            dark
+            small
+            color="indigo"
+            @click="remove"
+          >
+            <v-icon dark>mdi-minus</v-icon>
+          </v-btn>
+          <v-btn class="sm-2" fab dark small color="indigo" @click="add()">
+            <v-icon dark>mdi-plus</v-icon>
+          </v-btn>
+          <br />
+          <div id="app2">
+            <li v-for="item in buttons" :key="item"></li>
+            <br />
+          </div>
+          <br />
 
           <v-textarea
             outlined
@@ -300,13 +315,11 @@ export default {
   },
   data() {
     return {
-      cond: ["예정", "진행중", "완료"],
-      options: [
-        { v: "R", t: "Red" },
-        { v: "B", t: "Blue" },
-        { v: "G", t: "Green" },
-      ],
-      userList: {},
+      buttons: [],
+      cond: null,
+      cond_items: ["예정", "진행중", "완료"],
+
+      resultList: {},
       start_date: new Date().toISOString().substr(0, 10),
       end_date: new Date().toISOString().substr(0, 10),
       lead_in_date: new Date().toISOString().substr(0, 10),
@@ -375,11 +388,19 @@ export default {
           this.$router.push("/prjList");
         });
     },
-    prjList() {},
+    prjList() {
+      this.$router.push("/prjList");
+    },
     userList() {
       this.$store.dispatch("get_user_list", {}).then((data) => {
-        this.userList = data.userList;
+        this.resultList = data.resultList;
       });
+    },
+    add() {
+      this.buttons.push("addMember");
+    },
+    remove() {
+      this.buttons.push("removeBtn");
     },
   },
 };

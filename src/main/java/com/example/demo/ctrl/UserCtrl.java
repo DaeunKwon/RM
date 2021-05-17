@@ -62,7 +62,7 @@ public class UserCtrl {
         public List<UserVO> userList() {
                 log.info(">>>>>> get user list");
                 log.info(">>>>>>>>user list: " + userService.getlist());
-                return null;
+                return userService.getlist();
         }
 
 }

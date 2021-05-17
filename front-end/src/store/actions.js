@@ -35,7 +35,7 @@ export default {
         return axios.get('/api/user/list').then(data => {
             if (data.status === 200) {
                 return {
-                    "userList": data.data.data.userList
+                    "resultList": data.data.data.resultList
                 }
             }
         })

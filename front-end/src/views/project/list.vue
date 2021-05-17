@@ -19,13 +19,12 @@
               active-class="success"
               show-arrows
             >
-              <v-slide-item v-for="n in 8" :key="n" v-slot="{ active, toggle }">
+              <v-slide-item v-for="n in 5" :key="n">
                 <v-card
                   :color="active ? 'undefined' : 'green'"
                   class="ma-4"
                   height="200"
                   width="200"
-                  @click="toggle"
                 >
                   <v-card-title>Project title</v-card-title>
 
@@ -77,66 +76,52 @@
                           <v-card-text>
                             <v-container>
                               <v-row>
-                                <v-col cols="12" sm="6" md="4">
+                                <v-col cols="12" sm="6">
                                   <v-text-field
-                                    label="Legal first name*"
+                                    label="Project title"
                                     required
-                                  ></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="6" md="4">
-                                  <v-text-field
-                                    label="Legal middle name"
-                                    hint="example of helper text only on focus"
-                                  ></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="6" md="4">
-                                  <v-text-field
-                                    label="Legal last name*"
-                                    hint="example of persistent helper text"
-                                    persistent-hint
-                                    required
-                                  ></v-text-field>
-                                </v-col>
-                                <v-col cols="12">
-                                  <v-text-field
-                                    label="Email*"
-                                    required
-                                  ></v-text-field>
-                                </v-col>
-                                <v-col cols="12">
-                                  <v-text-field
-                                    label="Password*"
-                                    type="password"
-                                    required
+                                    disabled
+                                    outlined
+                                    value="Project title"
                                   ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="6">
-                                  <v-select
-                                    :items="['0-17', '18-29', '30-54', '54+']"
-                                    label="Age*"
+                                  <v-text-field
+                                    label="Date"
                                     required
-                                  ></v-select>
+                                    disabled
+                                    outlined
+                                    value="YYYY-MM-DD"
+                                  >
+                                  </v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="6">
-                                  <v-autocomplete
-                                    :items="[
-                                      'Skiing',
-                                      'Ice hockey',
-                                      'Soccer',
-                                      'Basketball',
-                                      'Hockey',
-                                      'Reading',
-                                      'Writing',
-                                      'Coding',
-                                      'Basejump',
-                                    ]"
-                                    label="Interests"
-                                    multiple
-                                  ></v-autocomplete>
+                                  <v-text-field
+                                    label="Timeline"
+                                    required
+                                    outlined
+                                  ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12" sm="6">
+                                  <v-textarea
+                                    label="Content"
+                                    required
+                                    outlined
+                                  ></v-textarea>
                                 </v-col>
                               </v-row>
+                              <v-btn
+                                class="sm-2"
+                                fab
+                                dark
+                                small
+                                color="indigo"
+                                @click="add()"
+                              >
+                                <v-icon dark>mdi-plus</v-icon>
+                              </v-btn>
                             </v-container>
-                            <small>*indicates required field</small>
                           </v-card-text>
                           <v-card-actions>
                             <v-spacer></v-spacer>
@@ -159,6 +144,101 @@
                       </v-dialog>
                     </v-card-text>
                   </v-card-content>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-dialog v-model="dialog" persistent max-width="600px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon @click="prjDetail" v-bind="attrs" v-on="on">
+                          <v-icon small>info</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-card>
+                        <v-card-title>
+                          <span class="headline">프로젝트 정보</span>
+                        </v-card-title>
+                        <v-card-text>
+                          <v-container>
+                            <v-row>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-text-field
+                                  label="Legal first name*"
+                                  required
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-text-field
+                                  label="Legal middle name"
+                                  hint="example of helper text only on focus"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-text-field
+                                  label="Legal last name*"
+                                  hint="example of persistent helper text"
+                                  persistent-hint
+                                  required
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12">
+                                <v-text-field
+                                  label="Email*"
+                                  required
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12">
+                                <v-text-field
+                                  label="Password*"
+                                  type="password"
+                                  required
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="6">
+                                <v-select
+                                  :items="['0-17', '18-29', '30-54', '54+']"
+                                  label="Age*"
+                                  required
+                                ></v-select>
+                              </v-col>
+                              <v-col cols="12" sm="6">
+                                <v-autocomplete
+                                  :items="[
+                                    'Skiing',
+                                    'Ice hockey',
+                                    'Soccer',
+                                    'Basketball',
+                                    'Hockey',
+                                    'Reading',
+                                    'Writing',
+                                    'Coding',
+                                    'Basejump',
+                                  ]"
+                                  label="Interests"
+                                  multiple
+                                ></v-autocomplete>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                          <small>*indicates required field</small>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="dialog = false"
+                            >Close</v-btn
+                          >
+                          <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="dialog = false"
+                            >Save</v-btn
+                          >
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+                  </v-card-actions>
                 </v-card>
               </v-slide-item>
             </v-slide-group>
@@ -167,14 +247,14 @@
         <div class="mt-12">
           <v-sheet class="mx-auto" elevation="8" max-width="1000">
             <v-slide-group
-              v-model="model"
+              v-model="model2"
               class="pa-4"
               active-class="success"
               show-arrows
             >
               <v-slide-item
-                v-for="n in 8"
-                :key="n"
+                v-for="nn in 5"
+                :key="nn"
                 v-slot="{ active, toggle2 }"
               >
                 <v-card
@@ -185,9 +265,13 @@
                   @click="toggle2"
                 >
                   <v-card-title>Project title</v-card-title>
-                  <v-card-content>
-                    <v-card-text> </v-card-text>
-                  </v-card-content>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+
+                    <v-btn icon @click="prjDetail">
+                      <v-icon small>info</v-icon>
+                    </v-btn>
+                  </v-card-actions>
                 </v-card>
               </v-slide-item>
             </v-slide-group>
@@ -209,7 +293,9 @@ import vfooter from "@/views/common/90_footer"; //import 풋터 추가
 export default {
   name: "prjList",
   data: () => ({
+    show: false,
     model: null,
+    model2: null,
     dialog: false,
     dialog2: false,
   }),

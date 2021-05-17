@@ -1,17 +1,53 @@
 <template>
   <div>
     <Header />
-    <b-container fluid="md">
-      <p>.<span v-html="strHtml"></span></p>
-      <h6>업무 일지 목록</h6>
+    <v-container
+      ><br />
+      <v-header>업무 일지 목록</v-header>
       <div align="right">
-        <button type="submit" class="btn btn-warning" @click="rptWrite">
-          작성
-        </button>
+        <v-btn
+          color="primary"
+          class="mr-2"
+          @click="this.$router.replace('/rptList')"
+        >
+          주간
+        </v-btn>
+        <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
+        <v-btn color="primary" @click="daily"> 전체 </v-btn>
       </div>
-      <p>.<span v-html="strHtml"></span></p>
-      <v-container>
-        <v-card elevation="10" outlined width="100%" class="mx-auto">
+      <br />
+      <v-container fluid>
+        <v-row>
+          <v-col cols="6" md="3">
+            <v-card
+              class="pa-2"
+              outlined
+              tile
+              elevation="1"
+              height="400"
+              width="400"
+            >
+              개인
+            </v-card>
+          </v-col>
+          <v-col cols="12" md="9">
+            <v-sheet class="pa-2" outlined tile elevation="1" height="600">
+              주간
+              <v-slide-group v-model="report" class="pa-4" show-arrows>
+                <v-slide-item v-for="day in 5" :key="day">
+                  <v-card
+                    color="grey lighten-2"
+                    class="ma-1"
+                    height="500"
+                    width="142"
+                  >
+                  </v-card>
+                </v-slide-item>
+              </v-slide-group>
+            </v-sheet>
+          </v-col> </v-row
+        ><br />
+        <!-- <v-card elevation="10" outlined width="100%" class="mx-auto">
           <v-card-title> Board </v-card-title>
           <v-card-text>
             <v-row>
@@ -38,13 +74,11 @@
               </v-col>
             </v-row>
           </v-card-text>
-        </v-card>
+        </v-card> -->
       </v-container>
-      <p>.<span v-html="strHtml"></span></p>
-      <p>.<span v-html="strHtml"></span></p>
-
+      <br /><br />
       <Footer />
-    </b-container>
+    </v-container>
   </div>
 </template>
 
@@ -157,6 +191,9 @@ export default {
     },
     rptWrite() {
       this.$router.push("/rptWrite");
+    },
+    daily() {
+      this.$router.push("/dailyRpt");
     },
   },
 };
