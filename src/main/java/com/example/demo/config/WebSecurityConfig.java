@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
-        return new CustomAuthenticationSuccessHandler("/prjList");
+        return new CustomAuthenticationSuccessHandler("/main");
     }
 
     @Override
@@ -60,12 +60,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll().antMatchers(HttpMethod.GET, "/**")
-                .authenticated().antMatchers(HttpMethod.POST, "/**").permitAll().antMatchers("/prjList").hasRole("USER")
+                .authenticated().antMatchers(HttpMethod.POST, "/**").permitAll().antMatchers("/main").hasRole("USER")
                 // .antMatchers("/api/user/**").permitAll().antMatchers("/api/admin/**").authenticated()
                 .and().cors().and();
 
         http.formLogin().usernameParameter("email").passwordParameter("password").loginPage("/")
-                .loginProcessingUrl("/login").defaultSuccessUrl("/prjList")
+                .loginProcessingUrl("/login").defaultSuccessUrl("/main")
                 .successHandler(customAuthenticationSuccessHandler()).permitAll();
 
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/")

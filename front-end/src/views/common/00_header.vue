@@ -2,7 +2,7 @@
   <div>
     <v-app-bar>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <v-toolbar-title @click="$router.replace('/prjList')"
+      <v-toolbar-title @click="$router.replace('/main')"
         >Report Management</v-toolbar-title
       >
 

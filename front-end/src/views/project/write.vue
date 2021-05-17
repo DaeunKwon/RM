@@ -294,7 +294,7 @@
 
           <br />
           <v-btn color="primary" class="mr-4" @click="prjWrite"> 저장 </v-btn>
-          <v-btn color="success" @click="prjList"> 목록 </v-btn>
+          <v-btn color="success" @click="main"> 목록 </v-btn>
         </v-form>
       </v-flex>
       <br /><br />
@@ -385,11 +385,11 @@ export default {
         .then((res) => {
           console.log(res);
           alert("프로젝트 등록 성공");
-          this.$router.push("/prjList");
+          this.$router.push("/main");
         });
     },
-    prjList() {
-      this.$router.push("/prjList");
+    main() {
+      this.$router.push("/main");
     },
     userList() {
       this.$store.dispatch("get_user_list", {}).then((data) => {

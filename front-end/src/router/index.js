@@ -5,7 +5,7 @@ import test1 from '../views/test1.vue';
 import hello from '../components/HelloWorld.vue';
 import login from '../components/user/login.vue';
 import join from '../components/user/join.vue'
-import prjList from '../views/project/list.vue';
+import main from '../views/project/main.vue';
 import prjWrite from '../views/project/write.vue';
 import rptList from '../views/report/list.vue';
 import rptWrite from '../views/report/write.vue';
@@ -38,8 +38,8 @@ const router = new VueRouter({
             component: prjWrite,
         },
         {
-            path: '/prjList',
-            component: prjList,
+            path: '/main',
+            component: main,
         },
         {
             path: '/',

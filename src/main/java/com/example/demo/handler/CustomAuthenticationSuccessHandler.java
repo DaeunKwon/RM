@@ -36,6 +36,6 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
             session.setAttribute("user", user);
             log.info(">>>>>>>>>login session: " + session);
         }
-        getRedirectStrategy().sendRedirect(request, response, "/prjList");
+        getRedirectStrategy().sendRedirect(request, response, "/main");
     }
 }
