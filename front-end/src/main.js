@@ -12,6 +12,8 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(Vuetify)
 
+
+
 new Vue({
   render: h => h(App),
   vuetify: new Vuetify(),

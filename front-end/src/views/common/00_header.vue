@@ -10,6 +10,7 @@
           <b-navbar-nav>
             <b-nav-item href="/prjList">프로젝트 관리</b-nav-item>
             <b-nav-item href="/rptList">업무 일지 관리</b-nav-item>
+            <b-nav-item href="/com_detail">근태 관리</b-nav-item>
           </b-navbar-nav>
 
           <!-- Right aligned nav items -->

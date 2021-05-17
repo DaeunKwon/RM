@@ -10,6 +10,9 @@ import prjWrite from '../views/project/write.vue';
 import rptList from '../views/report/list.vue';
 import rptWrite from '../views/report/write.vue';
 import prjDetail from '../views/project/detail.vue';
+import testaaaa from '../views/commute/testaaaa.vue';
+import com_detail from '../views/commute/com_detail.vue';
+import com_main from '../views/commute/com_main.vue';
 
 Vue.use(VueRouter);
 
@@ -59,6 +62,18 @@ const router = new VueRouter({
         {
             path: '/test1',
             component: test1,
+        },
+        {
+            path: '/testaaaa',
+            component: testaaaa,
+        },
+        {
+            path: '/com_detail',
+            component: com_detail,
+        },
+        {
+            path: '/com_main',
+            component: com_main,
         }
     ]
 });
