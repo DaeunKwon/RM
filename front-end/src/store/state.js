@@ -6,4 +6,5 @@ const initialState = user
 export default {
     state: initialState,
     userList: [],
+    projectList: [],
 }

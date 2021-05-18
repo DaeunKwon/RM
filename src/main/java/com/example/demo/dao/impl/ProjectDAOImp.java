@@ -1,5 +1,7 @@
 package com.example.demo.dao.impl;
 
+import java.util.List;
+
 import com.example.demo.dao.ProjectDAO;
 import com.example.demo.domain.ProjectVO;
 
@@ -33,6 +35,11 @@ public class ProjectDAOImp implements ProjectDAO {
     public void delete(Integer prj_no) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public List<ProjectVO> getProjectList() {
+        return sql.selectList(ns + ".getProjectList");
     }
 
 }

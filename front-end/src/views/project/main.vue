@@ -19,14 +19,14 @@
               active-class="success"
               show-arrows
             >
-              <v-slide-item v-for="n in 5" :key="n">
+              <v-slide-item v-for="project in projectList" :key="project.id">
                 <v-card
                   :color="active ? 'undefined' : 'green'"
                   class="ma-4"
                   height="200"
                   width="200"
                 >
-                  <v-card-title>Project title</v-card-title>
+                  <v-card-title>{{ project.prj_title }}</v-card-title>
 
                   <v-card-content>
                     <v-card-text>
@@ -147,7 +147,7 @@
 
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-dialog v-model="dialog" persistent max-width="600px">
+                    <v-dialog v-model="dialog3" persistent max-width="600px">
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn icon @click="prjDetail" v-bind="attrs" v-on="on">
                           <v-icon small>info</v-icon>
@@ -226,13 +226,13 @@
                           <v-btn
                             color="blue darken-1"
                             text
-                            @click="dialog = false"
+                            @click="dialog3 = false"
                             >Close</v-btn
                           >
                           <v-btn
                             color="blue darken-1"
                             text
-                            @click="dialog = false"
+                            @click="dialog3 = false"
                             >Save</v-btn
                           >
                         </v-card-actions>
@@ -289,16 +289,21 @@
 <script>
 import Header from "../../views/common/00_header"; //import 헤더 추가
 import vfooter from "@/views/common/90_footer"; //import 풋터 추가
+import http from "../../http-common";
 
 export default {
   name: "main",
-  data: () => ({
-    show: false,
-    model: null,
-    model2: null,
-    dialog: false,
-    dialog2: false,
-  }),
+  data() {
+    return {
+      show: false,
+      model: null,
+      model2: null,
+      dialog: false,
+      dialog2: false,
+      dialog3: false,
+      projectList: [],
+    };
+  },
   components: {
     Header, //헤더 컴포넌트 추가
     vfooter, //풋터 컴포넌트 추가
@@ -309,6 +314,24 @@ export default {
     },
     onWork() {
       this.dialog = false;
+    },
+    getProjectList() {
+      http
+        .get("http://localhost:8090/api/project/main", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          this.projectList = res.data;
+          console.log(res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    mounted() {
+      this.getProjectList();
     },
   },
 };

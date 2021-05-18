@@ -5,13 +5,7 @@
       ><br />
       <v-header>업무 일지 목록</v-header>
       <div align="right">
-        <v-btn
-          color="primary"
-          class="mr-2"
-          @click="this.$router.replace('/rptList')"
-        >
-          주간
-        </v-btn>
+        <v-btn color="primary" class="mr-2" @click="rptList"> 주간 </v-btn>
         <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
         <v-btn color="primary" @click="daily"> 전체 </v-btn>
       </div>
@@ -28,6 +22,12 @@
               width="400"
             >
               개인
+              <div>
+                <h5>report</h5>
+                <h5 v-for="report in reportList" :key="report.id">
+                  {{ report.rpt_title }}
+                </h5>
+              </div>
             </v-card>
           </v-col>
           <v-col cols="12" md="9">
@@ -85,7 +85,7 @@
 <script>
 import Header from "../../views/common/00_header"; //import 헤더 추가
 import Footer from "../../views/common/90_footer"; //import 풋터 추가
-import { getReportListAPI } from "@/api/index";
+import http from "../../http-common";
 
 export default {
   name: "rptList",
@@ -96,104 +96,32 @@ export default {
 
   data() {
     return {
-      headers: [
-        { text: "번호", align: "center", value: "rpt_no" },
-        { text: "제목", align: "center", value: "rpt_title" },
-      ],
-      document: [],
-      options: {
-        multiSort: true,
-        sortBy: [],
-        sortDesc: [],
-        page: 1,
-        itemsPerPage: 5,
-      },
-      footerOptions: {
-        "items-per-page-options": [5, 10, 25, 50, 100],
-      },
-      totalCount: 0,
-      loading: false,
-      conditions: [
-        { text: "번호", value: "rpt_no" },
-        { text: "제목", value: "rpt_title" },
-      ],
-      schType: "",
-      schVal: "",
+      reportList: [],
     };
   },
   mounted() {
     this.getReportList();
   },
-  watch: {
-    options: {
-      handler() {
-        this.getReportList();
-      },
-      deep: true,
-    },
-  },
   methods: {
-    getReportDataFromAPI(page, itemsPerPage, sort) {
-      return getReportListAPI({
-        params: {
-          schType: this.schType,
-          schVal: this.schVal,
-          page: page,
-          rows: itemsPerPage,
-          sort: encodeURIComponent(sort),
-        },
-      })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    getReportList() {
-      const vm = this;
-      this.loading = true;
-      // eslint-disable-next-line
-      return new Promise((resolve, reject) => {
-        const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-        let sort = [];
-        if (sortBy.length > 0) {
-          // eslint-disable-next-line
-          sortBy.forEach((value, index) => {
-            sort.push(
-              value
-                .replace(/[A-Z]/g, function (str) {
-                  return "_" + str[0];
-                })
-                .toUpperCase() +
-                " " +
-                (sortDesc[index] ? "desc" : "asc")
-            );
-          });
-        } else {
-          sort.push("DOC_NO desc");
-        }
-        let items = this.getReportDataFromAPI(page, itemsPerPage, sort).then(
-          (response) => {
-            items = response.data;
-            const total = response.total;
-            setTimeout(() => {
-              vm.loading = false;
-              this.document = items;
-              this.totalCount = total;
-            }, 1000);
-          }
-        );
-      });
-    },
-    onClickRow(event, data) {
-      this.movePage("/detail?docNo=" + data.item.docNo);
+    rptList() {
+      this.$router.push("/rptList");
     },
     rptWrite() {
       this.$router.push("/rptWrite");
     },
     daily() {
       this.$router.push("/dailyRpt");
+    },
+    getReportList() {
+      http
+        .get("/api/report/list")
+        .then((res) => {
+          this.reportList = res.data;
+          console.log(this.reportList);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
   },
 };

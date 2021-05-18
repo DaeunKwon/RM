@@ -31,13 +31,15 @@ export default {
             }
         );
     },
-    get_user_list({ commit }, { }) {
-        return axios.get('/api/user/list').then(data => {
-            if (data.status === 200) {
-                return {
-                    "resultList": data.data.data.resultList
-                }
-            }
-        })
-    }
+    // get_user_list({ commit }, { }) {
+    //     return axios.get('/api/user/list').then(data => {
+    //         if (data.status === 200) {
+    //             return {
+    //                 "resultList": data.data.data.resultList
+    //             }
+    //         }
+    //     })
+    // },
+
+
 }

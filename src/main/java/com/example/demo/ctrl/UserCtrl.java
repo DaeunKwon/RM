@@ -58,6 +58,7 @@ public class UserCtrl {
                 return userService.emailCheck(email);
         }
 
+        @ResponseBody
         @GetMapping(value = "/list")
         public List<UserVO> userList() {
                 log.info(">>>>>> get user list");

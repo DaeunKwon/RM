@@ -30,4 +30,7 @@
             'N')
 
     </insert>
+    <select id="getProjectList" resultType="com.example.demo.domain.ProjectVO">
+        select * from tbl_project
+    </select>
 </mapper>

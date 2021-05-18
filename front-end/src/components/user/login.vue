@@ -13,9 +13,6 @@
                 required
                 name="email"
               ></v-text-field>
-              <!-- <div style="color: red; padding-left: 12px">
-                {{ emailAlert }}
-              </div> -->
 
               <v-text-field
                 v-model="password"
@@ -28,7 +25,9 @@
               ></v-text-field
               ><br />
 
-              <v-btn color="primary" class="mr-4" type="submit"> Login </v-btn>
+              <v-btn color="primary" class="mr-4" type="submit" @click="login">
+                Login
+              </v-btn>
 
               <v-btn color="warning" @click="$router.replace('/join')">
                 Join
@@ -46,10 +45,8 @@ export default {
   name: "Login",
   data() {
     return {
-      user: {
-        email: "",
-        password: "",
-      },
+      email: "",
+      password: "",
       show: true,
     };
   },
@@ -64,20 +61,12 @@ export default {
       e.preventDefault();
       alert("로그인");
     },
-    //   login() {
-    //     if (this.email && this.password) {
-    //       let user = {
-    //         email: this.email,
-    //         password: this.password,
-    //       };
-    //       this.$store.dispatch("login", user).then(() => {
-    //         alert("로그인 성공");
-    //         return true;
-    //       });
-    //     } else {
-    //       return false;
-    //     }
-    //   },
+    login() {
+      const email = this.email;
+      const password = this.password;
+
+      this.$store.dispatch("LOGIN", { email, password });
+    },
   },
 };
 </script>

@@ -2,13 +2,13 @@
   <div>
     <v-app-bar>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <v-toolbar-title @click="$router.replace('/main')"
+      <v-toolbar-title type="button" @click="main"
         >Report Management</v-toolbar-title
       >
 
       <v-spacer></v-spacer>
 
-      <v-btn text @click="$router.replace('/rptList')"> 업무일지 </v-btn>
+      <v-btn text @click="rptList"> 업무일지 </v-btn>
 
       <v-btn text> 근태관리 </v-btn>
 
@@ -57,6 +57,24 @@ export default {
       } else if (action === "logout") {
         alert("logout");
       }
+    },
+    rptList() {
+      this.$axios.get("/api/report/list"),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+      this.$router.push("/rptList");
+    },
+    main() {
+      this.$axios.get("/api/project/main"),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+      this.$router.push("/main");
     },
   },
 };

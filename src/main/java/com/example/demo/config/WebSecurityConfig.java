@@ -60,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll().antMatchers(HttpMethod.GET, "/**")
-                .authenticated().antMatchers(HttpMethod.POST, "/**").permitAll().antMatchers("/main").hasRole("USER")
+                .authenticated().antMatchers(HttpMethod.POST, "/**").permitAll().antMatchers("/main").authenticated()
                 // .antMatchers("/api/user/**").permitAll().antMatchers("/api/admin/**").authenticated()
                 .and().cors().and();
 

@@ -16,5 +16,6 @@ export default {
     },
     registerFailure(state) {
         state.status.loggedIn = false;
-    }
+    },
+
 }

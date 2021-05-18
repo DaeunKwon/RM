@@ -101,8 +101,8 @@
             label="팀장"
             required
           >
-            <option v-for="data in resultList" :key="data">
-              {{ data.email }}
+            <option v-for="user in userList" :key="user.id">
+              {{ user.name }}
             </option></v-select
           >
 
@@ -182,8 +182,8 @@
             label="팀원"
             required
           >
-            <option v-for="data in resultList" :key="data">
-              {{ data.email }}
+            <option v-for="user in userList" :key="user.id">
+              {{ user.name }}
             </option></v-select
           >
 
@@ -306,6 +306,7 @@
 <script>
 import Header from "../../views/common/00_header"; //import 헤더 추가
 import Footer from "../../views/common/90_footer"; //import 풋터 추가
+import http from "../../http-common";
 
 export default {
   name: "prjWrite",
@@ -318,12 +319,12 @@ export default {
       buttons: [],
       cond: null,
       cond_items: ["예정", "진행중", "완료"],
-
-      resultList: {},
-      start_date: new Date().toISOString().substr(0, 10),
-      end_date: new Date().toISOString().substr(0, 10),
-      lead_in_date: new Date().toISOString().substr(0, 10),
-      lead_out_date: new Date().toISOString().substr(0, 10),
+      userList: [],
+      //start_date: new Date().toISOString().substr(0, 10),
+      start_date: "",
+      end_date: "",
+      lead_in_date: "",
+      lead_out_date: "",
       start_d8: false,
       end_d8: false,
       lead_in_d8: false,
@@ -349,8 +350,9 @@ export default {
       show: true,
     };
   },
-  created() {
-    this.userList();
+
+  mounted() {
+    this.getUserList();
   },
   methods: {
     prjWrite() {
@@ -391,10 +393,16 @@ export default {
     main() {
       this.$router.push("/main");
     },
-    userList() {
-      this.$store.dispatch("get_user_list", {}).then((data) => {
-        this.resultList = data.resultList;
-      });
+    getUserList() {
+      http
+        .get("/api/user/list")
+        .then((res) => {
+          this.userList = res.data;
+          console.log(this.userList);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     add() {
       this.buttons.push("addMember");
