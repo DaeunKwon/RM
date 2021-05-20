@@ -97,14 +97,20 @@
           <v-select
             outlined
             v-model="lead_email"
+            :hint="`${lead_email.name}, ${lead_email.email}`"
+            :items="userList"
+            item-text="name"
+            item-value="email"
             :rules="nameRules"
             label="팀장"
             required
-          >
-            <option v-for="user in userList" :key="user.id">
+            persistent-hint
+            return-object
+          ></v-select>
+          <!-- <option v-for="user in userList" :key="user.id">
               {{ user.name }}
             </option></v-select
-          >
+          > -->
 
           <v-row>
             <v-col cols="12" lg="6">
@@ -178,14 +184,17 @@
           <v-select
             outlined
             v-model="follow_email"
+            :hint="`${follow_email.name}, ${follow_email.email}`"
+            :items="userList"
+            item-text="name"
+            item-value="email"
             :rules="nameRules"
             label="팀원"
             required
+            persistent-hint
+            return-object
           >
-            <option v-for="user in userList" :key="user.id">
-              {{ user.name }}
-            </option></v-select
-          >
+          </v-select>
 
           <v-row>
             <v-col cols="12" lg="6">
@@ -316,6 +325,9 @@ export default {
   },
   data() {
     return {
+      lead_email: { name: "", email: "" },
+      follow_email: { name: "", email: "" },
+
       buttons: [],
       cond: null,
       cond_items: ["예정", "진행중", "완료"],
@@ -337,11 +349,11 @@ export default {
         content: "",
         remark: "",
       },
-      leader: {
-        lead_email: "",
-        lead_prj_in_d8: "",
-        lead_prj_out_d8: "",
-      },
+      // leader: {
+      //   lead_email: "",
+      //   lead_prj_in_d8: "",
+      //   lead_prj_out_d8: "",
+      // },
       follower: {
         follow_email: "",
         follow_prj_in_d8: "",
