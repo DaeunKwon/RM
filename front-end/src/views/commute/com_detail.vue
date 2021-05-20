@@ -22,7 +22,7 @@
                 v-on="on"
                 :disabled="test"
               >
-                {{ nowdate }}
+                {{ date }}
               </v-btn>
               <v-btn
                 v-else
@@ -49,7 +49,14 @@
                 <v-btn
                   color="green darken-1"
                   text
-                  @click="[(dialog = false), (test = true), (test2 = false)]"
+                  @click="
+                    [
+                      (dialog = false),
+                      (test = true),
+                      (test2 = false),
+                      (work = '근무중'),
+                    ]
+                  "
                 >
                   Agree
                 </v-btn>
@@ -84,7 +91,7 @@
                 <v-btn
                   color="green darken-1"
                   text
-                  @click="[(dialog2 = false), (test2 = true)]"
+                  @click="[(dialog2 = false), (test2 = true), (work = '퇴근')]"
                 >
                   Agree
                 </v-btn>
@@ -97,7 +104,7 @@
       <v-layout fluid grid-list-sm pa-15>
         <v-flex>
           <v-row align="center" justify="center">
-            <v-col cols="10" sm="0" md="4">
+            <v-col cols="10" sm="1" md="2">
               <v-menu
                 ref="menu"
                 v-model="menu"
@@ -162,7 +169,7 @@
         <v-row align="center" justify="center">
           <v-col cols="2" sm="2"> 근무상태 </v-col>
           <v-col cols="6" sm="4">
-            <v-text-field value="근무중" solo readonly></v-text-field>
+            <v-text-field v-model="work" solo readonly></v-text-field>
           </v-col>
         </v-row>
       </v-layout>
@@ -172,8 +179,9 @@
           <template>
             <v-data-table
               :headers="headers"
-              :items="desserts"
+              :items="day"
               hide-default-footer
+              disable-sort
               class="elevation-1"
             ></v-data-table>
           </template>
@@ -192,14 +200,8 @@
 <script>
 import Header from "../../views/common/00_header"; //import 헤더 추가
 import Footer from "../../views/common/90_footer"; //import 풋터 추가
-var nowdate = new Date().toISOString().substr(0, 10);
+const nowdate = new Date().toISOString().substr(0, 10);
 import Vue from "vue";
-new Vue({
-  el: "#combtn",
-  data: {
-    count: 0,
-  },
-});
 
 export default {
   data: () => ({
@@ -215,6 +217,7 @@ export default {
     dateif: true,
     test: false,
     test2: true,
+    work: "출근전",
     headers: [
       { text: "sunday", value: "sunday" },
       { text: "monday", value: "monday" },
@@ -224,7 +227,7 @@ export default {
       { text: "friday", value: "friday" },
       { text: "saturday", value: "saturday" },
     ],
-    desserts: [
+    day: [
       {
         sunday: "0시간",
         monday: "8시간",
@@ -236,6 +239,7 @@ export default {
       },
     ],
   }),
+  
 
   name: "com_detail",
   components: {

@@ -40,7 +40,7 @@
           </v-menu>
         </v-toolbar>
       </v-sheet>
-      <v-sheet height="600">
+      <v-sheet height="700">
         <v-calendar
           ref="calendar"
           v-model="focus"
@@ -89,9 +89,11 @@
 </template>
 
 <script>
+import eventBus from "../assets/js/eventbus.js";
+
 export default {
   data: () => ({
-    focus: "",
+    focus: "date",
     type: "month",
     typeToLabel: {
       month: "Month",
@@ -103,25 +105,8 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     events: [],
-    colors: [
-      "blue",
-      "indigo",
-      "deep-purple",
-      "cyan",
-      "green",
-      "orange",
-      "grey darken-1",
-    ],
-    names: [
-      "Meeting",
-      "Holiday",
-      "PTO",
-      "Travel",
-      "Event",
-      "Birthday",
-      "Conference",
-      "Party",
-    ],
+    colors: ["blue"],
+    names: ["조재승"],
   }),
   mounted() {
     this.$refs.calendar.checkChange();
@@ -129,7 +114,8 @@ export default {
   methods: {
     viewDay({ date }) {
       this.focus = date;
-      this.type = "day";
+      this.type = "month";
+      eventBus.$emit("date", this.focus);
     },
     getEventColor(event) {
       return event.color;
