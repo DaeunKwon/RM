@@ -11,6 +11,8 @@ public interface ProjectService {
 
     public void remove(ProjectVO pvo);
 
-    public List<ProjectVO> getList();
+    public List<ProjectVO> getProjectList();
+
+    public List<ProjectVO> getDoneProjectList();
 
 }

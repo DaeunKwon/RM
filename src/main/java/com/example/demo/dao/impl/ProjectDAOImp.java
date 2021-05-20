@@ -42,4 +42,9 @@ public class ProjectDAOImp implements ProjectDAO {
         return sql.selectList(ns + ".getProjectList");
     }
 
+    @Override
+    public List<ProjectVO> getDoneProjectList() {
+        return sql.selectList(ns + ".getDoneProjectList");
+    }
+
 }

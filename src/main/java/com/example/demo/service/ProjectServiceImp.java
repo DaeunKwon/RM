@@ -32,8 +32,13 @@ public class ProjectServiceImp implements ProjectService {
     }
 
     @Override
-    public List<ProjectVO> getList() {
+    public List<ProjectVO> getProjectList() {
         return pdao.getProjectList();
+    }
+
+    @Override
+    public List<ProjectVO> getDoneProjectList() {
+        return pdao.getDoneProjectList();
     }
 
 }

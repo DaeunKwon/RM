@@ -13,4 +13,6 @@ public interface ProjectDAO {
 
     public List<ProjectVO> getProjectList();
 
+    public List<ProjectVO> getDoneProjectList();
+
 }

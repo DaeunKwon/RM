@@ -12,7 +12,8 @@
       <br />
       <div>
         <div>
-          <v-sheet class="mx-auto" elevation="8" max-width="1000">
+          <v-sheet class="mx-auto" elevation="8" max-width="1000"
+            ><br />진행중인 프로젝트
             <v-slide-group
               v-model="model"
               class="pa-4"
@@ -117,7 +118,7 @@
                                 dark
                                 small
                                 color="indigo"
-                                @click="add()"
+                                @click="add"
                               >
                                 <v-icon dark>mdi-plus</v-icon>
                               </v-btn>
@@ -245,14 +246,18 @@
           </v-sheet>
         </div>
         <div class="mt-12">
-          <v-sheet class="mx-auto" elevation="8" max-width="1000">
+          <v-sheet class="mx-auto" elevation="8" max-width="1000"
+            ><br />완료된 프로젝트
             <v-slide-group
               v-model="model2"
               class="pa-4"
               active-class="success"
               show-arrows
             >
-              <v-slide-item v-for="project in projectList" :key="project.id">
+              <v-slide-item
+                v-for="project in doneProjectList"
+                :key="project.id"
+              >
                 <v-card
                   :color="active ? 'undefined' : 'grey lighten-1'"
                   class="ma-4"
@@ -387,6 +392,7 @@ export default {
       dialog3: false,
       dialog4: false,
       projectList: [],
+      doneProjectList: [],
     };
   },
   components: {
@@ -395,6 +401,7 @@ export default {
   },
   mounted() {
     this.getProjectList();
+    this.getDoneProjectList();
   },
   methods: {
     prjWrite() {
@@ -409,6 +416,17 @@ export default {
         .then((res) => {
           this.projectList = res.data;
           console.log(res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getDoneProjectList() {
+      http
+        .get("/api/project/main/done")
+        .then((res) => {
+          this.doneProjectList = res.data;
+          console.log(this.doneProjectList);
         })
         .catch((e) => {
           console.log(e);

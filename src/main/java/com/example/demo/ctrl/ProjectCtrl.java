@@ -69,7 +69,15 @@ public class ProjectCtrl {
     @GetMapping(value = "/api/project/main")
     public List<ProjectVO> list(Model model) {
         log.info(">>>>>>project list get");
-        return projectService.getList();
+        return projectService.getProjectList();
+
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/api/project/main/done")
+    public List<ProjectVO> getDoneProjectlist(Model model) {
+        log.info(">>>>>>project list get");
+        return projectService.getDoneProjectList();
 
     }
 }

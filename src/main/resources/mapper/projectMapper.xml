@@ -31,6 +31,9 @@
 
     </insert>
     <select id="getProjectList" resultType="com.example.demo.domain.ProjectVO">
-        select * from tbl_project
+        select * from tbl_project where (cond = '예정' or cond = '진행중')
+    </select>
+    <select id="getDoneProjectList" resultType="com.example.demo.domain.ProjectVO">
+        select * from tbl_project where cond = '완료'
     </select>
 </mapper>
