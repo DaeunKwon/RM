@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.example.demo.domain.UserVO;
 
@@ -15,4 +16,9 @@ public interface UserService extends UserDetailsService {
     public void remove(String email);
 
     Collection<GrantedAuthority> getAuthorities(String email);
+
+    public boolean emailCheck(String email);
+
+    public List<UserVO> getlist();
+
 }

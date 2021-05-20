@@ -3,9 +3,12 @@ package com.example.demo.config;
 import com.example.demo.handler.CustomAuthenticationSuccessHandler;
 import com.example.demo.service.UserService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,11 +18,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private final Logger log = LoggerFactory.getLogger(WebSecurityConfig.class);
 
     @Autowired
     private UserService userService;
@@ -38,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
-        return new CustomAuthenticationSuccessHandler("/prjList");
+        return new CustomAuthenticationSuccessHandler("/main");
     }
 
     @Override
@@ -50,15 +58,41 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/").permitAll().antMatchers("/user/**").authenticated()
-                .antMatchers("/admin/**").authenticated();
+        http.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll().antMatchers(HttpMethod.GET, "/**")
+                .authenticated().antMatchers(HttpMethod.POST, "/**").permitAll().antMatchers("/main").authenticated()
+                // .antMatchers("/api/user/**").permitAll().antMatchers("/api/admin/**").authenticated()
+                .and().cors().and();
 
         http.formLogin().usernameParameter("email").passwordParameter("password").loginPage("/")
-                .defaultSuccessUrl("/prjList").successHandler(customAuthenticationSuccessHandler()).permitAll();
+                .loginProcessingUrl("/login").defaultSuccessUrl("/main")
+                .successHandler(customAuthenticationSuccessHandler()).permitAll();
 
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true).deleteCookies("JSESSIONID");
 
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        // configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    // @Bean
+    // public DaoAuthenticationProvider authenticationProvider() {
+    // DaoAuthenticationProvider authenticationProvider = new
+    // DaoAuthenticationProvider();
+    // authenticationProvider.setUserDetailsService(userDetailsService());
+    // authenticationProvider.setPasswordEncoder(passwordEncoder());
+    // return authenticationProvider;
+    // }
 
 }

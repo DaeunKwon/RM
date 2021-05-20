@@ -1,7 +1,10 @@
 import axios from 'axios';
+import { AxiosResponse } from 'axios'
 
-const instance = axios.create({
-    baseURL: 'http://localhost:8090',
+const axiosApi = axios.create({
+    baseURL: `http://localhost:8090/api`,
+    timeout: 1000,
+    headers: { 'Content-Type': 'application/json' }
 });
 
 /**
@@ -9,9 +12,15 @@ const instance = axios.create({
  * @param {*} params
  */
 function getReportListAPI(params) {
-    return instance.get('/api/report/list', params)
+    return axios.get('/api/report/list', params)
+}
+
+function getSecured() {
+    return axios.post('/api/user/login')
 }
 
 export {
     getReportListAPI,
+    getSecured
 }
+

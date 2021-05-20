@@ -1,5 +1,7 @@
 package com.example.demo.ctrl;
 
+import java.util.List;
+
 import com.example.demo.domain.ReportVO;
 import com.example.demo.service.ReportService;
 
@@ -36,18 +38,9 @@ public class ReportCtrl {
 
     @ResponseBody
     @GetMapping(value = "api/report/list")
-    public ResponseEntity<?> list() {
+    public List<ReportVO> list() {
         log.info(">>>>>>>>>>>>>>>>report list 페이지 출력");
-        log.info(">>>>>>>>>>> rlist: " + rptSvc.list());
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @ResponseBody
-    @GetMapping(value = "/rptList")
-    public ResponseEntity<?> rptlist() {
-        log.info(">>>>>>>>>>>>>>>>report list 페이지 출력");
-        log.info(">>>>>>>>>>> rlist: " + rptSvc.list());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return rptSvc.list();
     }
 
 }

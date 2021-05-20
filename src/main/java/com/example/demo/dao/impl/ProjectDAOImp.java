@@ -1,5 +1,7 @@
 package com.example.demo.dao.impl;
 
+import java.util.List;
+
 import com.example.demo.dao.ProjectDAO;
 import com.example.demo.domain.ProjectVO;
 
@@ -15,7 +17,7 @@ public class ProjectDAOImp implements ProjectDAO {
     @Autowired
     private SqlSessionTemplate sql;
 
-    private String ns = "com.example.demo.dao.ProjectMapper";
+    private String ns = "com.example.demo.mapper.project";
 
     @Override
     public void insert(ProjectVO pvo) {
@@ -33,6 +35,16 @@ public class ProjectDAOImp implements ProjectDAO {
     public void delete(Integer prj_no) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public List<ProjectVO> getProjectList() {
+        return sql.selectList(ns + ".getProjectList");
+    }
+
+    @Override
+    public List<ProjectVO> getDoneProjectList() {
+        return sql.selectList(ns + ".getDoneProjectList");
     }
 
 }

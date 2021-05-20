@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import com.example.demo.dao.ProjectDAO;
 import com.example.demo.domain.ProjectVO;
 
@@ -27,6 +29,16 @@ public class ProjectServiceImp implements ProjectService {
     public void remove(ProjectVO pvo) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public List<ProjectVO> getProjectList() {
+        return pdao.getProjectList();
+    }
+
+    @Override
+    public List<ProjectVO> getDoneProjectList() {
+        return pdao.getDoneProjectList();
     }
 
 }

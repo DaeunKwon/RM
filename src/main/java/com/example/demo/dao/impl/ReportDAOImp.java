@@ -20,7 +20,7 @@ public class ReportDAOImp implements ReportDAO {
     @Autowired
     private SqlSessionTemplate sql;
 
-    private String ns = "com.example.demo.dao.ReportMapper";
+    private String ns = "com.example.demo.mapper.report";
 
     @Override
     public void write(ReportVO rvo) {

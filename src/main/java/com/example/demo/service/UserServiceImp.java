@@ -16,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,12 +29,29 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Autowired
     private UserAuthoritiesDAO userAuthdao;
 
-    @Override
-    public void join(UserVO uvo) {
-        log.info(">>>>>>>>>>>>>>userservice join 진입");
-        udao.join(uvo);
-        log.info(">>>>>>>>>>>>>>userservice join 성공");
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserServiceImp(UserDAO udao, PasswordEncoder passwordEncoder) {
+        this.udao = udao;
+        this.passwordEncoder = passwordEncoder;
     }
+
+    public void join(UserVO uvo) {
+
+        // **** 해싱하는 부분 ****
+        String encodePassword = passwordEncoder.encode(uvo.getPassword());
+        UserVO user = UserVO.builder().email(uvo.getEmail()).name(uvo.getName()).password(encodePassword).build();
+        udao.join(user);
+    }
+
+    // @Override
+    // public void join(UserVO uvo) {
+    // log.info(">>>>>>>>>>>>>>userservice join 진입");
+    // udao.join(uvo);
+    // log.info(">>>>>>>>>>>>>>userservice join 성공");
+    // }
 
     @Override
     public void modify(UserVO uvo) {
@@ -50,20 +68,20 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Override
     public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         log.info(">>>>>>>>>>>email: " + email);
-        CustomUserDetails user = udao.loginCheck(email);
+        UserVO user = udao.getUserfindByEmail(email);
         log.info(">>>>>>>>>" + user);
         if (user == null) {
-            return null;
+            throw new UsernameNotFoundException(email);
         } else {
+            log.info(">>>>>>> customuserdetails 생성");
             CustomUserDetails customUserDetails = new CustomUserDetails();
-            customUserDetails.setUsername(user.getUsername());
+            customUserDetails.setUsername(user.getEmail());
             customUserDetails.setPassword(user.getPassword());
-            customUserDetails.setAuthorities(getAuthorities(user.getUsername()));
+            customUserDetails.setAuthorities(getAuthorities(user.getEmail()));
             customUserDetails.setEnabled(true);
             customUserDetails.setAccountNonExpired(true);
             customUserDetails.setAccountNonLocked(true);
             customUserDetails.setCredentialsNonExpired(true);
-
             return customUserDetails;
         }
 
@@ -78,6 +96,18 @@ public class UserServiceImp implements UserService, UserDetailsService {
         }
 
         return authorities;
+    }
+
+    @Override
+    public boolean emailCheck(String email) {
+        log.info(">>>>>>" + email);
+        return (udao.getUserfindByEmail(email) == null) ? true : false;
+    }
+
+    @Override
+    public List<UserVO> getlist() {
+        log.info(">>>>>>> get user list (service)");
+        return udao.getUserList();
     }
 
 }

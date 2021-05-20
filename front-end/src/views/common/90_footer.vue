@@ -1,7 +1,7 @@
 <template>
-  <footer>
+  <v-footer>
     <p>@copyright 2021</p>
-  </footer>
+  </v-footer>
 </template>
  
 <script>

@@ -18,7 +18,7 @@ public class RouterCtrl implements ErrorController {
     }
 
     @RequestMapping("/error")
-    public String ridiectRoot() {
+    public String redirectRoot() {
         return "forward:/";
     }
 

@@ -1,48 +1,83 @@
 <template>
-  <header>
-    <div>
-      <b-navbar toggleable="lg" type="dark" variant="secondary">
-        <b-navbar-brand href="#">Logo</b-navbar-brand>
+  <div>
+    <v-app-bar>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <v-toolbar-title type="button" @click="main"
+        >Report Management</v-toolbar-title
+      >
 
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <v-spacer></v-spacer>
 
-        <b-collapse id="nav-collapse" is-nav>
-          <b-navbar-nav>
-            <b-nav-item href="/prjList">프로젝트 관리</b-nav-item>
-            <b-nav-item href="/rptList">업무 일지 관리</b-nav-item>
-            <b-nav-item href="/com_detail">근태 관리</b-nav-item>
-          </b-navbar-nav>
+      <v-btn text @click="rptList"> 업무일지 </v-btn>
 
-          <!-- Right aligned nav items -->
-          <b-navbar-nav class="ml-auto">
-            <b-nav-form>
-              <b-form-input
-                size="sm"
-                class="mr-sm-2"
-                placeholder="Search"
-              ></b-form-input>
-              <b-button size="sm" class="my-2 my-sm-0" type="submit"
-                >Search</b-button
-              >
-            </b-nav-form>
+      <v-btn text> 근태관리 </v-btn>
 
-            <b-nav-item-dropdown right>
-              <!-- Using 'button-content' slot -->
-              <template #button-content>
-                <em>User</em>
-              </template>
-              <b-dropdown-item href="#">Profile</b-dropdown-item>
-              <b-dropdown-item href="/logout">Sign Out</b-dropdown-item>
-            </b-nav-item-dropdown>
-          </b-navbar-nav>
-        </b-collapse>
-      </b-navbar>
-    </div>
-  </header>
+      <v-subheader>Username 님</v-subheader>
+
+      <v-menu
+        v-model="value"
+        :close-on-click="closeOnClick"
+        :close-on-content-click="closeOnContentClick"
+        :offset-y="offsetY"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in items"
+            :key="index"
+            @click="menuActionClick(item.action)"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-app-bar>
+  </div>
 </template>
  
 <script>
-export default {};
+export default {
+  data: () => ({
+    items: [
+      { title: "UserInfo", action: "userInfo" },
+      { title: "Logout", action: "logout" },
+    ],
+    closeOnClick: true,
+    closeOnContentClick: true,
+    offsetY: true,
+  }),
+  methods: {
+    menuActionClick(action) {
+      if (action === "userInfo") {
+        alert("UserInfo");
+      } else if (action === "logout") {
+        alert("logout");
+      }
+    },
+    rptList() {
+      this.$axios.get("/api/report/list"),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+      this.$router.push("/rptList");
+    },
+    main() {
+      this.$axios.get("/api/project/main"),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+      this.$router.push("/main");
+    },
+  },
+};
 </script>
  
 <style scoped>

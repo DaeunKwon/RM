@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo.dao.ReportMapper">
+<mapper namespace="com.example.demo.mapper.report">
 	<insert id="write" parameterType="com.example.demo.domain.ReportVO">
 		insert into tbl_report values (tbl_report_seq.nextval, 7, #{rpt_title}, #{rpt_content}, #{rpt_remark}, 'N', sysdate, 6, sysdate, 6)
 	</insert>

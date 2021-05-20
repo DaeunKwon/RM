@@ -1,158 +1,318 @@
 <template>
   <div>
     <Header />
-    <b-container fluid="md">
-      <p>.<span v-html="strHtml"></span></p>
-      <h6>프로젝트 작성</h6>
-      <p>.<span v-html="strHtml"></span></p>
-      <b-form v-if="show">
-        <b-form-group id="input-group-1" label="프로젝트명" label-for="input-1">
-          <b-form-input
-            id="input-1"
-            v-model="project.prj_title"
-            placeholder="프로젝트명"
+    <v-container>
+      <v-flex md6 offset-md3>
+        <br />
+        <h5>프로젝트 등록</h5>
+        <br />
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-text-field
+            v-model="prj_title"
+            :rules="nameRules"
+            label="프로젝트명"
             required
-          ></b-form-input>
-        </b-form-group>
+            outlined
+          ></v-text-field>
 
-        <b-form-group label="진행 상태" v-slot="{ ariaDescribedby }">
-          <b-form-radio-group
-            id="radio-group-2"
-            v-model="project.cond"
-            :aria-describedby="ariaDescribedby"
-            name="radio-sub-component"
+          <v-select
+            :items="cond_items"
+            v-model="cond"
+            :rules="nameRules"
+            label="진행상황"
+            required
+            outlined
+          ></v-select>
+
+          <v-row>
+            <v-col cols="12" lg="6">
+              <v-menu
+                ref="start_d8"
+                v-model="start_d8"
+                :close-on-content-click="false"
+                :return-value.sync="start_date"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="start_date"
+                    label="프로젝트 시작 날짜"
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="start_date" no-title scrollable>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="start_d8 = false"
+                    >취소</v-btn
+                  >
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.start_d8.save(start_date)"
+                    >저장</v-btn
+                  >
+                </v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col cols="12" lg="6">
+              <v-menu
+                ref="end_d8"
+                v-model="end_d8"
+                :close-on-content-click="false"
+                :return-value.sync="end_date"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="end_date"
+                    label="프로젝트 종료 날짜"
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="end_date" no-title scrollable>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="end_d8 = false"
+                    >취소</v-btn
+                  >
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.end_d8.save(end_date)"
+                    >저장</v-btn
+                  >
+                </v-date-picker>
+              </v-menu>
+            </v-col>
+          </v-row>
+
+          <v-select
+            outlined
+            v-model="lead_email"
+            :hint="`${lead_email.name}, ${lead_email.email}`"
+            :items="userList"
+            item-text="name"
+            item-value="email"
+            :rules="nameRules"
+            label="팀장"
+            required
+            persistent-hint
+            return-object
+          ></v-select>
+          <br />
+          <v-row>
+            <v-col cols="12" lg="6">
+              <v-menu
+                ref="lead_in_d8"
+                v-model="lead_in_d8"
+                :close-on-content-click="false"
+                :return-value.sync="lead_in_date"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="lead_in_date"
+                    label="참여 시작 날짜"
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="lead_in_date" no-title scrollable>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="lead_in_d8 = false"
+                    >취소</v-btn
+                  >
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.lead_in_d8.save(lead_in_date)"
+                    >저장</v-btn
+                  >
+                </v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col cols="12" lg="6">
+              <v-menu
+                ref="lead_out_d8"
+                v-model="lead_out_d8"
+                :close-on-content-click="false"
+                :return-value.sync="lead_out_date"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="lead_out_date"
+                    label="참여 종료 날짜"
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="lead_out_date" no-title scrollable>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="lead_out_d8 = false"
+                    >취소</v-btn
+                  >
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.lead_out_d8.save(lead_out_date)"
+                    >저장</v-btn
+                  >
+                </v-date-picker>
+              </v-menu>
+            </v-col>
+          </v-row>
+          <v-select
+            outlined
+            v-model="follow_email"
+            :hint="`${follow_email.name}, ${follow_email.email}`"
+            :items="userList"
+            item-text="name"
+            item-value="email"
+            :rules="nameRules"
+            label="팀원"
+            required
+            persistent-hint
+            return-object
           >
-            <b-form-radio value="진행 예정">진행 예정</b-form-radio>
-            <b-form-radio value="진행중">진행중</b-form-radio>
-            <b-form-radio value="진행 완료">진행 완료</b-form-radio>
-          </b-form-radio-group>
-        </b-form-group>
+          </v-select
+          ><br />
 
-        <b-form-group id="input-group-1" label="시작 날짜" label-for="input-1">
-          <b-form-datepicker
-            id="input-1"
-            v-model="project.start_d8"
-            placeholder="시작 날짜"
+          <v-row>
+            <v-col cols="12" lg="6">
+              <v-menu
+                ref="follow_in_d8"
+                v-model="follow_in_d8"
+                :close-on-content-click="false"
+                :return-value.sync="follow_in_date"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="follow_in_date"
+                    label="참여 시작 날짜"
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="follow_in_date" no-title scrollable>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="follow_in_d8 = false"
+                    >취소</v-btn
+                  >
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.follow_in_d8.save(follow_in_date)"
+                    >저장</v-btn
+                  >
+                </v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col cols="12" lg="6">
+              <v-menu
+                ref="follow_out_d8"
+                v-model="follow_out_d8"
+                :close-on-content-click="false"
+                :return-value.sync="lead_out_date"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="follow_out_date"
+                    label="참여 종료 날짜"
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="follow_out_date" no-title scrollable>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="follow_out_d8 = false"
+                    >취소</v-btn
+                  >
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.follow_out_d8.save(follow_out_date)"
+                    >저장</v-btn
+                  >
+                </v-date-picker>
+              </v-menu>
+            </v-col>
+          </v-row>
+          <v-btn
+            class="sm-2 mr-4"
+            fab
+            dark
+            small
+            color="indigo"
+            @click="remove"
+          >
+            <v-icon dark>mdi-minus</v-icon>
+          </v-btn>
+          <v-btn class="sm-2" fab dark small color="indigo" @click="add()">
+            <v-icon dark>mdi-plus</v-icon>
+          </v-btn>
+          <br />
+          <div id="app2">
+            <li v-for="item in buttons" :key="item"></li>
+            <br />
+          </div>
+          <br />
+
+          <v-textarea
+            outlined
+            v-model="content"
+            :rules="nameRules"
+            label="프로젝트 내용"
             required
-          ></b-form-datepicker>
-        </b-form-group>
+          ></v-textarea>
 
-        <b-form-group id="input-group-1" label="종료 날짜" label-for="input-1">
-          <b-form-datepicker
-            id="input-1"
-            v-model="project.end_d8"
-            placeholder="종료 날짜"
+          <v-textarea
+            outlined
+            v-model="remark"
+            :rules="nameRules"
+            label="특이사항"
             required
-          ></b-form-datepicker>
-        </b-form-group>
+          ></v-textarea>
 
-        <b-form-group id="input-group-1" label="팀장" label-for="input-1">
-          <b-form-input
-            id="input-1"
-            v-model="leader.email"
-            placeholder="팀장"
-            required
-          ></b-form-input>
-        </b-form-group>
-
-        <b-form-group
-          id="input-group-1"
-          label="참여 시작 날짜"
-          label-for="input-1"
-        >
-          <b-form-datepicker
-            id="input-1"
-            v-model="leader.prj_in_d8"
-            placeholder="참여 시작 날짜"
-            required
-          ></b-form-datepicker>
-        </b-form-group>
-
-        <b-form-group
-          id="input-group-1"
-          label="참여 종료 날짜"
-          label-for="input-1"
-        >
-          <b-form-datepicker
-            id="input-1"
-            v-model="leader.prj_out_d8"
-            placeholder="참여 종료 날짜"
-            required
-          ></b-form-datepicker>
-        </b-form-group>
-
-        <b-form-group id="input-group-1" label="팀원" label-for="input-1">
-          <b-form-input
-            id="input-1"
-            v-model="follower.email"
-            placeholder="팀원"
-            required
-          ></b-form-input>
-        </b-form-group>
-
-        <b-form-group
-          id="input-group-1"
-          label="참여 시작 날짜"
-          label-for="input-1"
-        >
-          <b-form-datepicker
-            id="input-1"
-            v-model="follower.prj_in_d8"
-            placeholder="참여 시작 날짜"
-            required
-          ></b-form-datepicker>
-        </b-form-group>
-
-        <b-form-group id="input-group-1" label="종료 날짜" label-for="input-1">
-          <b-form-datepicker
-            id="input-1"
-            v-model="follower.prj_out_d8"
-            placeholder="참여 종료 날짜"
-            required
-          ></b-form-datepicker>
-        </b-form-group>
-        <div id="add" class="text-center">
-          <b-button variant="secondary" @click="add">추가</b-button>
-        </div>
-        <p>.<span v-html="strHtml"></span></p>
-
-        <b-form-group id="input-group-1" label="내용" label-for="input-1">
-          <b-form-textarea
-            id="input-1"
-            v-model="project.prj_content"
-            placeholder="프로젝트 내용"
-            rows="8"
-            required
-          ></b-form-textarea>
-        </b-form-group>
-
-        <b-form-group id="input-group-1" label="특이사항" label-for="input-1">
-          <b-form-textarea
-            id="input-1"
-            v-model="project.prj_remark"
-            placeholder="특이사항"
-            rows="4"
-            required
-          ></b-form-textarea>
-        </b-form-group>
-        <p>.<span v-html="strHtml"></span></p>
-
-        <b-button type="button" variant="primary" @click="prjWrite"
-          >저장</b-button
-        >
-        <b-button type="button" variant="danger" @click="reset">취소</b-button>
-        <b-button variant="info" href="/prjList">목록</b-button>
-      </b-form>
-      <p>.<span v-html="strHtml"></span></p>
-      <p>.<span v-html="strHtml"></span></p>
+          <br />
+          <v-btn color="primary" class="mr-4" @click="prjWrite"> 저장 </v-btn>
+          <v-btn color="success" @click="main"> 목록 </v-btn>
+        </v-form>
+      </v-flex>
+      <br /><br />
       <Footer />
-    </b-container>
+    </v-container>
   </div>
 </template>
 
 <script>
 import Header from "../../views/common/00_header"; //import 헤더 추가
 import Footer from "../../views/common/90_footer"; //import 풋터 추가
+import http from "../../http-common";
 
 export default {
   name: "prjWrite",
@@ -162,26 +322,46 @@ export default {
   },
   data() {
     return {
+      lead_email: { name: "", email: "" },
+      follow_email: { name: "", email: "" },
+
+      buttons: [],
+      cond: null,
+      cond_items: ["예정", "진행중", "완료"],
+      userList: [],
+      //start_date: new Date().toISOString().substr(0, 10),
+      start_date: "",
+      end_date: "",
+      lead_in_date: "",
+      lead_out_date: "",
+      start_d8: false,
+      end_d8: false,
+      lead_in_d8: false,
+      lead_out_d8: false,
       project: {
-        prj_title: "",
+        title: "",
         cond: "",
         start_d8: "",
         end_d8: "",
-        prj_content: "",
-        prj_remark: "",
+        content: "",
+        remark: "",
       },
-      leader: {
-        email: "",
-        prj_in_d8: "",
-        prj_out_d8: "",
-      },
+      // leader: {
+      //   lead_email: "",
+      //   lead_prj_in_d8: "",
+      //   lead_prj_out_d8: "",
+      // },
       follower: {
-        email: "",
-        prj_in_d8: "",
-        prj_out_d8: "",
+        follow_email: "",
+        follow_prj_in_d8: "",
+        follow_prj_out_d8: "",
       },
       show: true,
     };
+  },
+
+  mounted() {
+    this.getUserList();
   },
   methods: {
     prjWrite() {
@@ -208,7 +388,7 @@ export default {
       };
 
       this.$axios
-        .post("/prjWrite", JSON.stringify(project), {
+        .post("/api/project/write", JSON.stringify(project), {
           headers: {
             "Content-Type": "application/json",
           },
@@ -216,29 +396,28 @@ export default {
         .then((res) => {
           console.log(res);
           alert("프로젝트 등록 성공");
-          this.$router.push("/prjList");
+          this.$router.push("/main");
         });
     },
-    reset(event) {
-      event.preventDefault();
-      // Reset our form values
-      this.project.prj_title = "";
-      this.project.cond = "";
-      this.project.start_d8 = "";
-      this.project.end_d8 = "";
-      this.project.prj_content = "";
-      this.project.prj_remark = "";
-      this.leader.email = "";
-      this.leader.prj_in_d8 = "";
-      this.leader.prj_out_d8 = "";
-      this.follower.email = "";
-      this.follower.prj_in_d8 = "";
-      this.follower.prj_out_d8 = "";
-      // Trick to reset/clear native browser form validation state
-      this.show = false;
-      this.$nextTick(() => {
-        this.show = true;
-      });
+    main() {
+      this.$router.push("/main");
+    },
+    getUserList() {
+      http
+        .get("/api/user/list")
+        .then((res) => {
+          this.userList = res.data;
+          console.log(this.userList);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    add() {
+      this.buttons.push("addMember");
+    },
+    remove() {
+      this.buttons.push("removeBtn");
     },
   },
 };

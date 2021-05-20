@@ -1,47 +1,42 @@
 <template>
   <v-container>
-    <v-card>
-      <v-card-title>업무 일지 관리</v-card-title>
-      <v-card-text>
-        <v-form ref="form" v-model="valid" lazy-validation>
-          <v-text-field
-            v-model="email"
-            :counter="10"
-            :rules="nameRules"
-            label="E-mail"
-            required
-          ></v-text-field>
+    <v-layout>
+      <v-flex md6 offset-md3>
+        <v-card>
+          <v-card-title class="justify-center">Report Management</v-card-title>
+          <v-card-text>
+            <v-form ref="form" lazy-validation method="post" action="/login">
+              <v-text-field
+                v-model="email"
+                :rules="emailRules"
+                label="E-mail"
+                required
+                name="email"
+              ></v-text-field>
 
-          <v-text-field
-            v-model="password"
-            :rules="emailRules"
-            label="Password"
-            required
-            type="password"
-          ></v-text-field>
+              <v-text-field
+                v-model="password"
+                :counter="10"
+                :rules="passwordRules"
+                label="Password"
+                required
+                type="password"
+                name="password"
+              ></v-text-field
+              ><br />
 
-          <v-checkbox
-            v-model="checkbox"
-            :rules="[(v) => !!v || 'You must agree to continue!']"
-            label="Do you agree?"
-            required
-          ></v-checkbox>
+              <v-btn color="primary" class="mr-4" type="submit" @click="login">
+                Login
+              </v-btn>
 
-          <v-btn
-            :disabled="!valid"
-            color="success"
-            class="mr-4"
-            @click="validate"
-          >
-            Validate
-          </v-btn>
-
-          <v-btn color="primary" class="mr-4" @click="login"> Login </v-btn>
-
-          <v-btn color="warning" href="/join"> Join </v-btn>
-        </v-form>
-      </v-card-text>
-    </v-card>
+              <v-btn color="warning" @click="$router.replace('/join')">
+                Join
+              </v-btn>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -55,30 +50,22 @@ export default {
       show: true,
     };
   },
+  data: () => ({
+    email: "",
+    emailRules: [(v) => !!v || "E-mail is required"],
+    password: "",
+    passwordRules: [(v) => !!v || "Password is required"],
+  }),
   methods: {
+    login(e) {
+      e.preventDefault();
+      alert("로그인");
+    },
     login() {
-      this.$axios
-        .post(
-          "http://localhost:8090/api/user/login",
-          JSON.stringify({
-            email: this.email,
-            password: this.password,
-          }),
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          alert("로그인 성공");
-          this.$router.push("/prjList");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const email = this.email;
+      const password = this.password;
+
+      this.$store.dispatch("LOGIN", { email, password });
     },
   },
 };
