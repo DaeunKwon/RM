@@ -10,7 +10,7 @@
           <v-text-field
             v-model="prj_title"
             :rules="nameRules"
-            label="Title"
+            label="프로젝트명"
             required
             outlined
           ></v-text-field>
@@ -47,13 +47,13 @@
                 <v-date-picker v-model="start_date" no-title scrollable>
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="start_d8 = false"
-                    >Cancel</v-btn
+                    >취소</v-btn
                   >
                   <v-btn
                     text
                     color="primary"
                     @click="$refs.start_d8.save(start_date)"
-                    >OK</v-btn
+                    >저장</v-btn
                   >
                 </v-date-picker>
               </v-menu>
@@ -81,13 +81,13 @@
                 <v-date-picker v-model="end_date" no-title scrollable>
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="end_d8 = false"
-                    >Cancel</v-btn
+                    >취소</v-btn
                   >
                   <v-btn
                     text
                     color="primary"
                     @click="$refs.end_d8.save(end_date)"
-                    >OK</v-btn
+                    >저장</v-btn
                   >
                 </v-date-picker>
               </v-menu>
@@ -107,11 +107,7 @@
             persistent-hint
             return-object
           ></v-select>
-          <!-- <option v-for="user in userList" :key="user.id">
-              {{ user.name }}
-            </option></v-select
-          > -->
-
+          <br />
           <v-row>
             <v-col cols="12" lg="6">
               <v-menu
@@ -135,13 +131,13 @@
                 <v-date-picker v-model="lead_in_date" no-title scrollable>
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="lead_in_d8 = false"
-                    >Cancel</v-btn
+                    >취소</v-btn
                   >
                   <v-btn
                     text
                     color="primary"
                     @click="$refs.lead_in_d8.save(lead_in_date)"
-                    >OK</v-btn
+                    >저장</v-btn
                   >
                 </v-date-picker>
               </v-menu>
@@ -169,13 +165,13 @@
                 <v-date-picker v-model="lead_out_date" no-title scrollable>
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="lead_out_d8 = false"
-                    >Cancel</v-btn
+                    >취소</v-btn
                   >
                   <v-btn
                     text
                     color="primary"
                     @click="$refs.lead_out_d8.save(lead_out_date)"
-                    >OK</v-btn
+                    >저장</v-btn
                   >
                 </v-date-picker>
               </v-menu>
@@ -194,7 +190,8 @@
             persistent-hint
             return-object
           >
-          </v-select>
+          </v-select
+          ><br />
 
           <v-row>
             <v-col cols="12" lg="6">
@@ -219,13 +216,13 @@
                 <v-date-picker v-model="follow_in_date" no-title scrollable>
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="follow_in_d8 = false"
-                    >Cancel</v-btn
+                    >취소</v-btn
                   >
                   <v-btn
                     text
                     color="primary"
                     @click="$refs.follow_in_d8.save(follow_in_date)"
-                    >OK</v-btn
+                    >저장</v-btn
                   >
                 </v-date-picker>
               </v-menu>
@@ -253,13 +250,13 @@
                 <v-date-picker v-model="follow_out_date" no-title scrollable>
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="follow_out_d8 = false"
-                    >Cancel</v-btn
+                    >취소</v-btn
                   >
                   <v-btn
                     text
                     color="primary"
                     @click="$refs.follow_out_d8.save(follow_out_date)"
-                    >OK</v-btn
+                    >저장</v-btn
                   >
                 </v-date-picker>
               </v-menu>
@@ -289,7 +286,7 @@
             outlined
             v-model="content"
             :rules="nameRules"
-            label="Content"
+            label="프로젝트 내용"
             required
           ></v-textarea>
 
@@ -297,7 +294,7 @@
             outlined
             v-model="remark"
             :rules="nameRules"
-            label="Remark"
+            label="특이사항"
             required
           ></v-textarea>
 

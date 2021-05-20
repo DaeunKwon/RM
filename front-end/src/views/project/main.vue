@@ -88,40 +88,124 @@
                                 </v-col>
                                 <v-col cols="12" sm="6">
                                   <v-text-field
+                                    v-model="date"
                                     label="Date"
                                     required
                                     disabled
                                     outlined
-                                    value="YYYY-MM-DD"
                                   >
                                   </v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="6">
-                                  <v-text-field
-                                    label="Timeline"
-                                    required
-                                    outlined
-                                  ></v-text-field>
+                                  <v-dialog
+                                    ref="dialog3"
+                                    v-model="modal2"
+                                    :return-value.sync="start_time"
+                                    persistent
+                                    width="290px"
+                                  >
+                                    <template v-slot:activator="{ on, attrs }">
+                                      <v-text-field
+                                        v-model="start_time"
+                                        label="시작 시간"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                        outlined
+                                      ></v-text-field>
+                                    </template>
+                                    <v-time-picker
+                                      v-if="modal2"
+                                      v-model="start_time"
+                                      full-width
+                                    >
+                                      <v-spacer></v-spacer>
+                                      <v-btn
+                                        text
+                                        color="primary"
+                                        @click="modal2 = false"
+                                        >Cancel</v-btn
+                                      >
+                                      <v-btn
+                                        text
+                                        color="primary"
+                                        @click="$refs.dialog3.save(start_time)"
+                                        >OK</v-btn
+                                      >
+                                    </v-time-picker>
+                                  </v-dialog>
                                 </v-col>
 
                                 <v-col cols="12" sm="6">
+                                  <v-dialog
+                                    ref="dialog4"
+                                    v-model="modal3"
+                                    :return-value.sync="end_time"
+                                    persistent
+                                    width="290px"
+                                  >
+                                    <template v-slot:activator="{ on, attrs }">
+                                      <v-text-field
+                                        v-model="end_time"
+                                        label="끝난 시간"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                        outlined
+                                      ></v-text-field>
+                                    </template>
+                                    <v-time-picker
+                                      v-if="modal3"
+                                      v-model="end_time"
+                                      full-width
+                                    >
+                                      <v-spacer></v-spacer>
+                                      <v-btn
+                                        text
+                                        color="primary"
+                                        @click="modal3 = false"
+                                        >Cancel</v-btn
+                                      >
+                                      <v-btn
+                                        text
+                                        color="primary"
+                                        @click="$refs.dialog4.save(end_time)"
+                                        >OK</v-btn
+                                      >
+                                    </v-time-picker>
+                                  </v-dialog>
+                                </v-col>
+                                <!-- <div v-for="(input, k) in inputs" :key="k"> -->
+                                <v-col v-for="(input, k) in inputs" :key="k">
                                   <v-textarea
-                                    label="Content"
+                                    label="업무 내용"
                                     required
                                     outlined
+                                    :id="'done' + k"
+                                    v-model="input.daily"
                                   ></v-textarea>
+                                  <v-btn
+                                    small
+                                    @click="remove(k)"
+                                    v-show="k || (!k && inputs.length > 1)"
+                                    >minus</v-btn
+                                  >
+                                  <v-btn small @click="add(k)" v-show="true"
+                                    >plus</v-btn
+                                  >
+                                  <v-btn
+                                    class="sm-2"
+                                    fab
+                                    dark
+                                    small
+                                    color="indigo"
+                                    @click="add2"
+                                  >
+                                    <v-icon dark>mdi-plus</v-icon>
+                                  </v-btn>
                                 </v-col>
+                                <!-- </div> -->
                               </v-row>
-                              <v-btn
-                                class="sm-2"
-                                fab
-                                dark
-                                small
-                                color="indigo"
-                                @click="add"
-                              >
-                                <v-icon dark>mdi-plus</v-icon>
-                              </v-btn>
                             </v-container>
                           </v-card-text>
                           <v-card-actions>
@@ -161,19 +245,25 @@
                         <v-card-text>
                           <v-container>
                             <v-row>
-                              <v-col cols="12" sm="6" md="4">
+                              <v-col>
                                 <v-text-field
-                                  label="Legal first name*"
+                                  label="프로젝트명"
                                   required
+                                  outlined
+                                  disabled
                                 ></v-text-field>
-                              </v-col>
-                              <v-col cols="12" sm="6" md="4">
+                                <v-text-field
+                                  label="진행상황"
+                                  required
+                                  outlined
+                                  disabled
+                                ></v-text-field>
+
                                 <v-text-field
                                   label="Legal middle name"
                                   hint="example of helper text only on focus"
                                 ></v-text-field>
-                              </v-col>
-                              <v-col cols="12" sm="6" md="4">
+
                                 <v-text-field
                                   label="Legal last name*"
                                   hint="example of persistent helper text"
@@ -393,6 +483,8 @@ export default {
       dialog4: false,
       projectList: [],
       doneProjectList: [],
+      inputs: { daily: "" },
+      date: "",
     };
   },
   components: {
@@ -402,6 +494,7 @@ export default {
   mounted() {
     this.getProjectList();
     this.getDoneProjectList();
+    this.getToday();
   },
   methods: {
     prjWrite() {
@@ -431,6 +524,16 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+    },
+    add(k) {
+      this.inputs.push({ daily: "" });
+    },
+    remove(k) {
+      this.inputs.splice(k, 1);
+    },
+    getToday() {
+      this.date = this.$moment(new Date()).format("YYYY-MM-DD");
+      console.log(this.date);
     },
   },
 };
