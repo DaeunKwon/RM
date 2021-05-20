@@ -5,7 +5,9 @@
       ><br />
       <v-header>업무 일지 목록</v-header>
       <div align="right">
-        <v-btn color="primary" class="mr-2" @click="rptList"> 주간 </v-btn>
+        <v-btn color="primary" class="mr-2" @click="$router.push('/prjList')">
+          주간
+        </v-btn>
         <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
         <v-btn color="primary" @click="daily"> 전체 </v-btn>
       </div>
@@ -47,34 +49,6 @@
             </v-sheet>
           </v-col> </v-row
         ><br />
-        <!-- <v-card elevation="10" outlined width="100%" class="mx-auto">
-          <v-card-title> Board </v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col align-self="end" cols="12" md="2"> </v-col>
-              <v-col cols="12" md="8"> </v-col>
-              <v-col align-self="center">
-                <Button
-                  @click="getReportList"
-                  color="blue-grey darken-1"
-                  rounded
-                  small
-                  block
-                  iconName="mdi-magnify"
-                  btnName="Search"
-                ></Button>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <template slot="items" slot-scope="props">
-                  <td>{{ props.item.rpt_no }}</td>
-                  <td>{{ props.item.rpt_title }}</td>
-                </template>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card> -->
       </v-container>
       <br /><br />
       <Footer />
@@ -103,9 +77,9 @@ export default {
     this.getReportList();
   },
   methods: {
-    rptList() {
-      this.$router.push("/rptList");
-    },
+    // rptList() {
+    //   this.$router.push("/rptList");
+    // },
     rptWrite() {
       this.$router.push("/rptWrite");
     },

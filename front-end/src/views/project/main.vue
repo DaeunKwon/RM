@@ -252,25 +252,109 @@
               active-class="success"
               show-arrows
             >
-              <v-slide-item
-                v-for="nn in 5"
-                :key="nn"
-                v-slot="{ active, toggle2 }"
-              >
+              <v-slide-item v-for="project in projectList" :key="project.id">
                 <v-card
-                  :color="active ? undefined : 'grey lighten-1'"
+                  :color="active ? 'undefined' : 'grey lighten-1'"
                   class="ma-4"
                   height="200"
                   width="200"
                   @click="toggle2"
                 >
-                  <v-card-title>Project title</v-card-title>
+                  <v-card-title>{{ project.prj_title }}</v-card-title>
                   <v-card-actions>
                     <v-spacer></v-spacer>
+                    <v-dialog v-model="dialog4" persistent max-width="600px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon @click="prjDetail" v-bind="attrs" v-on="on">
+                          <v-icon small>info</v-icon>
+                        </v-btn>
+                      </template>
 
-                    <v-btn icon @click="prjDetail">
-                      <v-icon small>info</v-icon>
-                    </v-btn>
+                      <v-card>
+                        <v-card-title>
+                          <span class="headline">프로젝트 정보</span>
+                        </v-card-title>
+                        <v-card-text>
+                          <v-container>
+                            <v-row>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-text-field
+                                  label="Legal first name*"
+                                  required
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-text-field
+                                  label="Legal middle name"
+                                  hint="example of helper text only on focus"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-text-field
+                                  label="Legal last name*"
+                                  hint="example of persistent helper text"
+                                  persistent-hint
+                                  required
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12">
+                                <v-text-field
+                                  label="Email*"
+                                  required
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12">
+                                <v-text-field
+                                  label="Password*"
+                                  type="password"
+                                  required
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="6">
+                                <v-select
+                                  :items="['0-17', '18-29', '30-54', '54+']"
+                                  label="Age*"
+                                  required
+                                ></v-select>
+                              </v-col>
+                              <v-col cols="12" sm="6">
+                                <v-autocomplete
+                                  :items="[
+                                    'Skiing',
+                                    'Ice hockey',
+                                    'Soccer',
+                                    'Basketball',
+                                    'Hockey',
+                                    'Reading',
+                                    'Writing',
+                                    'Coding',
+                                    'Basejump',
+                                  ]"
+                                  label="Interests"
+                                  multiple
+                                ></v-autocomplete>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                          <small>*indicates required field</small>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="dialog4 = false"
+                            >Close</v-btn
+                          >
+                          <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="dialog4 = false"
+                            >Save</v-btn
+                          >
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
                   </v-card-actions>
                 </v-card>
               </v-slide-item>
@@ -301,12 +385,16 @@ export default {
       dialog: false,
       dialog2: false,
       dialog3: false,
+      dialog4: false,
       projectList: [],
     };
   },
   components: {
     Header, //헤더 컴포넌트 추가
     vfooter, //풋터 컴포넌트 추가
+  },
+  mounted() {
+    this.getProjectList();
   },
   methods: {
     prjWrite() {
@@ -317,11 +405,7 @@ export default {
     },
     getProjectList() {
       http
-        .get("http://localhost:8090/api/project/main", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .get("/api/project/main")
         .then((res) => {
           this.projectList = res.data;
           console.log(res.data);
@@ -329,9 +413,6 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-    },
-    mounted() {
-      this.getProjectList();
     },
   },
 };
