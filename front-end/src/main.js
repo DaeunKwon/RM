@@ -17,12 +17,9 @@ Vue.use(BootstrapVue)
 Vue.use(Vuetify)
 Vue.use(vueMoment)
 
-
-
 new Vue({
   render: h => h(App),
   vuetify: new Vuetify(),
   router,
   store,
 }).$mount('#app')
-
