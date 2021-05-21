@@ -272,15 +272,11 @@
           >
             <v-icon dark>mdi-minus</v-icon>
           </v-btn>
-          <v-btn class="sm-2" fab dark small color="indigo" @click="add()">
+          <v-btn class="sm-2" fab dark small color="indigo" @click="add">
             <v-icon dark>mdi-plus</v-icon>
           </v-btn>
-          <br />
-          <div id="app2">
-            <li v-for="item in buttons" :key="item"></li>
-            <br />
-          </div>
-          <br />
+
+          <br /><br /><br />
 
           <v-textarea
             outlined
@@ -412,12 +408,6 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-    },
-    add() {
-      this.buttons.push("addMember");
-    },
-    remove() {
-      this.buttons.push("removeBtn");
     },
   },
 };

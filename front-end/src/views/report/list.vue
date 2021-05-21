@@ -127,84 +127,8 @@
                     </v-text-field>
                   </v-col>
 
-                  <v-col cols="12" sm="6">
-                    <v-dialog
-                      ref="dialog3"
-                      v-model="modal2"
-                      :return-value.sync="start_time"
-                      persistent
-                      width="290px"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="start_time"
-                          :id="'start_time' + k"
-                          label="시작 시간"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                          outlined
-                        ></v-text-field>
-                      </template>
-                      <v-time-picker
-                        v-if="modal2"
-                        v-model="start_time"
-                        :id="'start_time' + k"
-                        full-width
-                      >
-                        <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="modal2 = false"
-                          >Cancel</v-btn
-                        >
-                        <v-btn
-                          text
-                          color="primary"
-                          @click="$refs.dialog3.save(start_time)"
-                          >OK</v-btn
-                        >
-                      </v-time-picker>
-                    </v-dialog>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-dialog
-                      ref="dialog4"
-                      v-model="modal3"
-                      :return-value.sync="end_time"
-                      persistent
-                      width="290px"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="end_time"
-                          :id="'end_time' + k"
-                          label="끝난 시간"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                          outlined
-                        ></v-text-field>
-                      </template>
-                      <v-time-picker
-                        v-if="modal3"
-                        v-model="end_time"
-                        full-width
-                      >
-                        <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="modal3 = false"
-                          >Cancel</v-btn
-                        >
-                        <v-btn
-                          text
-                          color="primary"
-                          @click="$refs.dialog4.save(end_time)"
-                          >OK</v-btn
-                        >
-                      </v-time-picker>
-                    </v-dialog>
-                  </v-col>
-
                   <v-col cols="12" v-for="(input, k) in inputs" :key="k">
-                    <!-- <v-dialog
+                    <v-dialog
                       ref="dialog3"
                       v-model="modal2"
                       :return-value.sync="input.start_time"
@@ -235,7 +159,7 @@
                         <v-btn
                           text
                           color="primary"
-                          @click="$refs.dialog3.save(input.start_time)"
+                          @click="$refs.dialog3[k].save(input.start_time)"
                           >OK</v-btn
                         >
                       </v-time-picker>
@@ -271,11 +195,11 @@
                         <v-btn
                           text
                           color="primary"
-                          @click="$refs.dialog4.save(input.end_time)"
+                          @click="$refs.dialog4[k].save(input.end_time)"
                           >OK</v-btn
                         >
                       </v-time-picker>
-                    </v-dialog> -->
+                    </v-dialog>
                     <v-textarea
                       label="업무 내용"
                       required
@@ -392,9 +316,7 @@ export default {
       date: "",
       modal2: false,
       modal3: false,
-      start_time: null,
-      end_time: null,
-      inputs: [{ content: "" }],
+      inputs: [{ start_time: null, end_time: null, content: "" }],
     };
   },
   mounted() {
@@ -403,7 +325,7 @@ export default {
   },
   methods: {
     add(k) {
-      this.inputs.push({ content: "" });
+      this.inputs.push({ start_time: null, end_time: null, content: "" });
     },
     remove(k) {
       this.inputs.splice(k, 1);

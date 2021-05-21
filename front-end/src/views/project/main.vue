@@ -96,17 +96,23 @@
                                   >
                                   </v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="6">
+
+                                <v-col
+                                  cols="12"
+                                  v-for="(input, k) in inputs"
+                                  :key="k"
+                                >
                                   <v-dialog
                                     ref="dialog3"
                                     v-model="modal2"
-                                    :return-value.sync="start_time"
+                                    :return-value.sync="input.start_time"
                                     persistent
                                     width="290px"
                                   >
                                     <template v-slot:activator="{ on, attrs }">
                                       <v-text-field
-                                        v-model="start_time"
+                                        v-model="input.start_time"
+                                        :id="'start_time' + k"
                                         label="시작 시간"
                                         readonly
                                         v-bind="attrs"
@@ -116,7 +122,8 @@
                                     </template>
                                     <v-time-picker
                                       v-if="modal2"
-                                      v-model="start_time"
+                                      v-model="input.start_time"
+                                      :id="'start_time' + k"
                                       full-width
                                     >
                                       <v-spacer></v-spacer>
@@ -129,24 +136,27 @@
                                       <v-btn
                                         text
                                         color="primary"
-                                        @click="$refs.dialog3.save(start_time)"
+                                        @click="
+                                          $refs.dialog3[k].save(
+                                            input.start_time
+                                          )
+                                        "
                                         >OK</v-btn
                                       >
                                     </v-time-picker>
                                   </v-dialog>
-                                </v-col>
 
-                                <v-col cols="12" sm="6">
                                   <v-dialog
                                     ref="dialog4"
                                     v-model="modal3"
-                                    :return-value.sync="end_time"
+                                    :return-value.sync="input.end_time"
                                     persistent
                                     width="290px"
                                   >
                                     <template v-slot:activator="{ on, attrs }">
                                       <v-text-field
-                                        v-model="end_time"
+                                        v-model="input.end_time"
+                                        :id="'end_time' + k"
                                         label="끝난 시간"
                                         readonly
                                         v-bind="attrs"
@@ -156,7 +166,7 @@
                                     </template>
                                     <v-time-picker
                                       v-if="modal3"
-                                      v-model="end_time"
+                                      v-model="input.end_time"
                                       full-width
                                     >
                                       <v-spacer></v-spacer>
@@ -169,42 +179,39 @@
                                       <v-btn
                                         text
                                         color="primary"
-                                        @click="$refs.dialog4.save(end_time)"
+                                        @click="
+                                          $refs.dialog4[k].save(input.end_time)
+                                        "
                                         >OK</v-btn
                                       >
                                     </v-time-picker>
                                   </v-dialog>
-                                </v-col>
-                                <!-- <div v-for="(input, k) in inputs" :key="k"> -->
-                                <v-col v-for="(input, k) in inputs" :key="k">
                                   <v-textarea
                                     label="업무 내용"
                                     required
                                     outlined
-                                    :id="'done' + k"
-                                    v-model="input.daily"
+                                    :id="'content' + k"
+                                    v-model="input.content"
                                   ></v-textarea>
                                   <v-btn
-                                    small
-                                    @click="remove(k)"
-                                    v-show="k || (!k && inputs.length > 1)"
-                                    >minus</v-btn
-                                  >
-                                  <v-btn small @click="add(k)" v-show="true"
-                                    >plus</v-btn
-                                  >
-                                  <v-btn
-                                    class="sm-2"
                                     fab
                                     dark
                                     small
                                     color="indigo"
-                                    @click="add2"
+                                    @click="remove(k)"
+                                    v-show="k || (!k && inputs.length > 1)"
+                                    ><v-icon dark>mdi-minus</v-icon></v-btn
+                                  >&nbsp;&nbsp;
+                                  <v-btn
+                                    fab
+                                    dark
+                                    small
+                                    color="indigo"
+                                    @click="add(k)"
+                                    v-show="k === inputs.length - 1"
+                                    ><v-icon dark>mdi-plus</v-icon></v-btn
                                   >
-                                    <v-icon dark>mdi-plus</v-icon>
-                                  </v-btn>
                                 </v-col>
-                                <!-- </div> -->
                               </v-row>
                             </v-container>
                           </v-card-text>
@@ -481,9 +488,11 @@ export default {
       dialog2: false,
       dialog3: false,
       dialog4: false,
+      modal2: false,
+      modal3: false,
       projectList: [],
       doneProjectList: [],
-      inputs: { daily: "" },
+      inputs: [{ start_time: null, end_time: null, content: "" }],
       date: "",
     };
   },
@@ -526,7 +535,7 @@ export default {
         });
     },
     add(k) {
-      this.inputs.push({ daily: "" });
+      this.inputs.push({ start_time: null, end_time: null, content: "" });
     },
     remove(k) {
       this.inputs.splice(k, 1);
