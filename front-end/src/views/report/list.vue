@@ -235,7 +235,7 @@
               <v-btn color="blue darken-1" text @click="dialog2 = false">
                 Close
               </v-btn>
-              <v-btn color="blue darken-1" text @click="dialog2 = false">
+              <v-btn color="blue darken-1" text @click="rptWritePOST">
                 Save
               </v-btn>
             </v-card-actions>
@@ -354,6 +354,7 @@ export default {
       this.date = this.$moment(new Date()).format("YYYY-MM-DD");
       console.log(this.date);
     },
+    rptWritePOST() {},
   },
 };
 </script>
