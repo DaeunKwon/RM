@@ -265,59 +265,69 @@
                                   outlined
                                   disabled
                                 ></v-text-field>
-
                                 <v-text-field
-                                  label="Legal middle name"
-                                  hint="example of helper text only on focus"
+                                  label="시작 날짜"
+                                  required
+                                  outlined
+                                  disabled
                                 ></v-text-field>
-
                                 <v-text-field
-                                  label="Legal last name*"
-                                  hint="example of persistent helper text"
-                                  persistent-hint
+                                  label="종료 날짜"
                                   required
+                                  outlined
+                                  disabled
                                 ></v-text-field>
-                              </v-col>
-                              <v-col cols="12">
                                 <v-text-field
-                                  label="Email*"
+                                  label="팀장"
                                   required
+                                  outlined
+                                  disabled
                                 ></v-text-field>
-                              </v-col>
-                              <v-col cols="12">
                                 <v-text-field
-                                  label="Password*"
-                                  type="password"
+                                  label="참여 시작 날짜"
                                   required
+                                  outlined
+                                  disabled
                                 ></v-text-field>
-                              </v-col>
-                              <v-col cols="12" sm="6">
-                                <v-select
-                                  :items="['0-17', '18-29', '30-54', '54+']"
-                                  label="Age*"
+                                <v-text-field
+                                  label="참여 종료 날짜"
                                   required
-                                ></v-select>
-                              </v-col>
-                              <v-col cols="12" sm="6">
-                                <v-autocomplete
-                                  :items="[
-                                    'Skiing',
-                                    'Ice hockey',
-                                    'Soccer',
-                                    'Basketball',
-                                    'Hockey',
-                                    'Reading',
-                                    'Writing',
-                                    'Coding',
-                                    'Basejump',
-                                  ]"
-                                  label="Interests"
-                                  multiple
-                                ></v-autocomplete>
+                                  outlined
+                                  disabled
+                                ></v-text-field>
+                                <v-text-field
+                                  label="팀원"
+                                  required
+                                  outlined
+                                  disabled
+                                ></v-text-field>
+                                <v-text-field
+                                  label="참여 시작 날짜"
+                                  required
+                                  outlined
+                                  disabled
+                                ></v-text-field>
+                                <v-text-field
+                                  label="참여 종료 날짜"
+                                  required
+                                  outlined
+                                  disabled
+                                ></v-text-field>
+                                <v-textarea
+                                  label="내용"
+                                  required
+                                  outlined
+                                  disabled
+                                ></v-textarea>
+                                <v-textarea
+                                  label="특이사항"
+                                  required
+                                  outlined
+                                  disabled
+                                ></v-textarea>
                               </v-col>
                             </v-row>
                           </v-container>
-                          <small>*indicates required field</small>
                         </v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
@@ -325,13 +335,7 @@
                             color="blue darken-1"
                             text
                             @click="dialog3 = false"
-                            >Close</v-btn
-                          >
-                          <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="dialog3 = false"
-                            >Save</v-btn
+                            >닫기</v-btn
                           >
                         </v-card-actions>
                       </v-card>
@@ -371,7 +375,6 @@
                           <v-icon small>info</v-icon>
                         </v-btn>
                       </template>
-
                       <v-card>
                         <v-card-title>
                           <span class="headline">프로젝트 정보</span>
@@ -379,66 +382,82 @@
                         <v-card-text>
                           <v-container>
                             <v-row>
-                              <v-col cols="12" sm="6" md="4">
+                              <v-col>
                                 <v-text-field
-                                  label="Legal first name*"
+                                  label="프로젝트명"
                                   required
+                                  outlined
+                                  disabled
                                 ></v-text-field>
-                              </v-col>
-                              <v-col cols="12" sm="6" md="4">
                                 <v-text-field
-                                  label="Legal middle name"
-                                  hint="example of helper text only on focus"
+                                  label="진행상황"
+                                  required
+                                  outlined
+                                  disabled
                                 ></v-text-field>
-                              </v-col>
-                              <v-col cols="12" sm="6" md="4">
                                 <v-text-field
-                                  label="Legal last name*"
-                                  hint="example of persistent helper text"
-                                  persistent-hint
+                                  label="시작 날짜"
                                   required
+                                  outlined
+                                  disabled
                                 ></v-text-field>
-                              </v-col>
-                              <v-col cols="12">
                                 <v-text-field
-                                  label="Email*"
+                                  label="종료 날짜"
                                   required
+                                  outlined
+                                  disabled
                                 ></v-text-field>
-                              </v-col>
-                              <v-col cols="12">
                                 <v-text-field
-                                  label="Password*"
-                                  type="password"
+                                  label="팀장"
                                   required
+                                  outlined
+                                  disabled
                                 ></v-text-field>
-                              </v-col>
-                              <v-col cols="12" sm="6">
-                                <v-select
-                                  :items="['0-17', '18-29', '30-54', '54+']"
-                                  label="Age*"
+                                <v-text-field
+                                  label="참여 시작 날짜"
                                   required
-                                ></v-select>
-                              </v-col>
-                              <v-col cols="12" sm="6">
-                                <v-autocomplete
-                                  :items="[
-                                    'Skiing',
-                                    'Ice hockey',
-                                    'Soccer',
-                                    'Basketball',
-                                    'Hockey',
-                                    'Reading',
-                                    'Writing',
-                                    'Coding',
-                                    'Basejump',
-                                  ]"
-                                  label="Interests"
-                                  multiple
-                                ></v-autocomplete>
+                                  outlined
+                                  disabled
+                                ></v-text-field>
+                                <v-text-field
+                                  label="참여 종료 날짜"
+                                  required
+                                  outlined
+                                  disabled
+                                ></v-text-field>
+                                <v-text-field
+                                  label="팀원"
+                                  required
+                                  outlined
+                                  disabled
+                                ></v-text-field>
+                                <v-text-field
+                                  label="참여 시작 날짜"
+                                  required
+                                  outlined
+                                  disabled
+                                ></v-text-field>
+                                <v-text-field
+                                  label="참여 종료 날짜"
+                                  required
+                                  outlined
+                                  disabled
+                                ></v-text-field>
+                                <v-textarea
+                                  label="내용"
+                                  required
+                                  outlined
+                                  disabled
+                                ></v-textarea>
+                                <v-textarea
+                                  label="특이사항"
+                                  required
+                                  outlined
+                                  disabled
+                                ></v-textarea>
                               </v-col>
                             </v-row>
                           </v-container>
-                          <small>*indicates required field</small>
                         </v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
@@ -446,13 +465,7 @@
                             color="blue darken-1"
                             text
                             @click="dialog4 = false"
-                            >Close</v-btn
-                          >
-                          <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="dialog4 = false"
-                            >Save</v-btn
+                            >닫기</v-btn
                           >
                         </v-card-actions>
                       </v-card>
