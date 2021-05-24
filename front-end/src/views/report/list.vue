@@ -27,7 +27,7 @@
               <div>
                 <h5>report</h5>
                 <h5 v-for="report in reportList" :key="report.id">
-                  {{ report.rpt_title }}
+                  {{ report.rpt_no }}
                 </h5>
               </div>
             </v-card>
@@ -36,13 +36,14 @@
             <v-sheet class="pa-2" outlined tile elevation="1" height="600">
               주간
               <v-slide-group v-model="report" class="pa-4" show-arrows>
-                <v-slide-item v-for="day in 5" :key="day">
+                <v-slide-item v-for="day in weekdays" :key="day.id">
                   <v-card
                     color="grey lighten-2"
                     class="ma-1"
                     height="500"
                     width="142"
                   >
+                    <v-card-title>{{ day.weekday }} </v-card-title>
                   </v-card>
                 </v-slide-item>
               </v-slide-group>
@@ -71,7 +72,13 @@ export default {
   data() {
     return {
       reportList: [],
-
+      weekdays: [
+        { weekday: "월" },
+        { weekday: "화" },
+        { weekday: "수" },
+        { weekday: "목" },
+        { weekday: "금" },
+      ],
       dialog5: false,
       date: "",
       modal2: false,
@@ -80,8 +87,22 @@ export default {
     };
   },
   mounted() {
-    this.getReportList();
+    this.getReportList;
     this.getToday();
+  },
+  computed: {
+    getReportList() {
+      this.$axios
+        .get("/api/report/list")
+        .then((res) => {
+          this.reportList = res.data;
+          console.log(this.reportList);
+          return this.reportList;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
   },
   methods: {
     add(k) {
@@ -99,17 +120,7 @@ export default {
     daily() {
       this.$router.push("/dailyRpt");
     },
-    getReportList() {
-      http
-        .get("/api/report/list")
-        .then((res) => {
-          this.reportList = res.data;
-          console.log(this.reportList);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
+
     getToday() {
       this.date = this.$moment(new Date()).format("YYYY-MM-DD");
       console.log(this.date);

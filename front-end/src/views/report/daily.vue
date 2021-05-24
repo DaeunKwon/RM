@@ -29,7 +29,7 @@
             <tr v-for="report in reportList" :key="report.no">
               <td>{{ $moment(report.rpt_write_d8).format("YYYY-MM-DD") }}</td>
               <td>{{ report.rpt_writer }}</td>
-              <td>{{ report.rpt_content }}</td>
+              <td>{{ report.rpt_no }}</td>
             </tr>
           </tbody>
         </template>
