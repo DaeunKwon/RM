@@ -12,7 +12,7 @@
         >
           주간
         </v-btn>
-        <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
+        <v-btn color="primary" class="mr-2"> 월간 </v-btn>
         <v-btn color="primary" @click="daily"> 전체 </v-btn>
       </div>
       <br />
@@ -57,19 +57,25 @@ export default {
     };
   },
   mounted() {
-    this.getReportList();
+    this.getReportList;
   },
-  methods: {
+  computed: {
     getReportList() {
-      http
+      this.$axios
         .get("/api/report/list")
         .then((res) => {
           this.reportList = res.data;
           console.log(this.reportList);
+          return this.reportList;
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+  },
+  methods: {
+    daily() {
+      this.$router.push("/dailyRpt");
     },
   },
 };

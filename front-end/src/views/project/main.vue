@@ -514,9 +514,35 @@ export default {
     vfooter, //풋터 컴포넌트 추가
   },
   mounted() {
-    this.getProjectList();
-    this.getDoneProjectList();
+    this.getProjectList;
+    this.getDoneProjectList;
     this.getToday();
+  },
+  computed: {
+    getProjectList() {
+      this.$axios
+        .get("/api/project/main")
+        .then((res) => {
+          this.projectList = res.data;
+          console.log(res.data);
+          return this.projectList;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getDoneProjectList() {
+      this.$axios
+        .get("/api/project/main/done")
+        .then((res) => {
+          this.doneProjectList = res.data;
+          console.log(this.doneProjectList);
+          return this.getDoneProjectList;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
   },
   methods: {
     prjWrite() {
@@ -524,28 +550,6 @@ export default {
     },
     onWork() {
       this.dialog = false;
-    },
-    getProjectList() {
-      http
-        .get("/api/project/main")
-        .then((res) => {
-          this.projectList = res.data;
-          console.log(res.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getDoneProjectList() {
-      http
-        .get("/api/project/main/done")
-        .then((res) => {
-          this.doneProjectList = res.data;
-          console.log(this.doneProjectList);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
     },
     add(k) {
       this.inputs.push({ start_time: null, end_time: null, content: "" });

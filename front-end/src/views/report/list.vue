@@ -8,7 +8,7 @@
         <v-btn color="primary" class="mr-2" @click="$router.push('/prjList')">
           주간
         </v-btn>
-        <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
+        <v-btn color="primary" class="mr-2"> 월간 </v-btn>
         <v-btn color="primary" @click="daily"> 전체 </v-btn>
       </div>
       <br />
