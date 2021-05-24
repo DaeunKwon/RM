@@ -8,8 +8,7 @@
         <br />
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
-            v-model="prj_title"
-            :rules="nameRules"
+            v-model="title"
             label="프로젝트명"
             required
             outlined
@@ -18,7 +17,6 @@
           <v-select
             :items="cond_items"
             v-model="cond"
-            :rules="nameRules"
             label="진행상황"
             required
             outlined
@@ -96,12 +94,11 @@
 
           <v-select
             outlined
-            v-model="lead_email"
-            :hint="`${lead_email.name}, ${lead_email.email}`"
+            v-model="leader"
+            :hint="`${leader.name}, ${leader.email}`"
             :items="userList"
             item-text="name"
             item-value="email"
-            :rules="nameRules"
             label="팀장"
             required
             persistent-hint
@@ -182,12 +179,11 @@
             <v-col cols="12">
               <v-select
                 outlined
-                v-model="follower"
-                :hint="`${follower.name}, ${follower.email}`"
+                v-model="input.follower"
+                :id="'follower' + k"
                 :items="userList"
                 item-text="name"
                 item-value="email"
-                :rules="nameRules"
                 label="팀원"
                 required
                 persistent-hint
@@ -198,7 +194,7 @@
             <v-col cols="12">
               <v-dialog
                 ref="dialog"
-                v-model="modal"
+                v-model="follow_in_d8"
                 :return-value.sync="input.in_date"
                 persistent
                 width="290px"
@@ -215,13 +211,13 @@
                   ></v-text-field>
                 </template>
                 <v-date-picker
-                  v-if="modal"
+                  v-if="follow_in_d8"
                   v-model="input.in_date"
                   :id="'in_date' + k"
                   full-width
                 >
                   <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="modal = false"
+                  <v-btn text color="primary" @click="follow_in_d8 = false"
                     >Cancel</v-btn
                   >
                   <v-btn
@@ -235,7 +231,7 @@
 
               <v-dialog
                 ref="dialog2"
-                v-model="modal2"
+                v-model="follow_out_d8"
                 :return-value.sync="input.out_date"
                 persistent
                 width="290px"
@@ -252,12 +248,12 @@
                   ></v-text-field>
                 </template>
                 <v-date-picker
-                  v-if="modal2"
+                  v-if="follow_out_d8"
                   v-model="input.out_date"
                   full-width
                 >
                   <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="modal2 = false"
+                  <v-btn text color="primary" @click="follow_out_d8 = false"
                     >Cancel</v-btn
                   >
                   <v-btn
@@ -300,7 +296,6 @@
           <v-textarea
             outlined
             v-model="content"
-            :rules="nameRules"
             label="프로젝트 내용"
             required
           ></v-textarea>
@@ -308,7 +303,6 @@
           <v-textarea
             outlined
             v-model="remark"
-            :rules="nameRules"
             label="특이사항"
             required
           ></v-textarea>
@@ -339,87 +333,88 @@ export default {
     return {
       dialog: false,
       dialog2: false,
-      start_d8: false,
-      end_d8: false,
-      prj_title: "",
-      lead_in_d8: false,
-      lead_out_d8: false,
-      modal: false,
-      modal2: false,
-      inputs: [{ in_date: null, out_date: null }],
-      lead_email: { name: "", email: "" },
-      follower: { name: "", email: "" },
-      lead_in_date: "",
-      lead_out_date: "",
-      buttons: [],
-      cond: null,
-      cond_items: ["예정", "진행중", "완료"],
-      userList: [],
-      //start_date: new Date().toISOString().substr(0, 10),
-      start_date: "",
-      end_date: "",
       menu1: false,
       menu2: false,
       menu3: false,
       menu4: false,
-      remark: "",
-      content: "",
+      start_date: "",
+      end_date: "",
+      lead_in_date: "",
+      lead_out_date: "",
+      userList: [],
 
+      title: "",
+      cond_items: ["예정", "진행중", "완료"],
+      cond: null,
+      start_d8: false,
+      end_d8: false,
+      leader: { name: "", email: "" },
+      lead_in_d8: false,
+      lead_out_d8: false,
+      inputs: [
+        { follower: { name: "", email: "" }, in_date: null, out_date: null },
+      ],
+      follow_in_d8: false,
+      follow_out_d8: false,
+      content: "",
+      remark: "",
       show: true,
+      //start_date: new Date().toISOString().substr(0, 10),
     };
   },
-
   mounted() {
-    this.getUserList();
+    this.getUserList;
   },
-  methods: {
-    prjWrite() {
-      // alert(JSON.stringify(this.project));
-      // var leader = {
-      //   email: this.leader.email,
-      //   prj_in_d8: this.leader.prj_in_d8,
-      //   prj_out_d8: this.leader.prj_out_d8,
-      // };
-      // var follower = {
-      //   email: this.follower.email,
-      //   prj_in_d8: this.follower.prj_in_d8,
-      //   prj_out_d8: this.follower.prj_out_d8,
-      // };
-      // var project = {
-      //   prj_title: this.project.prj_title,
-      //   cond: this.project.cond,
-      //   start_d8: this.project.start_d8,
-      //   end_d8: this.project.end_d8,
-      //   prj_content: this.project.prj_content,
-      //   prj_remark: this.project.prj_remark,
-      //   leader: leader,
-      //   follower: follower,
-      // };
-      // this.$axios
-      //   .post("/api/project/write", JSON.stringify(project), {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   })
-      //   .then((res) => {
-      //     console.log(res);
-      //     alert("프로젝트 등록 성공");
-      //     this.$router.push("/main");
-      //   });
-    },
-    main() {
-      this.$router.push("/main");
-    },
+  computed: {
     getUserList() {
-      http
+      this.$axios
         .get("/api/user/list")
         .then((res) => {
           this.userList = res.data;
           console.log(this.userList);
+          return this.userList;
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+  },
+  methods: {
+    prjWrite: function () {
+      const fd = new FormData();
+      for (let i = 0; i < this.inputs.length; i++) {
+        console.log(this.inputs[i].follower);
+        console.log(this.inputs[i].in_date);
+        console.log(this.inputs[i].out_date);
+        fd.append("follower" + i, this.inputs[i].follower);
+        fd.append("follower" + i, this.inputs[i].in_date);
+        fd.append("follower" + i, this.inputs[i].out_date);
+      }
+      this.$axios
+        .post(
+          "http://localhost:8090/api/project/write",
+          JSON.stringify({
+            title: this.title,
+            cond: this.cond,
+            start_date: this.start_date,
+            end_date: this.end_date,
+            content: this.content,
+            remark: this.remark,
+          }),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          alert("프로젝트 등록 성공");
+          this.$router.push("/main");
+        });
+    },
+    main() {
+      this.$router.push("/main");
     },
     add(k) {
       this.inputs.push({ in_date: null, out_date: null });

@@ -7,12 +7,15 @@ import com.example.demo.domain.ProjectVO;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @Mapper
 public class ProjectDAOImp implements ProjectDAO {
+    private final Logger log = LoggerFactory.getLogger(ProjectDAOImp.class);
 
     @Autowired
     private SqlSessionTemplate sql;
@@ -21,6 +24,7 @@ public class ProjectDAOImp implements ProjectDAO {
 
     @Override
     public void insert(ProjectVO pvo) {
+        log.info(">>>>>project post dao");
         sql.insert(ns + ".write", pvo);
 
     }

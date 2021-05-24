@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*")
 // @RestController(value = "/api/project")
 @EnableAutoConfiguration
 @RestController
@@ -34,35 +34,14 @@ public class ProjectCtrl {
 
     @Autowired
     private ProjectService projectService;
-    // private ProjectInService prjINSvc;
-    // private AuthService authSvc;
 
-    // @RequestMapping(value = "prjList", method = RequestMethod.GET)
-    // @GetMapping(value = "/prjList")
-    // public String list() {
-    // log.info(">>>>>>>>>>>>>project list 페이지 출력");
-    // return "index";
-    // }
-
-    // @RequestMapping(value = "prjWrite", method = RequestMethod.GET)
-    // public String write() {
-    // log.info(">>>>>>>>>>>>>>>>>>>>project write 페이지 출력");
-    // return "index.html";
-    // }
-
-    @PostMapping(value = "/write", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/api/project/write", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void write(@RequestBody ProjectVO pvo) {
-        log.info(">>>>>>>>>>>>project write POST 요청");
+        log.info(">>>>>>> project: " + pvo.getPrj_title());
         projectService.write(pvo);
         log.info(">>>>>>>>>>>>project db에 넣기 성공");
 
-    }
-
-    @GetMapping(value = "/detail")
-    public String detail() {
-        log.info(">>>>>>>>>>>>>project detail 페이지 출력");
-        return "index.html";
     }
 
     @ResponseBody
