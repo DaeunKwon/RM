@@ -329,8 +329,17 @@ export default {
     Header, //헤더 컴포넌트 추가
     Footer, //풋터 컴포넌트 추가
   },
+  data: () => ({
+    title: "",
+    cond: "",
+    start_date: "",
+    end_date: "",
+    content: "",
+    remark: "",
+  }),
   data() {
     return {
+      valid: false,
       dialog: false,
       dialog2: false,
       menu1: false,
@@ -345,7 +354,7 @@ export default {
 
       title: "",
       cond_items: ["예정", "진행중", "완료"],
-      cond: null,
+      cond: "",
       start_d8: false,
       end_d8: false,
       leader: { name: "", email: "" },
@@ -362,6 +371,7 @@ export default {
       //start_date: new Date().toISOString().substr(0, 10),
     };
   },
+
   mounted() {
     this.getUserList;
   },
@@ -380,7 +390,7 @@ export default {
     },
   },
   methods: {
-    prjWrite: function () {
+    prjWrite() {
       const fd = new FormData();
       for (let i = 0; i < this.inputs.length; i++) {
         console.log(this.inputs[i].follower);
@@ -390,27 +400,23 @@ export default {
         fd.append("follower" + i, this.inputs[i].in_date);
         fd.append("follower" + i, this.inputs[i].out_date);
       }
+      const project = new FormData();
+      project.append("title", this.title);
+      project.append("cond", this.cond);
+      project.append("start_date", this.start_date);
+      project.append("end_date", this.end_date);
+      project.append("content", this.content);
+      project.append("remark", this.remark);
+      console.log(project);
       this.$axios
-        .post(
-          "http://localhost:8090/api/project/write",
-          JSON.stringify({
-            title: this.title,
-            cond: this.cond,
-            start_date: this.start_date,
-            end_date: this.end_date,
-            content: this.content,
-            remark: this.remark,
-          }),
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
+        .post("http://localhost:8090/api/project/write", project)
         .then((res) => {
           console.log(res);
           alert("프로젝트 등록 성공");
           this.$router.push("/main");
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
     main() {
