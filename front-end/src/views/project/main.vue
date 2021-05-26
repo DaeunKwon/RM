@@ -25,9 +25,7 @@
                 :key="project.prj_no"
               >
                 <v-card color="green" class="ma-4" height="200" width="200">
-                  <v-card-title
-                    >{{ project.prj_no }} {{ project.prj_title }}</v-card-title
-                  >
+                  <v-card-title>{{ project.prj_title }}</v-card-title>
 
                   <v-card-text>
                     <v-btn color="grey lighten-2" light @click="dialog = true">
@@ -61,8 +59,8 @@
               show-arrows
             >
               <v-slide-item
-                v-for="doneproject in doneProjectList"
-                :key="doneproject.id"
+                v-for="project in doneProjectList"
+                :key="project.id"
               >
                 <v-card
                   color="grey lighten-1"
@@ -70,7 +68,7 @@
                   height="200"
                   width="200"
                 >
-                  <v-card-title>{{ doneproject.prj_title }}</v-card-title>
+                  <v-card-title>{{ project.prj_title }}</v-card-title>
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialog4" persistent max-width="600px">
