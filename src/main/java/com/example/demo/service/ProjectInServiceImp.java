@@ -13,7 +13,7 @@ public class ProjectInServiceImp implements ProjectInService {
     private ProjectInDAO pINdao;
 
     @Override
-    public void write(ProjectInVO pINvo) {
+    public void add(ProjectInVO pINvo) {
         pINdao.insert(pINvo);
     }
 

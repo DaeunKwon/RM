@@ -19,7 +19,7 @@ public class ProjectInDAOImp implements ProjectInDAO {
 
     @Override
     public void insert(ProjectInVO pINvo) {
-        sql.insert(ns + ".write", pINvo);
+        sql.insert(ns + ".addLeader", pINvo);
     }
 
 }

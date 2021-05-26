@@ -336,6 +336,9 @@ export default {
     end_date: "",
     content: "",
     remark: "",
+    leader: { name: "", email: "" },
+    lead_in_date: "",
+    lead_out_date: "",
   }),
   data() {
     return {
@@ -371,7 +374,6 @@ export default {
       //start_date: new Date().toISOString().substr(0, 10),
     };
   },
-
   mounted() {
     this.getUserList;
   },
@@ -391,15 +393,6 @@ export default {
   },
   methods: {
     prjWrite() {
-      const fd = new FormData();
-      for (let i = 0; i < this.inputs.length; i++) {
-        console.log(this.inputs[i].follower);
-        console.log(this.inputs[i].in_date);
-        console.log(this.inputs[i].out_date);
-        fd.append("follower" + i, this.inputs[i].follower);
-        fd.append("follower" + i, this.inputs[i].in_date);
-        fd.append("follower" + i, this.inputs[i].out_date);
-      }
       const project = new FormData();
       project.append("title", this.title);
       project.append("cond", this.cond);
@@ -411,15 +404,32 @@ export default {
       this.$axios
         .post("http://localhost:8090/api/project/write", project)
         .then((res) => {
-          console.log(res);
-          alert("프로젝트 등록 성공");
-          this.$router.push("/main");
+          const leader = new FormData();
+          leader.append("email", this.leader.email);
+          leader.append("prj_in_d8", this.lead_in_date);
+          leader.append("prj_out_d8", this.lead_out_date);
+
+          this.$axios.post("/api/project/in/leader", leader).then((res) => {
+            console.log(res);
+            alert("프로젝트 등록 성공");
+            //this.$router.push("/main");
+          });
         })
         .catch((error) => {
           console.log(error);
         });
+
+      const fd = new FormData();
+      for (let i = 0; i < this.inputs.length; i++) {
+        console.log(this.inputs[i].follower);
+        console.log(this.inputs[i].in_date);
+        console.log(this.inputs[i].out_date);
+        fd.append("follower" + i, this.inputs[i].follower);
+        fd.append("follower" + i, this.inputs[i].in_date);
+        fd.append("follower" + i, this.inputs[i].out_date);
+      }
     },
-    main() {
+    mainInfo() {
       this.$router.push("/main");
     },
     add(k) {

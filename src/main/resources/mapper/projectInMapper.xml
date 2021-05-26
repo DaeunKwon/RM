@@ -33,4 +33,7 @@
             #{follow_prj_out_d8},
             #{prj_no})
     </insert>
+    <insert id="addLeader" parameterType="com.example.demo.domain.ProjectInVO">
+        insert into tbl_project_in values (tbl_project_in_seq.nextval, #{email}, 'USER_ADMIN', #{prj_in_d8}, #{prj_out_d8}, 2)
+    </insert>
 </mapper>
