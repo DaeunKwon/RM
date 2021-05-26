@@ -15,7 +15,6 @@
       <v-subheader>Username 님</v-subheader>
 
       <v-menu
-        v-model="value"
         :close-on-click="closeOnClick"
         :close-on-content-click="closeOnContentClick"
         :offset-y="offsetY"
