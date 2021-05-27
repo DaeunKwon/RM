@@ -15,7 +15,7 @@
           <v-sheet class="mx-auto" elevation="8" max-width="1000"
             ><br />진행중인 프로젝트
             <v-slide-group
-              v-model="model"
+              v-model="ingModel"
               class="pa-4"
               active-class="success"
               show-arrows
@@ -28,11 +28,19 @@
                   <v-card-title>{{ project.prj_title }}</v-card-title>
 
                   <v-card-text>
-                    <v-btn color="grey lighten-2" light @click="dialog = true">
+                    <v-btn
+                      color="grey lighten-2"
+                      light
+                      @click="onworkDialog = true"
+                    >
                       출근 </v-btn
                     >&nbsp;
 
-                    <v-btn color="grey lighten-2" light @click="dialog2 = true">
+                    <v-btn
+                      color="grey lighten-2"
+                      light
+                      @click="reportDialog = true"
+                    >
                       업무일지
                     </v-btn>
                   </v-card-text>
@@ -53,7 +61,7 @@
           <v-sheet class="mx-auto" elevation="8" max-width="1000"
             ><br />완료된 프로젝트
             <v-slide-group
-              v-model="model2"
+              v-model="doneModel"
               class="pa-4"
               active-class="success"
               show-arrows
@@ -71,107 +79,10 @@
                   <v-card-title>{{ project.prj_title }}</v-card-title>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-dialog v-model="dialog4" persistent max-width="600px">
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on">
-                          <v-icon>mdi-information-outline</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-card>
-                        <v-card-title>
-                          <span class="headline">프로젝트 정보</span>
-                        </v-card-title>
-                        <v-card-text>
-                          <v-container>
-                            <v-row>
-                              <v-col>
-                                <v-text-field
-                                  label="프로젝트명"
-                                  required
-                                  outlined
-                                  disabled
-                                ></v-text-field>
-                                <v-text-field
-                                  label="진행상황"
-                                  required
-                                  outlined
-                                  disabled
-                                ></v-text-field>
-                                <v-text-field
-                                  label="시작 날짜"
-                                  required
-                                  outlined
-                                  disabled
-                                ></v-text-field>
-                                <v-text-field
-                                  label="종료 날짜"
-                                  required
-                                  outlined
-                                  disabled
-                                ></v-text-field>
-                                <v-text-field
-                                  label="팀장"
-                                  required
-                                  outlined
-                                  disabled
-                                ></v-text-field>
-                                <v-text-field
-                                  label="참여 시작 날짜"
-                                  required
-                                  outlined
-                                  disabled
-                                ></v-text-field>
-                                <v-text-field
-                                  label="참여 종료 날짜"
-                                  required
-                                  outlined
-                                  disabled
-                                ></v-text-field>
-                                <v-text-field
-                                  label="팀원"
-                                  required
-                                  outlined
-                                  disabled
-                                ></v-text-field>
-                                <v-text-field
-                                  label="참여 시작 날짜"
-                                  required
-                                  outlined
-                                  disabled
-                                ></v-text-field>
-                                <v-text-field
-                                  label="참여 종료 날짜"
-                                  required
-                                  outlined
-                                  disabled
-                                ></v-text-field>
-                                <v-textarea
-                                  label="내용"
-                                  required
-                                  outlined
-                                  disabled
-                                ></v-textarea>
-                                <v-textarea
-                                  label="특이사항"
-                                  required
-                                  outlined
-                                  disabled
-                                ></v-textarea>
-                              </v-col>
-                            </v-row>
-                          </v-container>
-                        </v-card-text>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="dialog4 = false"
-                            >닫기</v-btn
-                          >
-                        </v-card-actions>
-                      </v-card>
-                    </v-dialog>
+
+                    <v-btn icon @click="openDialogView(project)">
+                      <v-icon>mdi-information-outline</v-icon>
+                    </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-slide-item>
@@ -180,14 +91,14 @@
         </div>
         <br />
 
-        <v-dialog v-model="dialog" max-width="290">
+        <v-dialog v-model="onworkDialog" max-width="290">
           <v-card>
             <v-card-title>출근하시겠습니까?</v-card-title>
 
             <v-card-actions>
               <v-spacer></v-spacer>
 
-              <v-btn color="red darken-1" text @click="dialog = false">
+              <v-btn color="red darken-1" text @click="onworkDialog = false">
                 취소
               </v-btn>
 
@@ -196,7 +107,7 @@
           </v-card>
         </v-dialog>
 
-        <v-dialog v-model="dialog2" persistent max-width="600px">
+        <v-dialog v-model="reportDialog" persistent max-width="600px">
           <v-card>
             <v-card-title>
               <span class="headline">업무 일지 작성</span>
@@ -226,8 +137,8 @@
 
                   <v-col cols="12" v-for="(input, k) in inputs" :key="k">
                     <v-dialog
-                      ref="dialog3"
-                      v-model="modal2"
+                      ref="startDialog"
+                      v-model="startModel"
                       :return-value.sync="input.start_time"
                       persistent
                       width="290px"
@@ -244,27 +155,27 @@
                         ></v-text-field>
                       </template>
                       <v-time-picker
-                        v-if="modal2"
+                        v-if="startModel"
                         v-model="input.start_time"
                         :id="'start_time' + k"
                         full-width
                       >
                         <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="modal2 = false"
+                        <v-btn text color="primary" @click="startModel = false"
                           >Cancel</v-btn
                         >
                         <v-btn
                           text
                           color="primary"
-                          @click="$refs.dialog3[k].save(input.start_time)"
+                          @click="$refs.startDialog[k].save(input.start_time)"
                           >OK</v-btn
                         >
                       </v-time-picker>
                     </v-dialog>
 
                     <v-dialog
-                      ref="dialog4"
-                      v-model="modal3"
+                      ref="endDialog"
+                      v-model="endModel"
                       :return-value.sync="input.end_time"
                       persistent
                       width="290px"
@@ -281,18 +192,18 @@
                         ></v-text-field>
                       </template>
                       <v-time-picker
-                        v-if="modal3"
+                        v-if="endModel"
                         v-model="input.end_time"
                         full-width
                       >
                         <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="modal3 = false"
+                        <v-btn text color="primary" @click="endModel = false"
                           >Cancel</v-btn
                         >
                         <v-btn
                           text
                           color="primary"
-                          @click="$refs.dialog4[k].save(input.end_time)"
+                          @click="$refs.endDialog[k].save(input.end_time)"
                           >OK</v-btn
                         >
                       </v-time-picker>
@@ -328,10 +239,10 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="dialog2 = false">
+              <v-btn color="blue darken-1" text @click="reportDialog = false">
                 Close
               </v-btn>
-              <v-btn color="blue darken-1" text @click="dialog2 = false">
+              <v-btn color="blue darken-1" text @click="reportDialog = false">
                 Save
               </v-btn>
             </v-card-actions>
@@ -459,15 +370,15 @@ export default {
   data() {
     return {
       show: false,
-      model: null,
-      model2: null,
-      dialog: false,
-      dialog2: false,
-      dialog3: false,
-      dialog4: false,
+      ingModel: null,
+      doneModel: null,
+      onworkDialog: false,
+      reportDialog: false,
+      startDialog: false,
+      endDialog: false,
       dialogView: false,
-      modal2: false,
-      modal3: false,
+      startModel: false,
+      endModel: false,
       projectList: [],
       doneProjectList: [],
       inputs: [{ start_time: null, end_time: null, content: "" }],
@@ -515,7 +426,7 @@ export default {
       this.$router.push("/prjWrite");
     },
     onWork() {
-      this.dialog = false;
+      this.onworkDialog = false;
     },
     add(k) {
       this.inputs.push({ start_time: null, end_time: null, content: "" });
