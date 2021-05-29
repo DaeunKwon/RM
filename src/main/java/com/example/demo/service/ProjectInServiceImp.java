@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import com.example.demo.dao.ProjectInDAO;
 import com.example.demo.domain.ProjectInVO;
 
@@ -15,6 +17,11 @@ public class ProjectInServiceImp implements ProjectInService {
     @Override
     public void add(ProjectInVO pINvo) {
         pINdao.insert(pINvo);
+    }
+
+    @Override
+    public List<ProjectInVO> getLedaerList() {
+        return pINdao.getLeaderList();
     }
 
 }
