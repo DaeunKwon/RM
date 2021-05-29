@@ -39,7 +39,7 @@
                     <v-btn
                       color="grey lighten-2"
                       light
-                      @click="reportDialog = true"
+                      @click="openReportDialog(project)"
                     >
                       업무일지
                     </v-btn>
@@ -140,7 +140,6 @@
                       ref="startDialog"
                       v-model="startModel"
                       :return-value.sync="input.start_time"
-                      persistent
                       width="290px"
                     >
                       <template v-slot:activator="{ on, attrs }">
@@ -162,13 +161,13 @@
                       >
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="startModel = false"
-                          >Cancel</v-btn
+                          >취소</v-btn
                         >
                         <v-btn
                           text
                           color="primary"
                           @click="$refs.startDialog[k].save(input.start_time)"
-                          >OK</v-btn
+                          >저장</v-btn
                         >
                       </v-time-picker>
                     </v-dialog>
@@ -177,7 +176,6 @@
                       ref="endDialog"
                       v-model="endModel"
                       :return-value.sync="input.end_time"
-                      persistent
                       width="290px"
                     >
                       <template v-slot:activator="{ on, attrs }">
@@ -198,13 +196,13 @@
                       >
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="endModel = false"
-                          >Cancel</v-btn
+                          >취소</v-btn
                         >
                         <v-btn
                           text
                           color="primary"
                           @click="$refs.endDialog[k].save(input.end_time)"
-                          >OK</v-btn
+                          >저장</v-btn
                         >
                       </v-time-picker>
                     </v-dialog>
@@ -240,16 +238,16 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="reportDialog = false">
-                Close
+                닫기
               </v-btn>
-              <v-btn color="blue darken-1" text @click="reportDialog = false">
-                Save
+              <v-btn color="blue darken-1" text @click="saveReport">
+                저장
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
 
-        <v-dialog v-model="dialogView" persistent max-width="600px">
+        <v-dialog v-model="dialogView" max-width="600px">
           <v-card>
             <v-card-title>
               <span class="headline">프로젝트 정보</span>
@@ -295,18 +293,29 @@
                       required
                       outlined
                       readonly
+                      :value="this.selectedProjectLeader.email"
                     ></v-text-field>
                     <v-text-field
                       label="참여 시작 날짜"
                       required
                       outlined
                       readonly
+                      :value="
+                        $moment(this.selectedProjectLeader.prj_in_d8).format(
+                          'YYYY-MM-DD'
+                        )
+                      "
                     ></v-text-field>
                     <v-text-field
                       label="참여 종료 날짜"
                       required
                       outlined
                       readonly
+                      :value="
+                        $moment(this.selectedProjectLeader.prj_out_d8).format(
+                          'YYYY-MM-DD'
+                        )
+                      "
                     ></v-text-field>
                     <v-text-field
                       label="팀원"
@@ -381,11 +390,14 @@ export default {
       endModel: false,
       projectList: [],
       doneProjectList: [],
+      leaderList: [],
       inputs: [{ start_time: null, end_time: null, content: "" }],
       date: "",
       selectedProject: "",
+      selectedProjectLeader: "",
     };
   },
+
   components: {
     Header, //헤더 컴포넌트 추가
     vfooter, //풋터 컴포넌트 추가
@@ -393,6 +405,7 @@ export default {
   mounted() {
     this.getProjectList;
     this.getDoneProjectList;
+    this.getLeaderList;
     this.getToday();
   },
   computed: {
@@ -420,6 +433,13 @@ export default {
           console.log(e);
         });
     },
+    getLeaderList() {
+      this.$axios.get("/api/project/in/leader/list").then((res) => {
+        this.leaderList = res.data;
+        console.log(this.leaderList);
+        return this.getLeaderList;
+      });
+    },
   },
   methods: {
     prjWrite() {
@@ -441,6 +461,39 @@ export default {
     openDialogView(project) {
       this.dialogView = true;
       this.selectedProject = project;
+      var leaderInfoList = this.leaderList;
+      for (var i in leaderInfoList) {
+        if (leaderInfoList[i].prj_no == project.prj_no) {
+          this.selectedProjectLeader = leaderInfoList[i];
+          return this.selectedProjectLeader;
+        }
+      }
+    },
+    openReportDialog(project) {
+      this.reportDialog = true;
+      this.selectedProject = project;
+    },
+    saveReport() {
+      let report = new FormData();
+      for (let i = 0; i < this.inputs.length; i++) {
+        console.log(this.inputs[i].start_time);
+        console.log(this.inputs[i].end_time);
+        console.log(this.inputs[i].content);
+        report.append("start_time_" + i, this.inputs[i].start_time);
+        report.append("end_time_" + i, this.inputs[i].end_time);
+        report.append("content_" + i, this.inputs[i].content);
+      }
+      console.log(report.get("content_1"));
+      this.$axios
+        .post("/api/report/write", JSON.stringify(report), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          alert("업무 일지 등록");
+          this.reportDialog = false;
+        });
     },
   },
 };
