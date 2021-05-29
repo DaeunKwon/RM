@@ -5,10 +5,8 @@
       ><br />
       <v-header>업무 일지 목록</v-header>
       <div align="right">
-        <v-btn color="primary" class="mr-2" @click="$router.push('/prjList')">
-          주간
-        </v-btn>
-        <v-btn color="primary" class="mr-2"> 월간 </v-btn>
+        <v-btn color="primary" class="mr-2" @click="rptList"> 주간 </v-btn>
+        <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
         <v-btn color="primary" @click="daily"> 전체 </v-btn>
       </div>
       <br />
@@ -23,11 +21,14 @@
               height="400"
               width="400"
             >
-              개인
+              {{ date }}
               <div>
-                <h5>report</h5>
-                <h5 v-for="report in reportList" :key="report.id">
-                  {{ report.rpt_no }}
+                <br />
+                <h5
+                  v-for="reportDetail in reportDetailList"
+                  :key="reportDetail.id"
+                >
+                  {{ reportDetail.rpt_content }}
                 </h5>
               </div>
             </v-card>
@@ -72,6 +73,7 @@ export default {
   data() {
     return {
       reportList: [],
+      reportDetailList: [],
       weekdays: [
         { weekday: "월" },
         { weekday: "화" },
@@ -89,6 +91,7 @@ export default {
   mounted() {
     this.getReportList;
     this.getToday();
+    this.getReportDetailList;
   },
   computed: {
     getReportList() {
@@ -103,24 +106,35 @@ export default {
           console.log(e);
         });
     },
+    getReportDetailList() {
+      this.$axios.get("/api/report/detail/list").then((res) => {
+        this.reportDetailList = res.data;
+        return this.reportDetailList;
+      });
+    },
   },
   methods: {
+    rptList() {
+      this.$router.push("/rptList");
+    },
     add(k) {
       this.inputs.push({ start_time: null, end_time: null, content: "" });
     },
     remove(k) {
       this.inputs.splice(k, 1);
     },
-    // rptList() {
-    //   this.$router.push("/rptList");
-    // },
+    rptList() {
+      this.$router.push("/rptList");
+    },
     rptWrite() {
       this.$router.push("/rptWrite");
     },
     daily() {
       this.$router.push("/dailyRpt");
     },
-
+    monthly() {
+      this.$router.push("/monthlyRpt");
+    },
     getToday() {
       this.date = this.$moment(new Date()).format("YYYY-MM-DD");
       console.log(this.date);

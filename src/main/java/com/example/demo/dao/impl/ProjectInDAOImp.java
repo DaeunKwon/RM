@@ -1,5 +1,7 @@
 package com.example.demo.dao.impl;
 
+import java.util.List;
+
 import com.example.demo.dao.ProjectInDAO;
 import com.example.demo.domain.ProjectInVO;
 
@@ -20,6 +22,11 @@ public class ProjectInDAOImp implements ProjectInDAO {
     @Override
     public void insert(ProjectInVO pINvo) {
         sql.insert(ns + ".addLeader", pINvo);
+    }
+
+    @Override
+    public List<ProjectInVO> getLeaderList() {
+        return sql.selectList(ns + ".getLeaderList");
     }
 
 }

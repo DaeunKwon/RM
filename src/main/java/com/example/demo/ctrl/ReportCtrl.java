@@ -1,7 +1,9 @@
 package com.example.demo.ctrl;
 
 import java.util.List;
+import org.springframework.http.MediaType;
 
+import com.example.demo.domain.ReportDetailVO;
 import com.example.demo.domain.ReportVO;
 import com.example.demo.service.ReportService;
 
@@ -15,32 +17,45 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-@EnableAutoConfiguration
 @RestController
-// @RequestMapping(value = "/api/report")
+@RequestMapping(value = "/api/report")
 public class ReportCtrl {
     private final Logger log = LoggerFactory.getLogger(ReportCtrl.class);
 
     @Autowired
-    private ReportService rptSvc;
+    private ReportService reportService;
 
     @PostMapping(value = "/rptWrite")
     @ResponseBody
     public String postMethodName(@RequestBody ReportVO rvo) {
         log.info(">>>>>>>>>>>>>>>report 작성");
-        rptSvc.write(rvo);
+        reportService.write(rvo);
         return "index.html";
     }
 
+    @PostMapping(value = "/write")
     @ResponseBody
-    @GetMapping(value = "api/report/list")
+    public void write(@RequestBody List<ReportDetailVO> reportDetail) {
+        log.info("report detail:" + reportDetail.get(0).getRpt_content());
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/list")
     public List<ReportVO> list() {
         log.info(">>>>>>>>>>>>>>>>report list 페이지 출력");
-        return rptSvc.list();
+        return reportService.list();
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/detail/list")
+    public List<ReportDetailVO> getReportDetailList() {
+        log.info(">>>>>>>>get report detail list");
+        return reportService.getReportDetailList();
     }
 
 }

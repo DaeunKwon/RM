@@ -3,7 +3,11 @@ package com.example.demo.domain;
 import java.util.Date;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Data
 public class ReportDetailVO {
     private int rpt_detail_no;
