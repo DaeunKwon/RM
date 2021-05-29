@@ -196,7 +196,6 @@
                 ref="dialog"
                 v-model="follow_in_d8"
                 :return-value.sync="input.in_date"
-                persistent
                 width="290px"
               >
                 <template v-slot:activator="{ on, attrs }">
@@ -233,7 +232,6 @@
                 ref="dialog2"
                 v-model="follow_out_d8"
                 :return-value.sync="input.out_date"
-                persistent
                 width="290px"
               >
                 <template v-slot:activator="{ on, attrs }">
@@ -419,15 +417,17 @@ export default {
           console.log(error);
         });
 
-      const fd = new FormData();
-      for (let i = 0; i < this.inputs.length; i++) {
-        console.log(this.inputs[i].follower);
-        console.log(this.inputs[i].in_date);
-        console.log(this.inputs[i].out_date);
-        fd.append("follower" + i, this.inputs[i].follower);
-        fd.append("follower" + i, this.inputs[i].in_date);
-        fd.append("follower" + i, this.inputs[i].out_date);
-      }
+      // const follower = new FormData();
+      // for (let i = 0; i < this.inputs.length; i++) {
+      //   console.log(this.inputs[i].follower.email);
+      //   console.log(this.inputs[i].in_date);
+      //   console.log(this.inputs[i].out_date);
+      //   follower.append("email_" + i, this.inputs[i].follower.email);
+      //   follower.append("prj_in_d8_" + i, this.inputs[i].in_date);
+      //   follower.append("prj_out_d8_" + i, this.inputs[i].out_date);
+      // }
+      // console.log(follower);
+      // this.$axios.post("api/project/in/follower", follower);
     },
     mainInfo() {
       this.$router.push("/main");
