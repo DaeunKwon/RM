@@ -11,12 +11,17 @@ import rptList from '../views/report/list.vue';
 import rptWrite from '../views/report/write.vue';
 import prjDetail from '../views/project/detail.vue';
 import dailyRpt from '../views/report/daily.vue';
+import monthlyRpt from '../views/report/monthly.vue';
 
 Vue.use(VueRouter);
 
 const router = new VueRouter({
     mode: 'history',
     routes: [
+        {
+            path: '/monthlyRpt',
+            component: monthlyRpt,
+        },
         {
             path: '/dailyRpt',
             component: dailyRpt,

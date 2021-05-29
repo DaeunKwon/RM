@@ -12,7 +12,7 @@
         >
           주간
         </v-btn>
-        <v-btn color="primary" class="mr-2"> 월간 </v-btn>
+        <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
         <v-btn color="primary" @click="daily"> 전체 </v-btn>
       </div>
       <br />
@@ -76,6 +76,9 @@ export default {
   methods: {
     daily() {
       this.$router.push("/dailyRpt");
+    },
+    monthly() {
+      this.$router.push("/monthlyRpt");
     },
   },
 };
