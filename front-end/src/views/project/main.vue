@@ -465,7 +465,10 @@ export default {
       for (var i in leaderInfoList) {
         if (leaderInfoList[i].prj_no == project.prj_no) {
           this.selectedProjectLeader = leaderInfoList[i];
+          console.log(this.selectedProjectLeader.email);
           return this.selectedProjectLeader;
+        } else {
+          return null;
         }
       }
     },
