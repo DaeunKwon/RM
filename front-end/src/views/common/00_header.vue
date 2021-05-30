@@ -58,21 +58,9 @@ export default {
       }
     },
     rptList() {
-      this.$axios.get("/api/report/list"),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
       this.$router.push("/rptList");
     },
     main() {
-      this.$axios.get("/api/project/main"),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
       this.$router.push("/main");
     },
   },
