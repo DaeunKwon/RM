@@ -5,4 +5,5 @@ export default {
     hasLoginErrored: state => state.loginError,
     getUserName: state => state.userName,
     getUserPass: state => state.userPass,
+    getCurrentUser: state => state.currentUser,
 }

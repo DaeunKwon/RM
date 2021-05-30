@@ -57,15 +57,9 @@ export default {
     passwordRules: [(v) => !!v || "Password is required"],
   }),
   methods: {
-    login(e) {
-      e.preventDefault();
-      alert("로그인");
-    },
     login() {
-      const email = this.email;
-      const password = this.password;
-
-      this.$store.dispatch("LOGIN", { email, password });
+      alert("로그인");
+      this.$store.dispatch("login", this.member);
     },
   },
 };

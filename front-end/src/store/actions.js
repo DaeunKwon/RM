@@ -1,4 +1,3 @@
-//import axios from 'axios';
 import axios from 'axios';
 import UserService from '../service/UserService'
 
@@ -40,6 +39,16 @@ export default {
     //         }
     //     })
     // },
+    // 현재 로그인 한 유저 가져오기
+    initCurrentUser: async function (context) {
+        await axios.get('/api/user/info')
+            .then(res => {
+                context.commit('setCurrentUser', res.data)
+            }).catch(error => {
+                context.commit('setCurrentUser', 'none')
+            })
+    },
+
 
 
 }

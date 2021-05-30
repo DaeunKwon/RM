@@ -17,5 +17,9 @@ export default {
     registerFailure(state) {
         state.status.loggedIn = false;
     },
+    setCurrentUser: function (state, payload) {
+        state.currentUser = payload
+    },
+
 
 }
