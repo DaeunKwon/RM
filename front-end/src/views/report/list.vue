@@ -3,7 +3,7 @@
     <Header />
     <v-container
       ><br />
-      <v-header>업무 일지 목록</v-header>
+      <div>업무 일지 목록</div>
       <div align="right">
         <v-btn color="primary" class="mr-2" @click="rptList"> 주간 </v-btn>
         <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
@@ -93,8 +93,7 @@
                 :type="type"
                 @click:event="showEvent"
                 @click:more="viewDay"
-                @click:date="viewDay"
-                @change="updateRange"
+                @change="getEvents"
               ></v-calendar>
               <v-menu
                 v-model="selectedOpen"
@@ -119,7 +118,8 @@
                     </v-btn>
                   </v-toolbar>
                   <v-card-text>
-                    <span v-html="selectedEvent.details"></span>
+                    <span :value="selectedEvent.rpt_start_time"></span>
+                    <span :value="selectedEvent.rpt_end_time"></span>
                   </v-card-text>
                   <v-card-actions>
                     <v-btn text color="secondary" @click="selectedOpen = false">
@@ -149,7 +149,9 @@ export default {
     Header, //헤더 컴포넌트 추가
     Footer, //풋터 컴포넌트 추가
   },
-
+  data: () => ({
+    events: [],
+  }),
   data() {
     return {
       reportList: [],
@@ -159,46 +161,43 @@ export default {
       modal2: false,
       modal3: false,
       inputs: [{ start_time: null, end_time: null, content: "" }],
+      focus: "",
+      type: "week",
+      typeToLabel: {
+        month: "Month",
+        week: "Week",
+        day: "Day",
+        "4day": "4 Days",
+      },
+      selectedEvent: {},
+      selectedElement: null,
+      selectedOpen: false,
+      events: [],
+      colors: [
+        "blue",
+        "indigo",
+        "deep-purple",
+        "cyan",
+        "green",
+        "orange",
+        "grey darken-1",
+      ],
+      names: [
+        "Meeting",
+        "Holiday",
+        "PTO",
+        "Travel",
+        "Event",
+        "Birthday",
+        "Conference",
+        "Party",
+      ],
     };
   },
-  data: () => ({
-    focus: "",
-    type: "week",
-    typeToLabel: {
-      month: "Month",
-      week: "Week",
-      day: "Day",
-      "4day": "4 Days",
-    },
-    selectedEvent: {},
-    selectedElement: null,
-    selectedOpen: false,
-    events: [],
-    colors: [
-      "blue",
-      "indigo",
-      "deep-purple",
-      "cyan",
-      "green",
-      "orange",
-      "grey darken-1",
-    ],
-    names: [
-      "Meeting",
-      "Holiday",
-      "PTO",
-      "Travel",
-      "Event",
-      "Birthday",
-      "Conference",
-      "Party",
-    ],
-  }),
   mounted() {
     this.getReportList;
     this.getToday();
     this.getReportDetailList;
-    this.$refs.calendar.checkChange();
   },
   computed: {
     getReportList() {
@@ -216,11 +215,31 @@ export default {
     getReportDetailList() {
       this.$axios.get("/api/report/detail/list").then((res) => {
         this.reportDetailList = res.data;
-        return this.reportDetailList;
       });
     },
   },
   methods: {
+    getEvents() {
+      const events = [];
+      this.$axios.get("/api/report/detail/list").then((res) => {
+        const reportDetailList = res.data;
+
+        for (let i = 0; i < reportDetailList.length; i++) {
+          const startTime = new Date(reportDetailList[i].rpt_start_time);
+          const endTime = new Date(reportDetailList[i].rpt_end_time);
+          //console.log(startTime);
+          events.push({
+            name: "Test",
+            start: new Date(reportDetailList[i].rpt_start_time),
+            end: new Date(reportDetailList[i].rpt_end_time),
+            color: this.colors[this.rnd(0, this.colors.length - 1)],
+          });
+          console.log(events[i].start);
+        }
+        this.events = events;
+        console.log(this.events[0].end);
+      });
+    },
     viewDay({ date }) {
       this.focus = date;
       this.type = "day";
@@ -253,20 +272,28 @@ export default {
 
       nativeEvent.stopPropagation();
     },
+
     updateRange({ start, end }) {
       const events = [];
-
       const min = new Date(`${start.date}T00:00:00`);
       const max = new Date(`${end.date}T23:59:59`);
       const days = (max.getTime() - min.getTime()) / 86400000;
       const eventCount = this.rnd(days, days + 20);
+      const reportCount = this.getCount();
+      console.log("reportCount:" + reportCount);
 
       for (let i = 0; i < eventCount; i++) {
         const allDay = this.rnd(0, 3) === 0;
         const firstTimestamp = this.rnd(min.getTime(), max.getTime());
+        console.log("firstTimestamp:" + firstTimestamp);
+        console.log(firstTimestamp - (firstTimestamp % 900000));
         const first = new Date(firstTimestamp - (firstTimestamp % 900000));
+
         const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000;
+        console.log(secondTimestamp);
         const second = new Date(first.getTime() + secondTimestamp);
+        console.log(first.getTime());
+        console.log("first:" + first);
 
         events.push({
           name: this.names[this.rnd(0, this.names.length - 1)],
@@ -281,6 +308,9 @@ export default {
     },
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
+    },
+    getCount() {
+      return this.reportDetailList.length;
     },
     rptList() {
       this.$router.push("/rptList");
