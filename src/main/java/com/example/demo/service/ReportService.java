@@ -12,4 +12,6 @@ public interface ReportService {
 
     public List<ReportDetailVO> getReportDetailList();
 
+    public void addReport(int prj_no);
+
 }

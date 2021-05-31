@@ -12,4 +12,6 @@ public interface ReportDAO {
 
     public List<ReportDetailVO> getReportDetailList();
 
+    public void addReport(int prj_no);
+
 }

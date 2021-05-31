@@ -37,4 +37,9 @@ public class ReportServiceImp implements ReportService {
 
     }
 
+    @Override
+    public void addReport(int prj_no) {
+        rdao.addReport(prj_no);
+    }
+
 }

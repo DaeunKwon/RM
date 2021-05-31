@@ -1,6 +1,9 @@
 package com.example.demo.ctrl;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.MediaType;
 
 import com.example.demo.domain.ReportDetailVO;
@@ -56,6 +59,14 @@ public class ReportCtrl {
     public List<ReportDetailVO> getReportDetailList() {
         log.info(">>>>>>>>get report detail list");
         return reportService.getReportDetailList();
+    }
+
+    @PostMapping(value = "/add")
+    @ResponseBody
+    public void addReport(HttpServletRequest req) {
+        log.info(">>>>>> add report post");
+        int prj_no = Integer.parseInt(req.getParameter("prj_no"));
+        reportService.addReport(prj_no);
     }
 
 }

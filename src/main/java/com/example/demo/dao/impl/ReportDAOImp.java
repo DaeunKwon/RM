@@ -41,4 +41,9 @@ public class ReportDAOImp implements ReportDAO {
         return sql.selectList(ns + ".getReportDetailList");
     }
 
+    @Override
+    public void addReport(int prj_no) {
+        sql.insert(ns + ".addReport", prj_no);
+    }
+
 }

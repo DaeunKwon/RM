@@ -107,7 +107,7 @@
           </v-card>
         </v-dialog>
 
-        <v-dialog v-model="reportDialog" persistent max-width="600px">
+        <v-dialog v-model="reportDialog" max-width="600px">
           <v-card>
             <v-card-title>
               <span class="headline">업무 일지 작성</span>
@@ -121,7 +121,7 @@
                       required
                       readonly
                       outlined
-                      :value="selectedProject.prj_title"
+                      v-model="selectedProject.prj_title"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6">
@@ -461,6 +461,7 @@ export default {
     openDialogView(project) {
       this.dialogView = true;
       this.selectedProject = project;
+
       var leaderInfoList = this.leaderList;
       for (var i in leaderInfoList) {
         if (leaderInfoList[i].prj_no == project.prj_no) {
@@ -476,27 +477,34 @@ export default {
       this.reportDialog = true;
       this.selectedProject = project;
     },
-    saveReport() {
-      let report = new FormData();
-      for (let i = 0; i < this.inputs.length; i++) {
-        console.log(this.inputs[i].start_time);
-        console.log(this.inputs[i].end_time);
-        console.log(this.inputs[i].content);
-        report.append("start_time_" + i, this.inputs[i].start_time);
-        report.append("end_time_" + i, this.inputs[i].end_time);
-        report.append("content_" + i, this.inputs[i].content);
-      }
-      console.log(report.get("content_1"));
-      this.$axios
-        .post("/api/report/write", JSON.stringify(report), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((res) => {
-          alert("업무 일지 등록");
-          this.reportDialog = false;
-        });
+    saveReport: function () {
+      // let report = new FormData();
+      // for (let i = 0; i < this.inputs.length; i++) {
+      //   console.log(this.inputs[i].start_time);
+      //   console.log(this.inputs[i].end_time);
+      //   console.log(this.inputs[i].content);
+      //   report.append("start_time_" + i, this.inputs[i].start_time);
+      //   report.append("end_time_" + i, this.inputs[i].end_time);
+      //   report.append("content_" + i, this.inputs[i].content);
+      // }
+      // console.log(report.get("content_1"));
+      // this.$axios
+      //   .post("/api/report/write", JSON.stringify(report), {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   })
+      //   .then((res) => {
+      //     alert("업무 일지 등록");
+      //     this.reportDialog = false;
+      //   });
+      //로그인한 유저의 프로젝트 참여 번호도 보내야 함
+      const report = new FormData();
+      report.append("prj_no", this.selectedProject.prj_no);
+      this.$axios.post("/api/report/add", report).then((res) => {
+        console.log(res);
+        alert("성공");
+      });
     },
   },
 };
