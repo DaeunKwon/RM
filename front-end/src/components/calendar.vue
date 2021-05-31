@@ -38,6 +38,7 @@
               </v-list-item>
             </v-list>
           </v-menu>
+          <v-btn @click="com_detail"> 근태 상세페이지 </v-btn>
         </v-toolbar>
       </v-sheet>
       <v-sheet height="700">
@@ -117,7 +118,7 @@ export default {
       this.type = "month";
       eventBus.$emit("date", this.focus);
     },
-    getEventColor(event) {
+    getEventColor(evesnt) {
       return event.color;
     },
     setToday() {
@@ -175,6 +176,16 @@ export default {
     },
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
+    },
+    com_detail() {
+      ////근태 상세페이지 이동
+      this.$axios.get("/api/commute/com_detail"),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+      this.$router.push("/com_detail");
     },
   },
 };

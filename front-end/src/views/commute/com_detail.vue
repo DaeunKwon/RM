@@ -49,14 +49,7 @@
                 <v-btn
                   color="green darken-1"
                   text
-                  @click="
-                    [
-                      (dialog = false),
-                      (test = true),
-                      (test2 = false),
-                      (work = '근무중'),
-                    ]
-                  "
+                  @click="[gotoWork(), (dialog = false), (work = '근무중')]"
                 >
                   Agree
                 </v-btn>
@@ -91,7 +84,7 @@
                 <v-btn
                   color="green darken-1"
                   text
-                  @click="[(dialog2 = false), (test2 = true), (work = '퇴근')]"
+                  @click="[offWork(), (dialog2 = false), (work = '퇴근')]"
                 >
                   Agree
                 </v-btn>
@@ -176,15 +169,7 @@
 
       <v-layout>
         <v-row align="center" justify="center">
-          <template>
-            <v-data-table
-              :headers="headers"
-              :items="day"
-              hide-default-footer
-              disable-sort
-              class="elevation-1"
-            ></v-data-table>
-          </template>
+          <Mydatatable />
         </v-row>
       </v-layout>
       <br />
@@ -194,60 +179,75 @@
     </v-container>
     <Footer />
   </div>
-</template>
+</template> 
 
 
 <script>
 import Header from "../../views/common/00_header"; //import 헤더 추가
 import Footer from "../../views/common/90_footer"; //import 풋터 추가
-const nowdate = new Date().toISOString().substr(0, 10);
-import Vue from "vue";
-
+import Mydatatable from "../../components/mydatatable"; // 주간 표 추가
+var nowdate = new Date().toISOString().substr(0, 10);
+import eventBus from "../../assets/js/eventbus.js";
 export default {
-  data: () => ({
-    nowdate: nowdate,
-    date: nowdate,
-    menu: false,
-    dialog: false,
-    dialog2: false,
-    time: "",
-    skill: 20,
-    knowledge: 33,
-    power: 78,
-    dateif: true,
-    test: false,
-    test2: true,
-    work: "출근전",
-    headers: [
-      { text: "sunday", value: "sunday" },
-      { text: "monday", value: "monday" },
-      { text: "tuesday", value: "tuesday" },
-      { text: "wednesday", value: "wednesday" },
-      { text: "thursday", value: "thursday" },
-      { text: "friday", value: "friday" },
-      { text: "saturday", value: "saturday" },
-    ],
-    day: [
-      {
-        sunday: "0시간",
-        monday: "8시간",
-        tuesday: "8시간",
-        wednesday: "8시간",
-        thursday: "8시간",
-        friday: "8시간",
-        saturday: "0시간",
-      },
-    ],
-  }),
-  
+  data() {
+    return {
+      nowdate: nowdate,
+      date: nowdate,
+      menu: false,
+      dialog: false,
+      dialog2: false,
+      time: "",
+      skill: 20,
+      knowledge: 35,
+      power: 78,
+      dateif: true,
+      test: "",
+      test2: "",
+      work: "출근전",
+
+      // test
+      prj_no: 1,
+      myEmail: "tt",
+    };
+  },
 
   name: "com_detail",
   components: {
     Header, //헤더 컴포넌트 추가
     Footer, //풋터 컴포넌트 추가
+    Mydatatable, // 주간 표
   },
+
   created() {
     this.getNow();
+
+    this.$axios
+      .post(
+        "http://localhost:8090/api/commute/checkWork",
+        {
+          com_d8: this.date,
+          prj_no: this.prj_no,
+          my_email: this.myEmail,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+
+        // 출근
+        if (res.data) {
+          // this.test = true;
+          // this.test2 = false;
+          // 미출근
+        } else {
+          this.test = false;
+          this.test2 = true;
+        }
+      });
   },
   methods: {
     com_detail() {
@@ -272,6 +272,53 @@ export default {
       } else {
         this.dateif = false;
       }
+      eventBus.$emit("datepick", this.date);
+    },
+
+    gotoWork() {
+      alert("출근등록");
+
+      this.$axios
+        .post(
+          "http://localhost:8090/api/commute/gotoWork",
+          {
+            com_d8: this.date,
+            prj_no: this.prj_no,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          this.test = true;
+          this.test2 = false;
+        });
+    },
+
+    offWork() {
+      alert("퇴근등록");
+
+      this.$axios
+        .post(
+          "http://localhost:8090/api/commute/offWork",
+          {
+            com_d8: this.date,
+            prj_no: this.prj_no,
+            my_email: this.myEmail,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          this.test2 = true;
+        });
     },
   },
 };

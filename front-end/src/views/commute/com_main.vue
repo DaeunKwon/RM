@@ -141,11 +141,6 @@ export default {
       },
     ],
   }),
-  methods: {
-    updateParentNumber: function (date) {
-      this.date = date;
-    },
-  },
 
   components: {
     Header,

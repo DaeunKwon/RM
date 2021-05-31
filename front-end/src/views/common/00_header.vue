@@ -10,7 +10,7 @@
 
       <v-btn text @click="rptList"> 업무일지 </v-btn>
 
-      <v-btn text> 근태관리 </v-btn>
+      <v-btn text @click="com_main"> 근태관리 </v-btn>
 
       <v-subheader>Username 님</v-subheader>
 
@@ -42,6 +42,7 @@
 <script>
 export default {
   data: () => ({
+    value: "",
     items: [
       { title: "UserInfo", action: "userInfo" },
       { title: "Logout", action: "logout" },
@@ -75,6 +76,15 @@ export default {
           },
         };
       this.$router.push("/main");
+    },
+    com_main() {
+      this.$axios.get("/api/commute/com_main"),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+      this.$router.push("/com_main");
     },
   },
 };
