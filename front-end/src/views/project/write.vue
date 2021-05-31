@@ -409,6 +409,7 @@ export default {
 
           this.$axios.post("/api/project/in/leader", leader).then((res) => {
             console.log(res);
+
             alert("프로젝트 등록 성공");
             //this.$router.push("/main");
           });
@@ -429,14 +430,14 @@ export default {
       // console.log(follower);
       // this.$axios.post("api/project/in/follower", follower);
     },
-    mainInfo() {
-      this.$router.push("/main");
-    },
     add(k) {
       this.inputs.push({ in_date: null, out_date: null });
     },
     remove(k) {
       this.inputs.splice(k, 1);
+    },
+    main() {
+      this.$router.push("/main");
     },
   },
 };

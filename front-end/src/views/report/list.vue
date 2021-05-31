@@ -118,6 +118,7 @@
                     </v-btn>
                   </v-toolbar>
                   <v-card-text>
+                    <span>start time</span>
                     <span :value="selectedEvent.rpt_start_time"></span>
                     <span :value="selectedEvent.rpt_end_time"></span>
                   </v-card-text>
@@ -223,6 +224,7 @@ export default {
       const events = [];
       this.$axios.get("/api/report/detail/list").then((res) => {
         const reportDetailList = res.data;
+        console.log(reportDetailList.length);
 
         for (let i = 0; i < reportDetailList.length; i++) {
           const startTime = new Date(reportDetailList[i].rpt_start_time);
