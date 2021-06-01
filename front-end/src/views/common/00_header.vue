@@ -12,7 +12,7 @@
 
       <v-btn text> 근태관리 </v-btn>
 
-      <v-subheader>Username 님</v-subheader>
+      <v-subheader> {{ $store.getters.getCurrentUser.name }} 님</v-subheader>
 
       <v-menu
         :close-on-click="closeOnClick"
@@ -49,12 +49,32 @@ export default {
     closeOnContentClick: true,
     offsetY: true,
   }),
+  // data() {
+  //   return {
+  //     user: "",
+  //   };
+  // },
+  // created() {
+  //   axios
+  //     .get("http://localhost:8090/main")
+  //     .then(
+  //       ({ data }) => (
+  //         (this.user = data.user), (this.accessLog = data.accessLog)
+  //       )
+  //     );
+  // },
   methods: {
     menuActionClick(action) {
       if (action === "userInfo") {
         alert("UserInfo");
       } else if (action === "logout") {
-        alert("logout");
+        this.$axios
+          .post("http://localhost:8090/logout")
+          .then(() =>
+            this.$store.dispatch("LOGOUT")(this.$router.push("/"))(
+              this.alert("logout")
+            )
+          );
       }
     },
     rptList() {

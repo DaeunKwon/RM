@@ -58,8 +58,16 @@ export default {
   }),
   methods: {
     login() {
-      alert("로그인");
-      this.$store.dispatch("login", this.member);
+      console.log("login");
+      this.$store.dispatch("LOGIN", { email, password });
+      // this.$axios
+      //   .post("http://localhost:8090/auth/login", {
+      //     email: this.email,
+      //     password: this.password,
+      //   })
+      //   .then((res) => {
+      //     console.log(res);
+      //   });
     },
   },
 };

@@ -355,6 +355,12 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
+              <v-btn
+                color="blue darken-1"
+                text
+                @click="updateProject(selectedProject)"
+                >수정</v-btn
+              >
               <v-btn color="blue darken-1" text @click="dialogView = false"
                 >닫기</v-btn
               >
@@ -406,6 +412,7 @@ export default {
     this.getProjectList;
     this.getDoneProjectList;
     this.getLeaderList;
+    this.getUserInfo;
     this.getToday();
   },
   computed: {
@@ -440,8 +447,20 @@ export default {
         return this.getLeaderList;
       });
     },
+    getUserInfo() {
+      this.$axios.get("/api/user/info").then((res) => {
+        this.$store.commit("setCurrentUser", res.data);
+        console.log(this.$store.getters.getCurrentUser);
+      });
+    },
   },
   methods: {
+    updateProject(selectedProject) {
+      this.$router.push({
+        name: "prjWrite",
+        params: { project: selectedProject },
+      });
+    },
     prjWrite() {
       this.$router.push("/prjWrite");
     },

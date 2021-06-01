@@ -12,6 +12,7 @@ import rptWrite from '../views/report/write.vue';
 import prjDetail from '../views/project/detail.vue';
 import dailyRpt from '../views/report/daily.vue';
 import monthlyRpt from '../views/report/monthly.vue';
+import store from '../store';
 
 Vue.use(VueRouter);
 
@@ -40,15 +41,44 @@ const router = new VueRouter({
         },
         {
             path: '/prjWrite',
+            name: 'prjWrite',
             component: prjWrite,
         },
         {
             path: '/main',
             component: main,
+            beforeEnter: function (to, from, next) {
+                let user
+                axios.get('/api/user/info')
+                    .then(res => {
+                        user = res.data
+                        console.log(user)
+                        if (!!user['email']) {
+                            next()
+                        } else {
+                            next('/')
+                        }
+                    })
+            },
+            props: true
         },
         {
             path: '/',
             component: login,
+            beforeEnter: function (to, from, next) {
+                let user
+                axios.get('/api/user/info')
+                    .then(res => {
+                        user = res.data
+                        console.log(user)
+                        if (!!user['email']) {
+                            next('/main')
+                        } else {
+                            next()
+                        }
+                    })
+            },
+            props: true
         },
         {
             path: '/join',

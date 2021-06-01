@@ -1,6 +1,7 @@
 export default {
-    accessToken: localStorage.getItem('access_token'),
-    userList: [],
-    projectList: [],
+    // accessToken: localStorage.getItem('access_token'),
+    // userList: [],
+    // projectList: [],
     currentUser: {},
+    // username: '',
 }

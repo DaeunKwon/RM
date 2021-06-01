@@ -10,4 +10,7 @@
 	<select id="getUserList" resultType="com.example.demo.domain.UserVO">
 		select email, name from tbl_member
 	</select>
+	<select id="getUserfindByUser" resultType="com.example.demo.domain.UserVO">
+		select * from tbl_member where email = #{email} and password = #{password}
+	</select>
 </mapper>
