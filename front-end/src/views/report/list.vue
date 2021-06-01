@@ -87,6 +87,7 @@
               <v-calendar
                 ref="calendar"
                 v-model="focus"
+                :value="focus"
                 color="primary"
                 :events="events"
                 :event-color="getEventColor"
@@ -150,9 +151,6 @@ export default {
     Header, //헤더 컴포넌트 추가
     Footer, //풋터 컴포넌트 추가
   },
-  data: () => ({
-    events: [],
-  }),
   data() {
     return {
       reportList: [],
@@ -193,6 +191,7 @@ export default {
         "Conference",
         "Party",
       ],
+      events: [],
     };
   },
   mounted() {
@@ -224,22 +223,20 @@ export default {
       const events = [];
       this.$axios.get("/api/report/detail/list").then((res) => {
         const reportDetailList = res.data;
-        console.log(reportDetailList.length);
-
+        // "2021-06-01 10:00",
         for (let i = 0; i < reportDetailList.length; i++) {
           const startTime = new Date(reportDetailList[i].rpt_start_time);
           const endTime = new Date(reportDetailList[i].rpt_end_time);
-          //console.log(startTime);
+
+          // console.log(startTime.getFullYear() + '-' + ((startTime.getMonth() + 1) < 10 ? '0' + (startTime.getMonth() + 1) : (startTime.getMonth() + 1)) + '-' + ((startTime.getMonth() + 1) < 10 ? '0' + (startTime.getMonth() + 1) : (startTime.getMonth() + 1)));
           events.push({
-            name: "Test",
-            start: new Date(reportDetailList[i].rpt_start_time),
-            end: new Date(reportDetailList[i].rpt_end_time),
+            name: reportDetailList[i].rpt_content,
+            start: reportDetailList[i].rpt_start_time,
+            end: reportDetailList[i].rpt_end_time,
             color: this.colors[this.rnd(0, this.colors.length - 1)],
           });
-          console.log(events[i].start);
         }
         this.events = events;
-        console.log(this.events[0].end);
       });
     },
     viewDay({ date }) {
@@ -247,6 +244,7 @@ export default {
       this.type = "day";
     },
     getEventColor(event) {
+      console.log(event);
       return event.color;
     },
     setToday() {
