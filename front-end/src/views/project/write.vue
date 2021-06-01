@@ -8,6 +8,14 @@
         <br />
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
+            v-if="$route.params.project"
+            v-model="$route.params.project.prj_title"
+            label="프로젝트명"
+            required
+            outlined
+          ></v-text-field>
+          <v-text-field
+            v-else
             v-model="title"
             label="프로젝트명"
             required
@@ -15,6 +23,15 @@
           ></v-text-field>
 
           <v-select
+            v-if="$route.params.project"
+            v-model="$route.params.project.cond"
+            :items="cond_items"
+            label="진행상황"
+            required
+            outlined
+          ></v-select>
+          <v-select
+            v-else
             :items="cond_items"
             v-model="cond"
             label="진행상황"
@@ -35,6 +52,19 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
+                    v-if="$route.params.project"
+                    :value="
+                      $moment($route.params.project.start_d8).format(
+                        'YYYY-MM-DD'
+                      )
+                    "
+                    label="프로젝트 시작 날짜"
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                  ></v-text-field>
+                  <v-text-field
+                    v-else
                     v-model="start_date"
                     label="프로젝트 시작 날짜"
                     v-bind="attrs"
