@@ -99,6 +99,17 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
+                    v-if="$route.params.project"
+                    :value="
+                      $moment($route.params.project.end_d8).format('YYYY-MM-DD')
+                    "
+                    label="프로젝트 종료 날짜"
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                  ></v-text-field>
+                  <v-text-field
+                    v-else
                     v-model="end_date"
                     label="프로젝트 종료 날짜"
                     v-bind="attrs"
@@ -163,6 +174,19 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
+                    v-if="$route.params.leader"
+                    :value="
+                      $moment($route.params.leader.prj_in_d8).format(
+                        'YYYY-MM-DD'
+                      )
+                    "
+                    label="참여 시작 날짜"
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                  ></v-text-field>
+                  <v-text-field
+                    v-else
                     v-model="lead_in_date"
                     label="참여 시작 날짜"
                     v-bind="attrs"
@@ -197,6 +221,19 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
+                    v-if="$route.params.leader"
+                    :value="
+                      $moment($route.params.leader.prj_out_d8).format(
+                        'YYYY-MM-DD'
+                      )
+                    "
+                    label="참여 종료 날짜"
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                  ></v-text-field>
+                  <v-text-field
+                    v-else
                     v-model="lead_out_date"
                     label="참여 종료 날짜"
                     v-bind="attrs"
@@ -451,6 +488,7 @@ export default {
     },
   },
   methods: {
+    formatDate() {},
     prjWrite() {
       console.log(this.$store.getters.getCurrentUser);
       const project = new FormData();
