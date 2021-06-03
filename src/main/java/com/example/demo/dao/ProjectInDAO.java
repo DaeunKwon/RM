@@ -9,4 +9,6 @@ public interface ProjectInDAO {
 
     public List<ProjectInVO> getLeaderList();
 
+    public ProjectInVO getLeaderInfo(int prj_no);
+
 }

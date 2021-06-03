@@ -7,12 +7,15 @@ import com.example.demo.domain.ProjectInVO;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @Mapper
 public class ProjectInDAOImp implements ProjectInDAO {
+    private final Logger log = LoggerFactory.getLogger(ProjectInDAOImp.class);
 
     @Autowired
     private SqlSessionTemplate sql;
@@ -27,6 +30,12 @@ public class ProjectInDAOImp implements ProjectInDAO {
     @Override
     public List<ProjectInVO> getLeaderList() {
         return sql.selectList(ns + ".getLeaderList");
+    }
+
+    @Override
+    public ProjectInVO getLeaderInfo(int prj_no) {
+        log.info(">>>>>>>project in vo dao");
+        return sql.selectOne(ns + ".getLeaderInfo", prj_no);
     }
 
 }

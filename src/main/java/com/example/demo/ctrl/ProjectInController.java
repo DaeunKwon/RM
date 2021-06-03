@@ -40,6 +40,7 @@ public class ProjectInController {
         pINvo.setEmail(req.getParameter("email"));
         pINvo.setPrj_in_d8(df.parse(req.getParameter("prj_in_d8")));
         pINvo.setPrj_out_d8(df.parse(req.getParameter("prj_out_d8")));
+        pINvo.setPrj_no(Integer.parseInt(req.getParameter("prj_no")));
         projectINService.add(pINvo);
 
     }
@@ -58,6 +59,12 @@ public class ProjectInController {
     public List<ProjectInVO> getLeaderList(Model model) {
         log.info(">>>>>>>get leader list in project");
         return projectINService.getLedaerList();
+    }
+
+    @GetMapping(value = "/leader/info")
+    public ProjectInVO getLeaderInfo(int prj_no) {
+        log.info(">>>>>>>>getleaderinfo controller");
+        return projectINService.getLeaderInfo(prj_no);
     }
 
 }

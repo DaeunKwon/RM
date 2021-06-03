@@ -10,4 +10,6 @@ public interface ProjectInService {
 
     public List<ProjectInVO> getLedaerList();
 
+    public ProjectInVO getLeaderInfo(int prj_no);
+
 }
