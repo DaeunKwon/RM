@@ -44,18 +44,21 @@ public class ProjectCtrl {
 
     @PostMapping(value = "/write")
     @ResponseBody
-    public void write(HttpServletRequest req) throws ParseException {
+    public int write(HttpServletRequest req) throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         ProjectVO pvo = new ProjectVO();
         pvo.setPrj_title(req.getParameter("title"));
         pvo.setCond(req.getParameter("cond"));
         pvo.setStart_d8(df.parse(req.getParameter("start_date")));
         pvo.setEnd_d8(df.parse(req.getParameter("end_date")));
+        pvo.setPrj_writer(req.getParameter("writer"));
+        pvo.setPrj_mod_writer(req.getParameter("mod_writer"));
         pvo.setPrj_content(req.getParameter("content"));
         pvo.setPrj_remark(req.getParameter("remark"));
         log.info(">>>>>>> project: " + pvo);
         projectService.write(pvo);
-        log.info(">>>>>>>>>>>>project db에 넣기 성공");
+        return pvo.getPrj_no();
+        // log.info(">>>>>>>>>>>>project db에 넣기 성공");
 
     }
 
@@ -73,5 +76,12 @@ public class ProjectCtrl {
         log.info(">>>>>>project list get");
         return projectService.getDoneProjectList();
 
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteProject(@RequestBody int prj_no) {
+        log.info(">>>>>delete project controller");
+        projectService.deleteProject(prj_no);
     }
 }

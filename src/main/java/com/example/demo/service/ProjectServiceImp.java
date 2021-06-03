@@ -18,9 +18,9 @@ public class ProjectServiceImp implements ProjectService {
     private ProjectDAO pdao;
 
     @Override
-    public void write(ProjectVO pvo) {
+    public int write(ProjectVO pvo) {
         log.info(">>>>>project post service");
-        pdao.insert(pvo);
+        return pdao.insert(pvo);
     }
 
     @Override
@@ -43,6 +43,11 @@ public class ProjectServiceImp implements ProjectService {
     @Override
     public List<ProjectVO> getDoneProjectList() {
         return pdao.getDoneProjectList();
+    }
+
+    @Override
+    public void deleteProject(int prj_no) {
+        pdao.deleteProject(prj_no);
     }
 
 }

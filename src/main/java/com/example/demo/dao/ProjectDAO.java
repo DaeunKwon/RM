@@ -5,7 +5,7 @@ import java.util.List;
 import com.example.demo.domain.ProjectVO;
 
 public interface ProjectDAO {
-    public void insert(ProjectVO pvo);
+    public int insert(ProjectVO pvo);
 
     public void update(ProjectVO pvo);
 
@@ -14,5 +14,7 @@ public interface ProjectDAO {
     public List<ProjectVO> getProjectList();
 
     public List<ProjectVO> getDoneProjectList();
+
+    public void deleteProject(int prj_no);
 
 }

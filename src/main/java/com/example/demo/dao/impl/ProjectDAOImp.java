@@ -23,9 +23,9 @@ public class ProjectDAOImp implements ProjectDAO {
     private String ns = "com.example.demo.mapper.project";
 
     @Override
-    public void insert(ProjectVO pvo) {
+    public int insert(ProjectVO pvo) {
         log.info(">>>>>project post dao");
-        sql.insert(ns + ".write", pvo);
+        return sql.insert(ns + ".write", pvo);
 
     }
 
@@ -49,6 +49,11 @@ public class ProjectDAOImp implements ProjectDAO {
     @Override
     public List<ProjectVO> getDoneProjectList() {
         return sql.selectList(ns + ".getDoneProjectList");
+    }
+
+    @Override
+    public void deleteProject(int prj_no) {
+        sql.update(ns + ".deleteProject", prj_no);
     }
 
 }

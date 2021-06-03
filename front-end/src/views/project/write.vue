@@ -123,6 +123,20 @@
           </v-row>
 
           <v-select
+            v-if="$route.params.project"
+            v-model="$route.params.leader.email"
+            outlined
+            :hint="`${leader.name}, ${leader.email}`"
+            :items="userList"
+            item-text="name"
+            item-value="email"
+            label="팀장"
+            required
+            persistent-hint
+            return-object
+          ></v-select>
+          <v-select
+            v-else
             outlined
             v-model="leader"
             :hint="`${leader.name}, ${leader.email}`"
@@ -134,6 +148,7 @@
             persistent-hint
             return-object
           ></v-select>
+
           <br />
           <v-row>
             <v-col cols="12" lg="6">
@@ -322,6 +337,14 @@
           <br /><br /><br />
 
           <v-textarea
+            v-if="$route.params.project"
+            v-model="$route.params.project.prj_content"
+            outlined
+            label="프로젝트 내용"
+            required
+          ></v-textarea>
+          <v-textarea
+            v-else
             outlined
             v-model="content"
             label="프로젝트 내용"
@@ -329,6 +352,14 @@
           ></v-textarea>
 
           <v-textarea
+            v-if="$route.params.project"
+            v-model="$route.params.project.prj_remark"
+            outlined
+            label="특이사항"
+            required
+          ></v-textarea>
+          <v-textarea
+            v-else
             outlined
             v-model="remark"
             label="특이사항"
@@ -421,44 +452,43 @@ export default {
   },
   methods: {
     prjWrite() {
+      console.log(this.$store.getters.getCurrentUser);
       const project = new FormData();
       project.append("title", this.title);
       project.append("cond", this.cond);
       project.append("start_date", this.start_date);
       project.append("end_date", this.end_date);
+      project.append("writer", this.$store.getters.getCurrentUser.email);
+      project.append("mod_writer", this.$store.getters.getCurrentUser.email);
       project.append("content", this.content);
       project.append("remark", this.remark);
-      console.log(project);
-      this.$axios
-        .post("http://localhost:8090/api/project/write", project)
-        .then((res) => {
-          const leader = new FormData();
-          leader.append("email", this.leader.email);
-          leader.append("prj_in_d8", this.lead_in_date);
-          leader.append("prj_out_d8", this.lead_out_date);
 
-          this.$axios.post("/api/project/in/leader", leader).then((res) => {
-            console.log(res);
+      this.$axios.post("/api/project/write", project).then((res) => {
+        const leader = new FormData();
+        leader.append("email", this.leader.email);
+        leader.append("prj_in_d8", this.lead_in_date);
+        leader.append("prj_out_d8", this.lead_out_date);
+        leader.append("prj_no", res.data);
 
-            alert("프로젝트 등록 성공");
-            //this.$router.push("/main");
+        this.$axios
+          .post("/api/project/in/leader", leader)
+          .then(console.log("팀장 넣기 성공")(this.$router.push("/main")))
+          .catch((err) => {
+            console.log(err);
           });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
 
-      // const follower = new FormData();
-      // for (let i = 0; i < this.inputs.length; i++) {
-      //   console.log(this.inputs[i].follower.email);
-      //   console.log(this.inputs[i].in_date);
-      //   console.log(this.inputs[i].out_date);
-      //   follower.append("email_" + i, this.inputs[i].follower.email);
-      //   follower.append("prj_in_d8_" + i, this.inputs[i].in_date);
-      //   follower.append("prj_out_d8_" + i, this.inputs[i].out_date);
-      // }
-      // console.log(follower);
-      // this.$axios.post("api/project/in/follower", follower);
+        // const follower = new FormData();
+        // for (let i = 0; i < this.inputs.length; i++) {
+        //   console.log(this.inputs[i].follower.email);
+        //   console.log(this.inputs[i].in_date);
+        //   console.log(this.inputs[i].out_date);
+        //   follower.append("email_" + i, this.inputs[i].follower.email);
+        //   follower.append("prj_in_d8_" + i, this.inputs[i].in_date);
+        //   follower.append("prj_out_d8_" + i, this.inputs[i].out_date);
+        // }
+        // console.log(follower);
+        // this.$axios.post("api/project/in/follower", follower);
+      });
     },
     add(k) {
       this.inputs.push({ in_date: null, out_date: null });
