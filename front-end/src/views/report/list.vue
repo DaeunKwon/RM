@@ -96,6 +96,7 @@
                 @click:more="viewDay"
                 @change="getEvents"
               ></v-calendar>
+
               <v-menu
                 v-model="selectedOpen"
                 :close-on-content-click="false"
@@ -119,9 +120,8 @@
                     </v-btn>
                   </v-toolbar>
                   <v-card-text>
-                    <span>start time</span>
-                    <span :value="selectedEvent.rpt_start_time"></span>
-                    <span :value="selectedEvent.rpt_end_time"></span>
+                    <span v-html="selectedEvent.start"></span><br />
+                    <span v-html="selectedEvent.end"></span>
                   </v-card-text>
                   <v-card-actions>
                     <v-btn text color="secondary" @click="selectedOpen = false">
@@ -181,17 +181,6 @@ export default {
         "orange",
         "grey darken-1",
       ],
-      names: [
-        "Meeting",
-        "Holiday",
-        "PTO",
-        "Travel",
-        "Event",
-        "Birthday",
-        "Conference",
-        "Party",
-      ],
-      events: [],
     };
   },
   mounted() {
@@ -223,16 +212,18 @@ export default {
       const events = [];
       this.$axios.get("/api/report/detail/list").then((res) => {
         const reportDetailList = res.data;
-        // "2021-06-01 10:00",
         for (let i = 0; i < reportDetailList.length; i++) {
-          const startTime = new Date(reportDetailList[i].rpt_start_time);
-          const endTime = new Date(reportDetailList[i].rpt_end_time);
+          const startTime = this.$moment(
+            reportDetailList[i].rpt_start_time
+          ).format("YYYY-MM-DD HH:mm");
+          const endTime = this.$moment(reportDetailList[i].rpt_end_time).format(
+            "YYYY-MM-DD HH:mm"
+          );
 
-          // console.log(startTime.getFullYear() + '-' + ((startTime.getMonth() + 1) < 10 ? '0' + (startTime.getMonth() + 1) : (startTime.getMonth() + 1)) + '-' + ((startTime.getMonth() + 1) < 10 ? '0' + (startTime.getMonth() + 1) : (startTime.getMonth() + 1)));
           events.push({
             name: reportDetailList[i].rpt_content,
-            start: reportDetailList[i].rpt_start_time,
-            end: reportDetailList[i].rpt_end_time,
+            start: startTime,
+            end: endTime,
             color: this.colors[this.rnd(0, this.colors.length - 1)],
           });
         }
@@ -244,7 +235,6 @@ export default {
       this.type = "day";
     },
     getEventColor(event) {
-      console.log(event);
       return event.color;
     },
     setToday() {
@@ -273,39 +263,6 @@ export default {
       nativeEvent.stopPropagation();
     },
 
-    updateRange({ start, end }) {
-      const events = [];
-      const min = new Date(`${start.date}T00:00:00`);
-      const max = new Date(`${end.date}T23:59:59`);
-      const days = (max.getTime() - min.getTime()) / 86400000;
-      const eventCount = this.rnd(days, days + 20);
-      const reportCount = this.getCount();
-      console.log("reportCount:" + reportCount);
-
-      for (let i = 0; i < eventCount; i++) {
-        const allDay = this.rnd(0, 3) === 0;
-        const firstTimestamp = this.rnd(min.getTime(), max.getTime());
-        console.log("firstTimestamp:" + firstTimestamp);
-        console.log(firstTimestamp - (firstTimestamp % 900000));
-        const first = new Date(firstTimestamp - (firstTimestamp % 900000));
-
-        const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000;
-        console.log(secondTimestamp);
-        const second = new Date(first.getTime() + secondTimestamp);
-        console.log(first.getTime());
-        console.log("first:" + first);
-
-        events.push({
-          name: this.names[this.rnd(0, this.names.length - 1)],
-          start: first,
-          end: second,
-          color: this.colors[this.rnd(0, this.colors.length - 1)],
-          timed: !allDay,
-        });
-      }
-
-      this.events = events;
-    },
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
     },
