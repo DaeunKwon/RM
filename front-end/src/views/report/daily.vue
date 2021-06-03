@@ -3,7 +3,7 @@
     <Header />
     <v-container
       ><br />
-      <v-header>업무 일지 목록 (전체)</v-header>
+      <div>업무 일지 목록 (전체)</div>
       <div align="right">
         <v-btn
           color="primary"

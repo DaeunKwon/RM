@@ -59,15 +59,6 @@ export default {
   methods: {
     login() {
       console.log("login");
-      this.$store.dispatch("LOGIN", { email, password });
-      // this.$axios
-      //   .post("http://localhost:8090/auth/login", {
-      //     email: this.email,
-      //     password: this.password,
-      //   })
-      //   .then((res) => {
-      //     console.log(res);
-      //   });
     },
   },
 };

@@ -49,20 +49,6 @@ export default {
     closeOnContentClick: true,
     offsetY: true,
   }),
-  // data() {
-  //   return {
-  //     user: "",
-  //   };
-  // },
-  // created() {
-  //   axios
-  //     .get("http://localhost:8090/main")
-  //     .then(
-  //       ({ data }) => (
-  //         (this.user = data.user), (this.accessLog = data.accessLog)
-  //       )
-  //     );
-  // },
   methods: {
     menuActionClick(action) {
       if (action === "userInfo") {
@@ -70,11 +56,7 @@ export default {
       } else if (action === "logout") {
         this.$axios
           .post("http://localhost:8090/logout")
-          .then(() =>
-            this.$store.dispatch("LOGOUT")(this.$router.push("/"))(
-              this.alert("logout")
-            )
-          );
+          .then(() => this.$router.push("/")(this.alert("logout")));
       }
     },
     rptList() {
