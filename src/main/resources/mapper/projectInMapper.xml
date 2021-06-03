@@ -33,4 +33,13 @@
             #{follow_prj_out_d8},
             #{prj_no})
     </insert>
+    <insert id="addLeader" parameterType="com.example.demo.domain.ProjectInVO">
+        insert into tbl_project_in values (tbl_project_in_seq.nextval, #{email}, 'ROLE_ADMIN', #{prj_in_d8}, #{prj_out_d8}, #{prj_no})
+    </insert>
+    <select id="getLeaderList" resultType="com.example.demo.domain.ProjectInVO">
+        select * from tbl_project_in where authority = 'ROLE_ADMIN'
+    </select>
+    <select id="getLeaderInfo" parameterType="java.lang.Integer" resultType="com.example.demo.domain.ProjectInVO">
+        select * from tbl_project_in where authority = 'ROLE_ADMIN' and prj_no = #{prj_no}
+    </select>
 </mapper>

@@ -5,18 +5,22 @@ import java.util.List;
 import com.example.demo.dao.ProjectDAO;
 import com.example.demo.domain.ProjectVO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProjectServiceImp implements ProjectService {
+    private final Logger log = LoggerFactory.getLogger(ProjectServiceImp.class);
 
     @Autowired
     private ProjectDAO pdao;
 
     @Override
-    public void write(ProjectVO pvo) {
-        pdao.insert(pvo);
+    public int write(ProjectVO pvo) {
+        log.info(">>>>>project post service");
+        return pdao.insert(pvo);
     }
 
     @Override
@@ -39,6 +43,11 @@ public class ProjectServiceImp implements ProjectService {
     @Override
     public List<ProjectVO> getDoneProjectList() {
         return pdao.getDoneProjectList();
+    }
+
+    @Override
+    public void deleteProject(int prj_no) {
+        pdao.deleteProject(prj_no);
     }
 
 }

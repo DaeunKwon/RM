@@ -1,6 +1,6 @@
 package com.example.demo.domain;
 
-import java.sql.Date;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import lombok.Data;
 public class ProjectInVO {
     private int prj_in_no;
     private String email;
-    private int auth_id;
+    private String authority;
     private Date prj_in_d8;
     private Date prj_out_d8;
     private int prj_no;

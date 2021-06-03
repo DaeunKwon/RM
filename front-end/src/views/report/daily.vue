@@ -3,7 +3,11 @@
     <Header />
     <v-container
       ><br />
+
       <v-header>업무 일지 목록 (전체)</v-header>
+      =======
+      <div>업무 일지 목록 (전체)</div>
+      >>>>>>> master
       <div align="right">
         <v-btn
           color="primary"
@@ -29,7 +33,7 @@
             <tr v-for="report in reportList" :key="report.no">
               <td>{{ $moment(report.rpt_write_d8).format("YYYY-MM-DD") }}</td>
               <td>{{ report.rpt_writer }}</td>
-              <td>{{ report.rpt_content }}</td>
+              <td>{{ report.rpt_no }}</td>
             </tr>
           </tbody>
         </template>
@@ -57,19 +61,28 @@ export default {
     };
   },
   mounted() {
-    this.getReportList();
+    this.getReportList;
   },
-  methods: {
+  computed: {
     getReportList() {
-      http
+      this.$axios
         .get("/api/report/list")
         .then((res) => {
           this.reportList = res.data;
           console.log(this.reportList);
+          return this.reportList;
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+  },
+  methods: {
+    daily() {
+      this.$router.push("/dailyRpt");
+    },
+    monthly() {
+      this.$router.push("/monthlyRpt");
     },
   },
 };

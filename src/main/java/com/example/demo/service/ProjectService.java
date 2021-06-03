@@ -5,7 +5,7 @@ import java.util.List;
 import com.example.demo.domain.ProjectVO;
 
 public interface ProjectService {
-    public void write(ProjectVO pvo);
+    public int write(ProjectVO pvo);
 
     public void modify(ProjectVO pvo);
 
@@ -14,5 +14,7 @@ public interface ProjectService {
     public List<ProjectVO> getProjectList();
 
     public List<ProjectVO> getDoneProjectList();
+
+    public void deleteProject(int prj_no);
 
 }

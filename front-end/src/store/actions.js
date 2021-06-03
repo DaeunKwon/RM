@@ -1,45 +1,18 @@
-//import axios from 'axios';
 import axios from 'axios';
-import UserService from '../service/UserService'
+
+const resourceHost = "http://localhost:8090"
 
 export default {
-    login({ commit }, user) {
-        return UserService.login(user).then(
-            user => {
-                commit('loginSuccess', user);
-                return Promise.resolve(user);
-            },
-            error => {
-                commit('loginFailure');
-                return Promise.reject(error);
-            }
-        );
+    // 현재 로그인 한 유저 가져오기
+    initCurrentUser: async function (context) {
+        await axios.get('/api/user/info', { email, password })
+            .then(res => {
+                context.commit('setCurrentUser', res.data)
+            }).catch(error => {
+                context.commit('setCurrentUser', 'none')
+            })
     },
-    logout({ commit }) {
-        UserService.logout();
-        commit('logout');
-    },
-    join({ commit }, user) {
-        return UserService.join(user).then(
-            response => {
-                commit('joinSuccess');
-                return Promise.resolve(response.data);
-            },
-            error => {
-                commit('joinFailure');
-                return Promise.reject(error);
-            }
-        );
-    },
-    // get_user_list({ commit }, { }) {
-    //     return axios.get('/api/user/list').then(data => {
-    //         if (data.status === 200) {
-    //             return {
-    //                 "resultList": data.data.data.resultList
-    //             }
-    //         }
-    //     })
-    // },
+
 
 
 }

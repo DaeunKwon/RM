@@ -1,21 +1,12 @@
+import router from "../router";
+
 export default {
-    loginSuccess(state, user) {
-        state.status.loggedIn = true;
-        state.user = user;
+    setUsername(state, username) {
+        state.username = username;
     },
-    loginFailure(state) {
-        state.status.loggedIn = false;
-        state.user = null;
-    },
-    logout(state) {
-        state.status.loggedIn = false;
-        state.user = null;
-    },
-    registerSuccess(state) {
-        state.status.loggedIn = false;
-    },
-    registerFailure(state) {
-        state.status.loggedIn = false;
+
+    setCurrentUser: function (state, payload) {
+        state.currentUser = payload
     },
 
 }

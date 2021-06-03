@@ -7,4 +7,10 @@
 	<select id="list" resultType="com.example.demo.domain.ReportVO">
 		select * from tbl_report
 	</select>
+	<select id="getReportDetailList" resultType="com.example.demo.domain.ReportDetailVO">
+		select * from tbl_report_detail
+	</select>
+	<insert id="addReport" parameterType="java.lang.Integer">
+		insert into tbl_report values (tbl_report_seq.nextval, #{prj_no}, 'N', sysdate, 31, sysdate, 31)
+	</insert>
 </mapper>

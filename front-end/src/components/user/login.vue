@@ -62,10 +62,7 @@ export default {
       alert("로그인");
     },
     login() {
-      const email = this.email;
-      const password = this.password;
-
-      this.$store.dispatch("LOGIN", { email, password });
+      console.log("login");
     },
   },
 };

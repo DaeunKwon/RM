@@ -58,8 +58,6 @@
 </template>
 
 <script>
-console.log("join.vue 진입");
-
 export default {
   data() {
     return {

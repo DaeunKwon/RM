@@ -15,4 +15,6 @@ public interface UserDAO {
 
     public List<UserVO> getUserList();
 
+    public UserVO getUserfindByUser(UserVO user);
+
 }

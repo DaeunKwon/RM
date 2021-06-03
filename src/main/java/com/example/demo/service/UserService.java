@@ -21,4 +21,6 @@ public interface UserService extends UserDetailsService {
 
     public List<UserVO> getlist();
 
+    public UserVO findUserByEmail(UserVO user);
+
 }
