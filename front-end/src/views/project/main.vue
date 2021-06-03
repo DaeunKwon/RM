@@ -25,7 +25,12 @@
                 :key="project.prj_no"
               >
                 <v-card color="green" class="ma-4" height="200" width="200">
-                  <v-card-title>{{ project.prj_title }}</v-card-title>
+                  <v-card-title
+                    >{{ project.prj_title }} <v-spacer></v-spacer>
+                    <v-btn icon @click="openDeleteDialog(project)">
+                      <v-icon>mdi-delete-outline</v-icon></v-btn
+                    ></v-card-title
+                  >
 
                   <v-card-text>
                     <v-btn
@@ -76,7 +81,12 @@
                   height="200"
                   width="200"
                 >
-                  <v-card-title>{{ project.prj_title }}</v-card-title>
+                  <v-card-title
+                    >{{ project.prj_title }}<v-spacer></v-spacer>
+                    <v-btn icon @click="openDeleteDialog(project)">
+                      <v-icon>mdi-delete-outline</v-icon></v-btn
+                    ></v-card-title
+                  >
                   <v-card-actions>
                     <v-spacer></v-spacer>
 
@@ -90,6 +100,24 @@
           </v-sheet>
         </div>
         <br />
+
+        <v-dialog v-model="deleteDialog" max-width="290">
+          <v-card>
+            <v-card-title>삭제하시겠습니까?</v-card-title>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+
+              <v-btn color="green darken-1" text @click="deleteDialog = false">
+                취소
+              </v-btn>
+
+              <v-btn color="red darken-1" text @click="deleteProject">
+                삭제
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
         <v-dialog v-model="onworkDialog" max-width="290">
           <v-card>
@@ -293,7 +321,7 @@
                       required
                       outlined
                       readonly
-                      :value="this.selectedProjectLeader.email"
+                      :value="leaderInfo.email"
                     ></v-text-field>
                     <v-text-field
                       label="참여 시작 날짜"
@@ -301,9 +329,7 @@
                       outlined
                       readonly
                       :value="
-                        $moment(this.selectedProjectLeader.prj_in_d8).format(
-                          'YYYY-MM-DD'
-                        )
+                        $moment(leaderInfo.prj_in_d8).format('YYYY-MM-DD')
                       "
                     ></v-text-field>
                     <v-text-field
@@ -312,9 +338,7 @@
                       outlined
                       readonly
                       :value="
-                        $moment(this.selectedProjectLeader.prj_out_d8).format(
-                          'YYYY-MM-DD'
-                        )
+                        $moment(leaderInfo.prj_out_d8).format('YYYY-MM-DD')
                       "
                     ></v-text-field>
                     <v-text-field
@@ -358,7 +382,7 @@
               <v-btn
                 color="blue darken-1"
                 text
-                @click="updateProject(selectedProject)"
+                @click="updateProject(selectedProject, leaderInfo)"
                 >수정</v-btn
               >
               <v-btn color="blue darken-1" text @click="dialogView = false"
@@ -387,6 +411,7 @@ export default {
       show: false,
       ingModel: null,
       doneModel: null,
+      deleteDialog: false,
       onworkDialog: false,
       reportDialog: false,
       startDialog: false,
@@ -396,11 +421,12 @@ export default {
       endModel: false,
       projectList: [],
       doneProjectList: [],
-      leaderList: [],
+      // leaderList: [],
       inputs: [{ start_time: null, end_time: null, content: "" }],
       date: "",
       selectedProject: "",
-      selectedProjectLeader: "",
+      leaderInfo: "",
+      deletedProject: "",
     };
   },
 
@@ -411,7 +437,7 @@ export default {
   mounted() {
     this.getProjectList;
     this.getDoneProjectList;
-    this.getLeaderList;
+    // this.getLeaderList;
     this.getUserInfo;
     this.getToday();
   },
@@ -421,7 +447,6 @@ export default {
         .get("/api/project/main")
         .then((res) => {
           this.projectList = res.data;
-          console.log(res.data);
           return this.projectList;
         })
         .catch((e) => {
@@ -433,20 +458,19 @@ export default {
         .get("/api/project/main/done")
         .then((res) => {
           this.doneProjectList = res.data;
-          console.log(this.doneProjectList);
           return this.getDoneProjectList;
         })
         .catch((e) => {
           console.log(e);
         });
     },
-    getLeaderList() {
-      this.$axios.get("/api/project/in/leader/list").then((res) => {
-        this.leaderList = res.data;
-        console.log(this.leaderList);
-        return this.getLeaderList;
-      });
-    },
+    // getLeaderList() {
+    //   this.$axios.get("/api/project/in/leader/list").then((res) => {
+    //     this.leaderList = res.data;
+    //     console.log(this.leaderList);
+    //     return this.getLeaderList;
+    //   });
+    // },
     getUserInfo() {
       this.$axios.get("/api/user/info").then((res) => {
         this.$store.commit("setCurrentUser", res.data);
@@ -455,10 +479,10 @@ export default {
     },
   },
   methods: {
-    updateProject(selectedProject) {
+    updateProject(selectedProject, leaderInfo) {
       this.$router.push({
         name: "prjWrite",
-        params: { project: selectedProject },
+        params: { project: selectedProject, leader: leaderInfo },
       });
     },
     prjWrite() {
@@ -475,22 +499,31 @@ export default {
     },
     getToday() {
       this.date = this.$moment(new Date()).format("YYYY-MM-DD");
-      console.log(this.date);
     },
     openDialogView(project) {
       this.dialogView = true;
       this.selectedProject = project;
+      console.log(this.selectedProject.prj_no);
 
-      var leaderInfoList = this.leaderList;
-      for (var i in leaderInfoList) {
-        if (leaderInfoList[i].prj_no == project.prj_no) {
-          this.selectedProjectLeader = leaderInfoList[i];
-          console.log(this.selectedProjectLeader.email);
-          return this.selectedProjectLeader;
-        } else {
-          return null;
-        }
-      }
+      this.$axios
+        .get("/api/project/in/leader/info", {
+          params: { prj_no: this.selectedProject.prj_no },
+        })
+        .then((res) => {
+          this.leaderInfo = res.data;
+          console.log(this.leaderInfo.email);
+        });
+
+      // var leaderInfoList = this.leaderList;
+      // for (var i in leaderInfoList) {
+      //   if (leaderInfoList[i].prj_no == project.prj_no) {
+      //     this.selectedProjectLeader = leaderInfoList[i];
+      //     console.log(this.selectedProjectLeader.email);
+      //     return this.selectedProjectLeader;
+      //   } else {
+      //     return null;
+      //   }
+      // }
     },
     openReportDialog(project) {
       this.reportDialog = true;
@@ -524,6 +557,24 @@ export default {
         console.log(res);
         alert("성공");
       });
+    },
+    openDeleteDialog(project) {
+      this.deleteDialog = true;
+      this.selectedProject = project;
+    },
+    deleteProject() {
+      console.log(this.selectedProject.prj_no);
+      this.$axios
+        .post("/api/project/delete", this.selectedProject.prj_no, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          alert("삭제 성공");
+          this.deleteDialog = false;
+          this.$router.push("/main");
+        });
     },
   },
 };
