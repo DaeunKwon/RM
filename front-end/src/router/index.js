@@ -14,6 +14,14 @@ import dailyRpt from '../views/report/daily.vue';
 import monthlyRpt from '../views/report/monthly.vue';
 import store from '../store';
 
+/** 같은 페이지에서 같은 페이지로 $router.push 한 오류 처리 (ex : 홈페이지에서 홈 로고를 클릭한 경우) */
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(() => {
+        return window.location.reload()
+    })
+};
+
 Vue.use(VueRouter);
 
 const router = new VueRouter({
