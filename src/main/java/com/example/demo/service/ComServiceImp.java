@@ -28,7 +28,7 @@ public class ComServiceImp implements ComService {
     }
 
     @Override
-    public void workTime(ComVO cvo) {
-        comdao.workTime(cvo);
+    public void weekTime(ComVO cvo) {
+        comdao.weekTime(cvo);
     }
 }

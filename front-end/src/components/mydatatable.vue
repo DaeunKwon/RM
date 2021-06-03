@@ -24,6 +24,7 @@
         </tr>
       </tbody>
       <span>{{ test }}</span>
+      <v-btn @click="getweekTime">test 버튼</v-btn>
     </template>
   </v-simple-table>
 </template>
@@ -34,6 +35,7 @@ var now = moment(new Date());
 var end = moment([2015, 0, 4]);
 
 import eventBus from "../assets/js/eventbus.js";
+import http from "../http-common";
 export default {
   data: () => ({
     datepick: now,
@@ -97,6 +99,25 @@ export default {
             .format("YYYY-MM-DD"),
         },
       ];
+    },
+  },
+  methods: {
+    getweekTime() {
+      this.$axios
+        .post(
+          "http://localhost:8090/api/commute/weekTime",
+          {
+            com_d8: "2021-06-01",
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+        });
     },
   },
 };

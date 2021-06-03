@@ -240,12 +240,12 @@ export default {
 
         // 출근
         if (res.data) {
-          // this.test = true;
-          // this.test2 = false;
+          this.test = false;
+          this.test2 = false;
           // 미출근
         } else {
           this.test = false;
-          this.test2 = true;
+          this.test2 = false;
         }
       });
   },

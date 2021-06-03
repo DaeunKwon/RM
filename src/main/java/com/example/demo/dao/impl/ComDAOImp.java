@@ -38,7 +38,9 @@ public class ComDAOImp implements ComDAO {
     }
 
     @Override
-    public void workTime(ComVO cvo) {
-        sql.update(ns + ".workTime", cvo);
+    public void weekTime(ComVO cvo) {
+        log.info(">>>>>>>>>>>>>>comdao weekTime 진입");
+        log.info(cvo.getCom_d8());
+        sql.selectOne(ns + ".weekTime", cvo);
     }
 }

@@ -9,20 +9,19 @@
         com_start,
         com_end,
         com_total,
-        prj_in_no)
-
-        values(
+        prj_in_no)values(
         null,
         #{com_d8},
         sysdate,
         null,
         null,
-        #{prj_in_no})
+        #{prj_no})
     </insert>
     <update id="offWork" parameterType="com.example.demo.domain.ComVO">
         UPDATE tbl_commute
         SET
-        com_end = sysdate
+        com_end = sysdate,
+        COM_TOTAL = trunc(((SYSDATE - COM_START) * 60 * 24))
         WHERE com_d8 = #{com_d8}
        AND PRJ_IN_NO = (SELECT PRJ_IN_NO FROM TBL_PROJECT_IN tpi WHERE EMAIL = #{my_email} AND PRJ_NO = ${prj_no})
     </update>
@@ -39,23 +38,14 @@
                         AND PRJ_NO = ${prj_no}
                         )
     </select>
-    <update id="workTime" parameterType="com.example.demo.domain.ComVO">
-         UPDATE tbl_commute
-        SET
-        com_total = trunc((com_end - com_start)*24*60)
-        WHERE com_d8 = #{com_d8}
-       AND PRJ_IN_NO = (SELECT PRJ_IN_NO FROM TBL_PROJECT_IN tpi WHERE EMAIL = #{my_email} AND PRJ_NO = ${prj_no})
-    </update>
-    <select id="weekTime" resultType="integer">
-         SELECT 
-                com_total 
-        FROM tbl_commute
-        WHERE com_d8 = #{com_d8}
-        AND PRJ_IN_NO = (SELECT 
-                                PRJ_IN_NO 
-                        FROM TBL_PROJECT_IN tpi 
-                        WHERE EMAIL = #{my_email}
-                        AND PRJ_NO = ${prj_no}
-                        )
+
+    <select id="weekTime" resultType="com.example.demo.domain.ComVO">
+        SELECT NVL(TC.COM_TOTAL,'0') COM_TOTAL
+        FROM tbl_commute TC
+        RIGHT OUTER JOIN (SELECT to_char(day + LEVEL - 1, 'yyyy-mm-dd') as DAY FROM 
+        ( SELECT trunc(TO_DATE('#{com_d8, jdbcType=VARCHAR}','yyyy-mm-dd'),'DAY') as DAY FROM dual )
+        CONNECT BY LEVEL
+        <![CDATA[ < ]]>
+        = 7)DA ON TC.COM_D8 = DA.DAY ORDER BY DA.DAY;
     </select>
 </mapper> 

@@ -10,12 +10,16 @@ public class ComVO {
     private String com_start;
     private String com_end;
     private String com_total;
-    private String prj_in_no;
+    private int prj_in_no;
     private String my_email;
-    private String prj_no;
+    private int prj_no;
 
     public ComVO() {
 
+    }
+
+    public ComVO(String com_d8) {
+        this.com_d8 = com_d8;
     }
 
     public ComVO(String com_d8, String com_start, String com_end) {
@@ -25,8 +29,8 @@ public class ComVO {
     }
 
     @Builder
-    public ComVO(Integer com_no, String com_d8, String com_start, String com_end, String com_total, String prj_in_no,
-            String my_email, String prj_no) {
+    public ComVO(Integer com_no, String com_d8, String com_start, String com_end, String com_total, int prj_in_no,
+            String my_email, int prj_no) {
         this.com_no = com_no;
         this.com_d8 = com_d8;
         this.com_start = com_start;

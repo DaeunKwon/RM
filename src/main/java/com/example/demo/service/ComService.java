@@ -9,5 +9,5 @@ public interface ComService {
 
     public boolean checkWork(ComVO cvo);
 
-    public void workTime(ComVO cvo);
+    public void weekTime(ComVO cvo);
 }
