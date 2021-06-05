@@ -33,4 +33,9 @@ public class ProjectInServiceImp implements ProjectInService {
         return pINdao.getLeaderInfo(prj_no);
     }
 
+    @Override
+    public void addFollower(List<ProjectInVO> projectInList) {
+        pINdao.addFollower(projectInList);
+    }
+
 }

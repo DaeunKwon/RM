@@ -11,4 +11,6 @@ public interface ProjectInDAO {
 
     public ProjectInVO getLeaderInfo(int prj_no);
 
+    public void addFollower(List<ProjectInVO> projectInList);
+
 }

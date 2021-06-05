@@ -38,4 +38,9 @@ public class ProjectInDAOImp implements ProjectInDAO {
         return sql.selectOne(ns + ".getLeaderInfo", prj_no);
     }
 
+    @Override
+    public void addFollower(List<ProjectInVO> projectInList) {
+        sql.insert(ns + ".addFollower", projectInList);
+    }
+
 }

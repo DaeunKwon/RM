@@ -488,9 +488,7 @@ export default {
     },
   },
   methods: {
-    formatDate() {},
     prjWrite() {
-      console.log(this.$store.getters.getCurrentUser);
       const project = new FormData();
       project.append("title", this.title);
       project.append("cond", this.cond);
@@ -501,32 +499,42 @@ export default {
       project.append("content", this.content);
       project.append("remark", this.remark);
 
-      this.$axios.post("/api/project/write", project).then((res) => {
-        const leader = new FormData();
-        leader.append("email", this.leader.email);
-        leader.append("prj_in_d8", this.lead_in_date);
-        leader.append("prj_out_d8", this.lead_out_date);
-        leader.append("prj_no", res.data);
+      // this.$axios.post("/api/project/write", project).then((res) => {
+      //   const leader = new FormData();
+      //   leader.append("email", this.leader.email);
+      //   leader.append("prj_in_d8", this.lead_in_date);
+      //   leader.append("prj_out_d8", this.lead_out_date);
+      //   leader.append("prj_no", res.data);
 
-        this.$axios
-          .post("/api/project/in/leader", leader)
-          .then(console.log("팀장 넣기 성공")(this.$router.push("/main")))
-          .catch((err) => {
-            console.log(err);
-          });
+      //   this.$axios.post("/api/project/in/leader", leader);
 
-        // const follower = new FormData();
-        // for (let i = 0; i < this.inputs.length; i++) {
-        //   console.log(this.inputs[i].follower.email);
-        //   console.log(this.inputs[i].in_date);
-        //   console.log(this.inputs[i].out_date);
-        //   follower.append("email_" + i, this.inputs[i].follower.email);
-        //   follower.append("prj_in_d8_" + i, this.inputs[i].in_date);
-        //   follower.append("prj_out_d8_" + i, this.inputs[i].out_date);
-        // }
-        // console.log(follower);
-        // this.$axios.post("api/project/in/follower", follower);
+      // var follower = [];
+      // for (let i = 0; i < this.inputs.length; i++) {
+      //   follower[i] = new FormData();
+      //   follower[i].append("email", this.inputs[i].follower.email);
+      //   follower[i].append("prj_in_d8", this.inputs[i].in_date);
+      //   follower[i].append("prj_out_d8", this.inputs[i].out_date);
+      //   console.log(follower[i].get("email"));
+      //   console.log(follower[i].get("prj_in_d8"));
+      //   console.log(follower[i].get("prj_out_d8"));
+      // }
+      // console.log(follower[0].get("email"));
+      // console.log(follower[0].get("prj_in_d8"));
+
+      const follower = new FormData();
+      for (let i = 0; i < this.inputs.length; i++) {
+        follower.append("email", this.inputs[i].follower.email);
+        follower.append("prj_in_d8", this.inputs[i].in_date);
+        follower.append("prj_out_d8", this.inputs[i].out_date);
+        //follower.append("prj_no", res.data);
+      }
+      // console.log(follower.getAll("email"));
+
+      this.$axios.post("/api/project/in/follower", follower).then((res) => {
+        alert("프로젝트 등록 성공");
+        //this.$router.push("/main");
       });
+      // });
     },
     add(k) {
       this.inputs.push({ in_date: null, out_date: null });
