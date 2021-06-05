@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.report">
 	<insert id="write" parameterType="com.example.demo.domain.ReportVO">
-		insert into tbl_report values (tbl_report_seq.nextval, 7, #{rpt_title}, #{rpt_content}, #{rpt_remark}, 'N', sysdate, 6, sysdate, 6)
+		insert into tbl_report values (tbl_report_seq.nextval, #{prj_no}, 'N', sysdate, 28, sysdate, 28)
+		<selectKey keyProperty="rpt_no" resultType="Integer" order="AFTER"> SELECT tbl_report_seq.currval FROM dual </selectKey>
 	</insert>
 	<select id="list" resultType="com.example.demo.domain.ReportVO">
 		select * from tbl_report
@@ -10,7 +11,15 @@
 	<select id="getReportDetailList" resultType="com.example.demo.domain.ReportDetailVO">
 		select * from tbl_report_detail
 	</select>
-	<insert id="addReport" parameterType="java.lang.Integer">
-		insert into tbl_report values (tbl_report_seq.nextval, #{prj_no}, 'N', sysdate, 31, sysdate, 31)
+	<insert id="writeDetail" parameterType="java.util.List">
+		<foreach collection="list" item="rdvo" open="INSERT ALL" close="SELECT * FROM SYS.DUAL" separator=" ">
+            INTO tbl_report_detail values (
+                tbl_report_detail_seq.nextval,
+                #{rdvo.rpt_start_time},
+                #{rdvo.rpt_end_time},
+                #{rdvo.rpt_content},
+                #{rdvo.rpt_no}
+            )
+        </foreach>
 	</insert>
 </mapper>

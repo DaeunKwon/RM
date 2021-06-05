@@ -19,10 +19,8 @@ public class ReportServiceImp implements ReportService {
     private ReportDAO rdao;
 
     @Override
-    public void write(ReportVO rvo) {
-        log.info(">>>>>>>>>>>> report service 진입");
-        rdao.write(rvo);
-        log.info(">>>>>>>>>>>>>report service 성공");
+    public int write(ReportVO rvo) {
+        return rdao.write(rvo);
     }
 
     @Override
@@ -38,8 +36,8 @@ public class ReportServiceImp implements ReportService {
     }
 
     @Override
-    public void addReport(int prj_no) {
-        rdao.addReport(prj_no);
+    public void writeDetail(List<ReportDetailVO> reportDetailList) {
+        rdao.writeDetail(reportDetailList);
     }
 
 }

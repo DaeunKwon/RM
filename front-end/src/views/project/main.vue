@@ -437,7 +437,6 @@ export default {
   mounted() {
     this.getProjectList;
     this.getDoneProjectList;
-    // this.getLeaderList;
     this.getUserInfo;
     this.getToday();
   },
@@ -464,13 +463,6 @@ export default {
           console.log(e);
         });
     },
-    // getLeaderList() {
-    //   this.$axios.get("/api/project/in/leader/list").then((res) => {
-    //     this.leaderList = res.data;
-    //     console.log(this.leaderList);
-    //     return this.getLeaderList;
-    //   });
-    // },
     getUserInfo() {
       this.$axios.get("/api/user/info").then((res) => {
         this.$store.commit("setCurrentUser", res.data);
@@ -513,49 +505,33 @@ export default {
           this.leaderInfo = res.data;
           console.log(this.leaderInfo.email);
         });
-
-      // var leaderInfoList = this.leaderList;
-      // for (var i in leaderInfoList) {
-      //   if (leaderInfoList[i].prj_no == project.prj_no) {
-      //     this.selectedProjectLeader = leaderInfoList[i];
-      //     console.log(this.selectedProjectLeader.email);
-      //     return this.selectedProjectLeader;
-      //   } else {
-      //     return null;
-      //   }
-      // }
     },
     openReportDialog(project) {
       this.reportDialog = true;
       this.selectedProject = project;
     },
-    saveReport: function () {
-      // let report = new FormData();
-      // for (let i = 0; i < this.inputs.length; i++) {
-      //   console.log(this.inputs[i].start_time);
-      //   console.log(this.inputs[i].end_time);
-      //   console.log(this.inputs[i].content);
-      //   report.append("start_time_" + i, this.inputs[i].start_time);
-      //   report.append("end_time_" + i, this.inputs[i].end_time);
-      //   report.append("content_" + i, this.inputs[i].content);
-      // }
-      // console.log(report.get("content_1"));
-      // this.$axios
-      //   .post("/api/report/write", JSON.stringify(report), {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   })
-      //   .then((res) => {
-      //     alert("업무 일지 등록");
-      //     this.reportDialog = false;
-      //   });
+    saveReport() {
       //로그인한 유저의 프로젝트 참여 번호도 보내야 함
       const report = new FormData();
       report.append("prj_no", this.selectedProject.prj_no);
-      this.$axios.post("/api/report/add", report).then((res) => {
-        console.log(res);
-        alert("성공");
+      report.append("rpt_writer", this.$store.getters.getCurrentUser);
+      report.append("rpt_mod_writer", this.$store.getters.getCurrentUser);
+
+      this.$axios.post("/api/report/write", report).then((res) => {
+        console.log(res.data);
+        const reportDetail = new FormData();
+        for (let i = 0; i < this.inputs.length; i++) {
+          reportDetail.append("start_time", this.inputs[i].start_time);
+          reportDetail.append("end_time", this.inputs[i].end_time);
+          reportDetail.append("content", this.inputs[i].content);
+          reportDetail.append("rpt_no", res.data);
+        }
+
+        this.$axios
+          .post("/api/report/write/detail", reportDetail)
+          .then((res) => {
+            alert("업무 일지 등록 성공");
+          });
       });
     },
     openDeleteDialog(project) {

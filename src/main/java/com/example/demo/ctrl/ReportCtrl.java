@@ -1,5 +1,9 @@
 package com.example.demo.ctrl;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,20 +37,6 @@ public class ReportCtrl {
     @Autowired
     private ReportService reportService;
 
-    @PostMapping(value = "/rptWrite")
-    @ResponseBody
-    public String postMethodName(@RequestBody ReportVO rvo) {
-        log.info(">>>>>>>>>>>>>>>report 작성");
-        reportService.write(rvo);
-        return "index.html";
-    }
-
-    @PostMapping(value = "/write")
-    @ResponseBody
-    public void write(@RequestBody List<ReportDetailVO> reportDetail) {
-        log.info("report detail:" + reportDetail.get(0).getRpt_content());
-    }
-
     @ResponseBody
     @GetMapping(value = "/list")
     public List<ReportVO> list() {
@@ -61,12 +51,37 @@ public class ReportCtrl {
         return reportService.getReportDetailList();
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/write")
     @ResponseBody
-    public void addReport(HttpServletRequest req) {
+    public int write(HttpServletRequest req) {
         log.info(">>>>>> add report post");
-        int prj_no = Integer.parseInt(req.getParameter("prj_no"));
-        reportService.addReport(prj_no);
+        ReportVO rvo = new ReportVO();
+        rvo.setPrj_no(Integer.parseInt(req.getParameter("prj_no")));
+        rvo.setRpt_writer(req.getParameter("rpt_writer"));
+        rvo.setRpt_mod_writer(req.getParameter("rpt_mod_writer"));
+        reportService.write(rvo);
+        return rvo.getRpt_no();
+    }
+
+    @PostMapping(value = "/write/detail")
+    public void writeDetail(HttpServletRequest req) throws ParseException {
+        log.info(">>>>>>> write report detail controller");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        List<ReportDetailVO> reportDetailList = new ArrayList<>();
+        String[] rpt_start_time = req.getParameterValues("start_time");
+        String[] rpt_end_time = req.getParameterValues("end_time");
+        String[] rpt_content = req.getParameterValues("content");
+        String[] rpt_no = req.getParameterValues("rpt_no");
+        for (int i = 0; i < rpt_start_time.length; i++) {
+            ReportDetailVO reportDetail = new ReportDetailVO();
+            reportDetail.setRpt_start_time(df.parse(rpt_start_time[i]));
+            reportDetail.setRpt_end_time(df.parse(rpt_end_time[i]));
+            reportDetail.setRpt_content(rpt_content[i]);
+            reportDetail.setRpt_no(Integer.parseInt(rpt_no[i]));
+            reportDetailList.add(reportDetail);
+        }
+        reportService.writeDetail(reportDetailList);
+
     }
 
 }
