@@ -307,9 +307,6 @@ export default {
     rptList() {
       this.$router.push("/rptList");
     },
-    rptWrite() {
-      this.$router.push("/rptWrite");
-    },
     daily() {
       this.$router.push("/dailyRpt");
     },

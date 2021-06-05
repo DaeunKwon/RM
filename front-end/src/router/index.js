@@ -8,7 +8,6 @@ import join from '../components/user/join.vue'
 import main from '../views/project/main.vue';
 import prjWrite from '../views/project/write.vue';
 import rptList from '../views/report/list.vue';
-import rptWrite from '../views/report/write.vue';
 import prjDetail from '../views/project/detail.vue';
 import dailyRpt from '../views/report/daily.vue';
 import monthlyRpt from '../views/report/monthly.vue';
@@ -38,10 +37,6 @@ const router = new VueRouter({
         {
             path: '/prjDetail',
             component: prjDetail,
-        },
-        {
-            path: '/rptWrite',
-            component: rptWrite,
         },
         {
             path: '/rptList',
