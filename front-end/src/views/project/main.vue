@@ -154,7 +154,7 @@
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                      v-model="date"
+                      v-model="today"
                       label="Date"
                       required
                       readonly
@@ -423,7 +423,7 @@ export default {
       doneProjectList: [],
       // leaderList: [],
       inputs: [{ start_time: null, end_time: null, content: "" }],
-      date: "",
+      today: "",
       selectedProject: "",
       leaderInfo: "",
       deletedProject: "",
@@ -490,7 +490,7 @@ export default {
       this.inputs.splice(k, 1);
     },
     getToday() {
-      this.date = this.$moment(new Date()).format("YYYY-MM-DD");
+      this.today = this.$moment(new Date()).format("YYYY-MM-DD");
     },
     openDialogView(project) {
       this.dialogView = true;
@@ -521,8 +521,14 @@ export default {
         console.log(res.data);
         const reportDetail = new FormData();
         for (let i = 0; i < this.inputs.length; i++) {
-          reportDetail.append("start_time", this.inputs[i].start_time);
-          reportDetail.append("end_time", this.inputs[i].end_time);
+          reportDetail.append(
+            "start_time",
+            this.today + " " + this.inputs[i].start_time
+          );
+          reportDetail.append(
+            "end_time",
+            this.today + " " + this.inputs[i].end_time
+          );
           reportDetail.append("content", this.inputs[i].content);
           reportDetail.append("rpt_no", res.data);
         }

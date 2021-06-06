@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -66,7 +65,7 @@ public class ReportCtrl {
     @PostMapping(value = "/write/detail")
     public void writeDetail(HttpServletRequest req) throws ParseException {
         log.info(">>>>>>> write report detail controller");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         List<ReportDetailVO> reportDetailList = new ArrayList<>();
         String[] rpt_start_time = req.getParameterValues("start_time");
         String[] rpt_end_time = req.getParameterValues("end_time");
