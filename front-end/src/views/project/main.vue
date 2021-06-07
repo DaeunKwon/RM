@@ -391,7 +391,9 @@
               <v-btn
                 color="blue darken-1"
                 text
-                @click="updateProject(selectedProject, leaderInfo)"
+                @click="
+                  updateProject(selectedProject, leaderInfo, followerList)
+                "
                 >수정</v-btn
               >
               <v-btn color="blue darken-1" text @click="dialogView = false"
@@ -481,14 +483,19 @@ export default {
     },
   },
   methods: {
-    updateProject(selectedProject, leaderInfo) {
+    updateProject(selectedProject, leaderInfo, followerList) {
       this.$router.push({
         name: "prjWrite",
-        params: { project: selectedProject, leader: leaderInfo },
+        params: {
+          flag: 1,
+          project: selectedProject,
+          leader: leaderInfo,
+          follower: followerList,
+        },
       });
     },
     prjWrite() {
-      this.$router.push("/prjWrite");
+      this.$router.push({ name: "prjWrite", params: { flag: 0 } });
     },
     onWork() {
       this.onworkDialog = false;

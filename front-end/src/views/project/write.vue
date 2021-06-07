@@ -8,14 +8,14 @@
         <br />
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
-            v-if="$route.params.project"
+            v-if="$route.params.flag == 1"
             v-model="$route.params.project.prj_title"
             label="프로젝트명"
             required
             outlined
           ></v-text-field>
           <v-text-field
-            v-else
+            v-else-if="$route.params.flag == 0"
             v-model="title"
             label="프로젝트명"
             required
@@ -23,7 +23,7 @@
           ></v-text-field>
 
           <v-select
-            v-if="$route.params.project"
+            v-if="$route.params.flag == 1"
             v-model="$route.params.project.cond"
             :items="cond_items"
             label="진행상황"
@@ -31,7 +31,7 @@
             outlined
           ></v-select>
           <v-select
-            v-else
+            v-else-if="$route.params.flag == 0"
             :items="cond_items"
             v-model="cond"
             label="진행상황"
@@ -52,7 +52,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-if="$route.params.project"
+                    v-if="$route.params.flag == 1"
                     :value="
                       $moment($route.params.project.start_d8).format(
                         'YYYY-MM-DD'
@@ -64,7 +64,7 @@
                     outlined
                   ></v-text-field>
                   <v-text-field
-                    v-else
+                    v-else-if="$route.params.flag == 0"
                     v-model="start_date"
                     label="프로젝트 시작 날짜"
                     v-bind="attrs"
@@ -99,7 +99,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-if="$route.params.project"
+                    v-if="$route.params.flag == 1"
                     :value="
                       $moment($route.params.project.end_d8).format('YYYY-MM-DD')
                     "
@@ -109,7 +109,7 @@
                     outlined
                   ></v-text-field>
                   <v-text-field
-                    v-else
+                    v-else-if="$route.params.flag == 0"
                     v-model="end_date"
                     label="프로젝트 종료 날짜"
                     v-bind="attrs"
@@ -134,7 +134,7 @@
           </v-row>
 
           <v-select
-            v-if="$route.params.project"
+            v-if="$route.params.flag == 1"
             v-model="$route.params.leader.email"
             outlined
             :hint="`${leader.name}, ${leader.email}`"
@@ -147,7 +147,7 @@
             return-object
           ></v-select>
           <v-select
-            v-else
+            v-else-if="$route.params.flag == 0"
             outlined
             v-model="leader"
             :hint="`${leader.name}, ${leader.email}`"
@@ -174,7 +174,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-if="$route.params.leader"
+                    v-if="$route.params.flag == 1"
                     :value="
                       $moment($route.params.leader.prj_in_d8).format(
                         'YYYY-MM-DD'
@@ -186,7 +186,7 @@
                     outlined
                   ></v-text-field>
                   <v-text-field
-                    v-else
+                    v-else-if="$route.params.flag == 0"
                     v-model="lead_in_date"
                     label="참여 시작 날짜"
                     v-bind="attrs"
@@ -221,7 +221,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-if="$route.params.leader"
+                    v-if="$route.params.flag == 1"
                     :value="
                       $moment($route.params.leader.prj_out_d8).format(
                         'YYYY-MM-DD'
@@ -233,7 +233,7 @@
                     outlined
                   ></v-text-field>
                   <v-text-field
-                    v-else
+                    v-else-if="$route.params.flag == 0"
                     v-model="lead_out_date"
                     label="참여 종료 날짜"
                     v-bind="attrs"
@@ -257,131 +257,254 @@
             </v-col>
           </v-row>
 
-          <v-row v-for="(input, k) in inputs" :key="k">
-            <v-col cols="12">
-              <v-select
-                outlined
-                v-model="input.follower"
-                :id="'follower' + k"
-                :items="userList"
-                item-text="name"
-                item-value="email"
-                label="팀원"
-                required
-                persistent-hint
-                return-object
+          <div v-if="$route.params.flag == 1">
+            <v-row v-for="(input, k) in inputs" :key="k">
+              <div
+                v-for="follower in $route.params.follower"
+                :key="follower.id"
               >
-              </v-select
-            ></v-col>
-            <v-col cols="12">
-              <v-dialog
-                ref="dialog"
-                v-model="follow_in_d8"
-                :return-value.sync="input.in_date"
-                width="290px"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
+                <v-col cols="12">
+                  <v-select
+                    outlined
+                    v-model="follower.email"
+                    :id="'follower' + k"
+                    :items="userList"
+                    item-text="name"
+                    item-value="email"
+                    label="팀원"
+                    required
+                    persistent-hint
+                    return-object
+                  >
+                  </v-select>
+                </v-col>
+                <v-col cols="12">
+                  <v-dialog
+                    ref="dialog"
+                    v-model="follow_in_d8"
+                    :return-value.sync="input.in_date"
+                    width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="input.in_date"
+                        :id="'in_date' + k"
+                        label="참여 시작 날짜"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                        outlined
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-if="follow_in_d8"
+                      v-model="input.in_date"
+                      :id="'in_date' + k"
+                      full-width
+                    >
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="follow_in_d8 = false"
+                        >Cancel</v-btn
+                      >
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.dialog[k].save(input.in_date)"
+                        >OK</v-btn
+                      >
+                    </v-date-picker>
+                  </v-dialog>
+
+                  <v-dialog
+                    ref="dialog2"
+                    v-model="follow_out_d8"
+                    :return-value.sync="input.out_date"
+                    width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="input.out_date"
+                        :id="'out_date' + k"
+                        label="참여 종료 날짜"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                        outlined
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-if="follow_out_d8"
+                      v-model="input.out_date"
+                      full-width
+                    >
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="follow_out_d8 = false"
+                        >Cancel</v-btn
+                      >
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.dialog2[k].save(input.out_date)"
+                        >OK</v-btn
+                      >
+                    </v-date-picker>
+                  </v-dialog>
+
+                  <v-btn
+                    class="sm-2 mr-4"
+                    fab
+                    dark
+                    small
+                    color="indigo"
+                    @click="remove(k)"
+                    v-show="k || (!k && inputs.length > 1)"
+                  >
+                    <v-icon dark>mdi-minus</v-icon>
+                  </v-btn>
+                  <v-btn
+                    class="sm-2"
+                    fab
+                    dark
+                    small
+                    color="indigo"
+                    @click="add(k)"
+                    v-show="k === inputs.length - 1"
+                  >
+                    <v-icon dark>mdi-plus</v-icon>
+                  </v-btn>
+                </v-col>
+                <br />
+              </div>
+            </v-row>
+          </div>
+
+          <div v-else-if="$route.params.flag == 0">
+            <v-row v-for="(input, k) in inputs" :key="k">
+              <v-col cols="12">
+                <v-select
+                  outlined
+                  v-model="input.follower"
+                  :id="'follower' + k"
+                  :items="userList"
+                  item-text="name"
+                  item-value="email"
+                  label="팀원"
+                  required
+                  persistent-hint
+                  return-object
+                >
+                </v-select>
+              </v-col>
+              <v-col cols="12">
+                <v-dialog
+                  ref="dialog"
+                  v-model="follow_in_d8"
+                  :return-value.sync="input.in_date"
+                  width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="input.in_date"
+                      :id="'in_date' + k"
+                      label="참여 시작 날짜"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                      outlined
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-if="follow_in_d8"
                     v-model="input.in_date"
                     :id="'in_date' + k"
-                    label="참여 시작 날짜"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                    outlined
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-if="follow_in_d8"
-                  v-model="input.in_date"
-                  :id="'in_date' + k"
-                  full-width
-                >
-                  <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="follow_in_d8 = false"
-                    >Cancel</v-btn
+                    full-width
                   >
-                  <v-btn
-                    text
-                    color="primary"
-                    @click="$refs.dialog[k].save(input.in_date)"
-                    >OK</v-btn
-                  >
-                </v-date-picker>
-              </v-dialog>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="follow_in_d8 = false"
+                      >Cancel</v-btn
+                    >
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="$refs.dialog[k].save(input.in_date)"
+                      >OK</v-btn
+                    >
+                  </v-date-picker>
+                </v-dialog>
 
-              <v-dialog
-                ref="dialog2"
-                v-model="follow_out_d8"
-                :return-value.sync="input.out_date"
-                width="290px"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
+                <v-dialog
+                  ref="dialog2"
+                  v-model="follow_out_d8"
+                  :return-value.sync="input.out_date"
+                  width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="input.out_date"
+                      :id="'out_date' + k"
+                      label="참여 종료 날짜"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                      outlined
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-if="follow_out_d8"
                     v-model="input.out_date"
-                    :id="'out_date' + k"
-                    label="참여 종료 날짜"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                    outlined
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-if="follow_out_d8"
-                  v-model="input.out_date"
-                  full-width
-                >
-                  <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="follow_out_d8 = false"
-                    >Cancel</v-btn
+                    full-width
                   >
-                  <v-btn
-                    text
-                    color="primary"
-                    @click="$refs.dialog2[k].save(input.out_date)"
-                    >OK</v-btn
-                  >
-                </v-date-picker>
-              </v-dialog>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="follow_out_d8 = false"
+                      >Cancel</v-btn
+                    >
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="$refs.dialog2[k].save(input.out_date)"
+                      >OK</v-btn
+                    >
+                  </v-date-picker>
+                </v-dialog>
 
-              <v-btn
-                class="sm-2 mr-4"
-                fab
-                dark
-                small
-                color="indigo"
-                @click="remove(k)"
-                v-show="k || (!k && inputs.length > 1)"
-              >
-                <v-icon dark>mdi-minus</v-icon>
-              </v-btn>
-              <v-btn
-                class="sm-2"
-                fab
-                dark
-                small
-                color="indigo"
-                @click="add(k)"
-                v-show="k === inputs.length - 1"
-              >
-                <v-icon dark>mdi-plus</v-icon>
-              </v-btn>
-            </v-col>
-            <br />
-          </v-row>
+                <v-btn
+                  class="sm-2 mr-4"
+                  fab
+                  dark
+                  small
+                  color="indigo"
+                  @click="remove(k)"
+                  v-show="k || (!k && inputs.length > 1)"
+                >
+                  <v-icon dark>mdi-minus</v-icon>
+                </v-btn>
+                <v-btn
+                  class="sm-2"
+                  fab
+                  dark
+                  small
+                  color="indigo"
+                  @click="add(k)"
+                  v-show="k === inputs.length - 1"
+                >
+                  <v-icon dark>mdi-plus</v-icon>
+                </v-btn>
+              </v-col>
+              <br />
+            </v-row>
+          </div>
 
           <br /><br /><br />
 
           <v-textarea
-            v-if="$route.params.project"
+            v-if="$route.params.flag == 1"
             v-model="$route.params.project.prj_content"
             outlined
             label="프로젝트 내용"
             required
           ></v-textarea>
           <v-textarea
-            v-else
+            v-else-if="$route.params.flag == 0"
             outlined
             v-model="content"
             label="프로젝트 내용"
@@ -389,14 +512,14 @@
           ></v-textarea>
 
           <v-textarea
-            v-if="$route.params.project"
+            v-if="$route.params.flag == 1"
             v-model="$route.params.project.prj_remark"
             outlined
             label="특이사항"
             required
           ></v-textarea>
           <v-textarea
-            v-else
+            v-else-if="$route.params.flag == 0"
             outlined
             v-model="remark"
             label="특이사항"
@@ -404,7 +527,13 @@
           ></v-textarea>
 
           <br />
-          <v-btn color="primary" class="mr-4" @click="prjWrite"> 저장 </v-btn>
+          <v-btn
+            color="primary"
+            class="mr-4"
+            @click="prjWrite($route.params.flag)"
+          >
+            저장
+          </v-btn>
           <v-btn color="success" @click="main"> 목록 </v-btn>
         </v-form>
       </v-flex>
@@ -488,7 +617,7 @@ export default {
     },
   },
   methods: {
-    prjWrite() {
+    prjWrite(flag) {
       const project = new FormData();
       project.append("title", this.title);
       project.append("cond", this.cond);
@@ -499,29 +628,31 @@ export default {
       project.append("content", this.content);
       project.append("remark", this.remark);
 
-      this.$axios.post("/api/project/write", project).then((res) => {
-        const leader = new FormData();
-        leader.append("email", this.leader.email);
-        leader.append("prj_in_d8", this.lead_in_date);
-        leader.append("prj_out_d8", this.lead_out_date);
-        leader.append("prj_no", res.data);
+      if (flag == 0) {
+        this.$axios.post("/api/project/write", project).then((res) => {
+          const leader = new FormData();
+          leader.append("email", this.leader.email);
+          leader.append("prj_in_d8", this.lead_in_date);
+          leader.append("prj_out_d8", this.lead_out_date);
+          leader.append("prj_no", res.data);
 
-        this.$axios.post("/api/project/in/leader", leader);
+          this.$axios.post("/api/project/in/leader", leader);
 
-        const follower = new FormData();
-        for (let i = 0; i < this.inputs.length; i++) {
-          follower.append("email", this.inputs[i].follower.email);
-          follower.append("prj_in_d8", this.inputs[i].in_date);
-          follower.append("prj_out_d8", this.inputs[i].out_date);
-          follower.append("prj_no", res.data);
-        }
-        // console.log(follower.getAll("email"));
+          const follower = new FormData();
+          for (let i = 0; i < this.inputs.length; i++) {
+            follower.append("email", this.inputs[i].follower.email);
+            follower.append("prj_in_d8", this.inputs[i].in_date);
+            follower.append("prj_out_d8", this.inputs[i].out_date);
+            follower.append("prj_no", res.data);
+          }
+          // console.log(follower.getAll("email"));
 
-        this.$axios.post("/api/project/in/follower", follower).then((res) => {
-          alert("프로젝트 등록 성공");
-          this.$router.push("/main");
+          this.$axios.post("/api/project/in/follower", follower).then((res) => {
+            alert("프로젝트 등록 성공");
+            this.$router.push("/main");
+          });
         });
-      });
+      }
     },
     add(k) {
       this.inputs.push({ in_date: null, out_date: null });
