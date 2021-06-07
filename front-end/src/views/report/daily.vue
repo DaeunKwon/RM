@@ -5,13 +5,7 @@
       ><br />
       <div>업무 일지 목록 (전체)</div>
       <div align="right">
-        <v-btn
-          color="primary"
-          class="mr-2"
-          @click="this.$router.replace('/rptList')"
-        >
-          주간
-        </v-btn>
+        <v-btn color="primary" class="mr-2" @click="rptList"> 주간 </v-btn>
         <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
         <v-btn color="primary" @click="daily"> 전체 </v-btn>
       </div>
@@ -74,6 +68,9 @@ export default {
     },
   },
   methods: {
+    rptList() {
+      this.$router.push("/rptList");
+    },
     daily() {
       this.$router.push("/dailyRpt");
     },
