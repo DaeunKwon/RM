@@ -1,5 +1,6 @@
 package com.example.demo.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.example.demo.dao.ReportDAO;
@@ -42,6 +43,11 @@ public class ReportDAOImp implements ReportDAO {
     @Override
     public void writeDetail(List<ReportDetailVO> reportDetailList) {
         sql.insert(ns + ".writeDetail", reportDetailList);
+    }
+
+    @Override
+    public List<ReportDetailVO> getSelectedReport(Date rpt_write_d8) {
+        return sql.selectList(ns + ".getSelectedReport", rpt_write_d8);
     }
 
 }

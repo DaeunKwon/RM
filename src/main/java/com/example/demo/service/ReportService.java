@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.example.demo.domain.ReportDetailVO;
@@ -13,5 +14,7 @@ public interface ReportService {
     public List<ReportDetailVO> getReportDetailList();
 
     public void writeDetail(List<ReportDetailVO> reportDetailList);
+
+    public List<ReportDetailVO> getSelectedReport(Date rpt_write_d8);
 
 }

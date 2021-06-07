@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.example.demo.dao.ReportDAO;
@@ -38,6 +39,11 @@ public class ReportServiceImp implements ReportService {
     @Override
     public void writeDetail(List<ReportDetailVO> reportDetailList) {
         rdao.writeDetail(reportDetailList);
+    }
+
+    @Override
+    public List<ReportDetailVO> getSelectedReport(Date rpt_write_d8) {
+        return rdao.getSelectedReport(rpt_write_d8);
     }
 
 }

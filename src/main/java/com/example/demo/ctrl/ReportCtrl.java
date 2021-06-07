@@ -83,4 +83,10 @@ public class ReportCtrl {
 
     }
 
+    @GetMapping(value = "/get")
+    public List<ReportDetailVO> getSelectedReport(HttpServletRequest req) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return reportService.getSelectedReport(df.parse(req.getParameter("rpt_write_d8")));
+    }
+
 }

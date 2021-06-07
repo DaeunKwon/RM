@@ -22,4 +22,11 @@
             )
         </foreach>
 	</insert>
+	<select id="getSelectedReport" parameterType="java.util.Date" resultType="com.example.demo.domain.ReportDetailVO">
+		SELECT trd.*
+		FROM TBL_REPORT tr
+		JOIN TBL_REPORT_DETAIL trd
+		ON tr.RPT_NO = trd.RPT_NO AND RPT_WRITE_D8 >= #{rpt_write_d8}
+		<![CDATA[AND rpt_write_d8 < #{rpt_write_d8}+1]]>
+	</select>
 </mapper>
