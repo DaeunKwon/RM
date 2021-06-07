@@ -85,4 +85,10 @@ public class ProjectInController {
         return projectINService.getLeaderInfo(prj_no);
     }
 
+    @GetMapping(value = "/follower/info")
+    public List<ProjectInVO> getFollowerInfo(int prj_no) {
+        log.info(">>>>>>> get follower info controller");
+        return projectINService.getFollowerInfo(prj_no);
+    }
+
 }

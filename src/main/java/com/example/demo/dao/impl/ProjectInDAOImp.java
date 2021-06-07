@@ -43,4 +43,9 @@ public class ProjectInDAOImp implements ProjectInDAO {
         sql.insert(ns + ".addFollower", projectInList);
     }
 
+    @Override
+    public List<ProjectInVO> getFollowerInfo(int prj_no) {
+        return sql.selectList(ns + ".getFollowerInfo", prj_no);
+    }
+
 }

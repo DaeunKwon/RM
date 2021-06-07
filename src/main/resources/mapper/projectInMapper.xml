@@ -54,4 +54,7 @@
             )
         </foreach>
     </insert>
+    <select id="getFollowerInfo" parameterType="java.lang.Integer" resultType="com.example.demo.domain.ProjectInVO">
+        select * from tbl_project_in where authority = 'ROLE_USER' and prj_no = #{prj_no}
+    </select>
 </mapper>

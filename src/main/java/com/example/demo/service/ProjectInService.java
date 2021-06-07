@@ -14,4 +14,6 @@ public interface ProjectInService {
 
     public void addFollower(List<ProjectInVO> projectInList);
 
+    public List<ProjectInVO> getFollowerInfo(int prj_no);
+
 }

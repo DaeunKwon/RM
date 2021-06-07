@@ -341,24 +341,33 @@
                         $moment(leaderInfo.prj_out_d8).format('YYYY-MM-DD')
                       "
                     ></v-text-field>
-                    <v-text-field
-                      label="팀원"
-                      required
-                      outlined
-                      readonly
-                    ></v-text-field>
-                    <v-text-field
-                      label="참여 시작 날짜"
-                      required
-                      outlined
-                      readonly
-                    ></v-text-field>
-                    <v-text-field
-                      label="참여 종료 날짜"
-                      required
-                      outlined
-                      readonly
-                    ></v-text-field>
+                    <div v-for="follower in followerList" :key="follower.email">
+                      <v-text-field
+                        label="팀원"
+                        required
+                        outlined
+                        readonly
+                        :value="follower.email"
+                      ></v-text-field>
+                      <v-text-field
+                        label="참여 시작 날짜"
+                        required
+                        outlined
+                        readonly
+                        :value="
+                          $moment(follower.prj_in_d8).format('YYYY-MM-DD')
+                        "
+                      ></v-text-field>
+                      <v-text-field
+                        label="참여 종료 날짜"
+                        required
+                        outlined
+                        readonly
+                        :value="
+                          $moment(follower.prj_out_d8).format('YYYY-MM-DD')
+                        "
+                      ></v-text-field>
+                    </div>
                     <v-textarea
                       label="내용"
                       required
@@ -427,6 +436,7 @@ export default {
       selectedProject: "",
       leaderInfo: "",
       deletedProject: "",
+      followerList: [],
     };
   },
 
@@ -504,6 +514,15 @@ export default {
         .then((res) => {
           this.leaderInfo = res.data;
           console.log(this.leaderInfo.email);
+        });
+
+      this.$axios
+        .get("/api/project/in/follower/info", {
+          params: { prj_no: this.selectedProject.prj_no },
+        })
+        .then((res) => {
+          this.followerList = res.data;
+          console.log(this.followerList);
         });
     },
     openReportDialog(project) {
