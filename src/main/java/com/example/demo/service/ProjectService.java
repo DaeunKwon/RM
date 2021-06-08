@@ -11,10 +11,12 @@ public interface ProjectService {
 
     public void remove(ProjectVO pvo);
 
-    public List<ProjectVO> getProjectList();
+    public List<ProjectVO> getProjectList(String email);
 
-    public List<ProjectVO> getDoneProjectList();
+    public List<ProjectVO> getDoneProjectList(String email);
 
     public void deleteProject(int prj_no);
+
+    public void update(ProjectVO pvo);
 
 }

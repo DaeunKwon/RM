@@ -20,6 +20,9 @@
               active-class="success"
               show-arrows
             >
+              <div v-if="!projectList">
+                <h5>No Project</h5>
+              </div>
               <v-slide-item
                 v-for="project in projectList"
                 :key="project.prj_no"
@@ -71,6 +74,9 @@
               active-class="success"
               show-arrows
             >
+              <div v-if="!doneProjectList">
+                <h5>No Project</h5>
+              </div>
               <v-slide-item
                 v-for="project in doneProjectList"
                 :key="project.id"
@@ -453,20 +459,29 @@ export default {
     this.getToday();
   },
   computed: {
-    getProjectList() {
+    getUserInfo() {
+      this.$axios.get("/api/user/info").then((res) => {
+        this.$store.commit("setCurrentUser", res.data);
+        console.log(this.$store.getters.getCurrentUser);
+
+        this.$axios
+          .get("/api/project/main", {
+            params: { email: this.$store.getters.getCurrentUser.email },
+          })
+          .then((res) => {
+            this.projectList = res.data;
+            console.log(this.projectList);
+            return this.projectList;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      });
+
       this.$axios
-        .get("/api/project/main")
-        .then((res) => {
-          this.projectList = res.data;
-          return this.projectList;
+        .get("/api/project/main/done", {
+          params: { email: this.$store.getters.getCurrentUser.email },
         })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getDoneProjectList() {
-      this.$axios
-        .get("/api/project/main/done")
         .then((res) => {
           this.doneProjectList = res.data;
           return this.getDoneProjectList;
@@ -474,12 +489,6 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-    },
-    getUserInfo() {
-      this.$axios.get("/api/user/info").then((res) => {
-        this.$store.commit("setCurrentUser", res.data);
-        console.log(this.$store.getters.getCurrentUser);
-      });
     },
   },
   methods: {

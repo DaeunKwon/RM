@@ -42,7 +42,6 @@
           <v-row>
             <v-col cols="12" lg="6">
               <v-menu
-                ref="menu1"
                 v-model="start_d8"
                 :close-on-content-click="false"
                 :return-value.sync="start_date"
@@ -53,11 +52,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-if="$route.params.flag == 1"
-                    :value="
-                      $moment($route.params.project.start_d8).format(
-                        'YYYY-MM-DD'
-                      )
-                    "
+                    v-model="$route.params.project.start_d8"
                     label="프로젝트 시작 날짜"
                     v-bind="attrs"
                     v-on="on"
@@ -77,10 +72,7 @@
                   <v-btn text color="primary" @click="start_d8 = false"
                     >취소</v-btn
                   >
-                  <v-btn
-                    text
-                    color="primary"
-                    @click="$refs.menu1.save(start_date)"
+                  <v-btn text color="primary" @click="$refs.save(start_date)"
                     >저장</v-btn
                   >
                 </v-date-picker>
@@ -570,7 +562,6 @@ export default {
       valid: false,
       dialog: false,
       dialog2: false,
-      menu1: false,
       menu2: false,
       menu3: false,
       menu4: false,
@@ -618,17 +609,17 @@ export default {
   },
   methods: {
     prjWrite(flag) {
-      const project = new FormData();
-      project.append("title", this.title);
-      project.append("cond", this.cond);
-      project.append("start_date", this.start_date);
-      project.append("end_date", this.end_date);
-      project.append("writer", this.$store.getters.getCurrentUser.email);
-      project.append("mod_writer", this.$store.getters.getCurrentUser.email);
-      project.append("content", this.content);
-      project.append("remark", this.remark);
-
       if (flag == 0) {
+        const project = new FormData();
+        project.append("title", this.title);
+        project.append("cond", this.cond);
+        project.append("start_date", this.start_date);
+        project.append("end_date", this.end_date);
+        project.append("writer", this.$store.getters.getCurrentUser.email);
+        project.append("mod_writer", this.$store.getters.getCurrentUser.email);
+        project.append("content", this.content);
+        project.append("remark", this.remark);
+
         this.$axios.post("/api/project/write", project).then((res) => {
           const leader = new FormData();
           leader.append("email", this.leader.email);
@@ -651,6 +642,21 @@ export default {
             alert("프로젝트 등록 성공");
             this.$router.push("/main");
           });
+        });
+      }
+      if (flag == 1) {
+        const project = new FormData();
+        project.append("prj_no", $route.params.project.prj_no);
+        project.append("title", this.title);
+        project.append("cond", this.cond);
+        project.append("start_date", this.start_date);
+        project.append("end_date", this.end_date);
+        project.append("mod_writer", this.$store.getters.getCurrentUser.email);
+        project.append("content", this.content);
+        project.append("remark", this.remark);
+
+        this.$axios.post("/api/project/update", project).then((res) => {
+          alert("프로젝트 수정");
         });
       }
     },

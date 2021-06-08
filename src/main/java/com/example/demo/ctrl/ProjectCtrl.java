@@ -54,17 +54,19 @@ public class ProjectCtrl {
 
     @ResponseBody
     @GetMapping(value = "/main")
-    public List<ProjectVO> list(Model model) {
+    public List<ProjectVO> list(HttpServletRequest req) {
         log.info(">>>>>>project list get");
-        return projectService.getProjectList();
+        String email = req.getParameter("email");
+        return projectService.getProjectList(email);
 
     }
 
     @ResponseBody
     @GetMapping(value = "/main/done")
-    public List<ProjectVO> getDoneProjectlist(Model model) {
+    public List<ProjectVO> getDoneProjectlist(HttpServletRequest req) {
         log.info(">>>>>>project list get");
-        return projectService.getDoneProjectList();
+        String email = req.getParameter("email");
+        return projectService.getDoneProjectList(email);
 
     }
 
@@ -73,5 +75,22 @@ public class ProjectCtrl {
     public void deleteProject(@RequestBody int prj_no) {
         log.info(">>>>>delete project controller");
         projectService.deleteProject(prj_no);
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void updateProject(HttpServletRequest req) throws ParseException {
+        log.info(">>>>>>>>> update project controller");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        ProjectVO pvo = new ProjectVO();
+        pvo.setPrj_no(Integer.parseInt(req.getParameter("prj_no")));
+        pvo.setPrj_title(req.getParameter("title"));
+        pvo.setCond(req.getParameter("cond"));
+        pvo.setStart_d8(df.parse(req.getParameter("start_date")));
+        pvo.setEnd_d8(df.parse(req.getParameter("end_date")));
+        pvo.setPrj_mod_writer(req.getParameter("mod_writer"));
+        pvo.setPrj_content(req.getParameter("content"));
+        pvo.setPrj_remark(req.getParameter("remark"));
+        projectService.update(pvo);
     }
 }
