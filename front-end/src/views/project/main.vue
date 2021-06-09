@@ -68,15 +68,15 @@
         <div class="mt-12">
           <v-sheet class="mx-auto" elevation="8" max-width="1000"
             ><br />완료된 프로젝트
+            <div v-if="this.doneProjectList == null">
+              <h5>{{ message }}</h5>
+            </div>
             <v-slide-group
               v-model="doneModel"
               class="pa-4"
               active-class="success"
               show-arrows
             >
-              <div v-if="!doneProjectList">
-                <h5>No Project</h5>
-              </div>
               <v-slide-item
                 v-for="project in doneProjectList"
                 :key="project.id"
@@ -445,6 +445,7 @@ export default {
       leaderInfo: "",
       deletedProject: "",
       followerList: [],
+      message: "",
     };
   },
 
@@ -463,6 +464,16 @@ export default {
       this.$axios.get("/api/user/info").then((res) => {
         this.$store.commit("setCurrentUser", res.data);
         console.log(this.$store.getters.getCurrentUser);
+        console.log(this.$store.getters.getCurrentUser.email);
+
+        this.$axios
+          .get("/api/project/in/info", {
+            params: { email: this.$store.getters.getCurrentUser.email },
+          })
+          .then((res) => {
+            this.$store.commit("setUserProjectInfo", res.data);
+            //console.log(this.$store.getter.getUserProjectInfo.prj_no);
+          });
 
         this.$axios
           .get("/api/project/main", {
@@ -476,19 +487,25 @@ export default {
           .catch((e) => {
             console.log(e);
           });
-      });
 
-      this.$axios
-        .get("/api/project/main/done", {
-          params: { email: this.$store.getters.getCurrentUser.email },
-        })
-        .then((res) => {
-          this.doneProjectList = res.data;
-          return this.getDoneProjectList;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+        this.$axios
+          .get("/api/project/main/done", {
+            params: { email: this.$store.getters.getCurrentUser.email },
+          })
+          .then((res) => {
+            console.log(res.data);
+            if (res.data.length == 0) {
+              this.message = "No Project";
+              console.log("no project");
+            } else {
+              this.doneProjectList = res.data;
+              return this.getDoneProjectList;
+            }
+          })
+          .catch((e) => {
+            //console.log(e);
+          });
+      });
     },
   },
   methods: {
@@ -529,7 +546,7 @@ export default {
         })
         .then((res) => {
           this.leaderInfo = res.data;
-          console.log(this.leaderInfo.email);
+          //console.log(this.leaderInfo.email);
         });
 
       this.$axios
@@ -538,7 +555,7 @@ export default {
         })
         .then((res) => {
           this.followerList = res.data;
-          console.log(this.followerList);
+          //console.log(this.followerList);
         });
     },
     openReportDialog(project) {

@@ -9,4 +9,7 @@ export default {
         state.currentUser = payload
     },
 
+    setUserProjectInfo: function (state, payload) {
+        state.userProjectInfo = payload
+    }
 }

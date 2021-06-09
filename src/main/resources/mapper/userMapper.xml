@@ -11,6 +11,8 @@
 		select email, name from tbl_member
 	</select>
 	<select id="getUserfindByUser" resultType="com.example.demo.domain.UserVO">
-		select * from tbl_member where email = #{email} and password = #{password}
+		select m.*, a.ROLES_AUTHORITY authority from tbl_member m
+		JOIN AUTHORITIES a
+		ON m.EMAIL = a.MEMBER_EMAIL
 	</select>
 </mapper>
