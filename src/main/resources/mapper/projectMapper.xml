@@ -31,20 +31,22 @@
         <selectKey keyProperty="prj_no" resultType="Integer" order="AFTER"> SELECT tbl_project_seq.currval FROM dual </selectKey>
     </insert>
     <select id="getProjectList" parameterType="java.lang.String" resultType="com.example.demo.domain.ProjectVO">
-        SELECT tp.*, tpi.AUTHORITY
-        FROM TBL_PROJECT_IN tpi 
-        JOIN TBL_PROJECT tp 
+        SELECT tp.*, tpi.authority
+        FROM TBL_PROJECT tp
+        JOIN TBL_PROJECT_IN tpi
         ON tp.PRJ_NO = tpi.PRJ_NO
-        where (cond = '예정' or cond = '진행중') and rmv_YN = 'N'
-        AND tpi.EMAIL = #{email}
+        where cond IN ('예정', '진행중')
+        AND rmv_YN in ('N')
+        AND tpi.EMAIL in (#{email})
     </select>
     <select id="getDoneProjectList" parameterType="java.lang.String" resultType="com.example.demo.domain.ProjectVO">
-        SELECT tp.*, tpi.AUTHORITY
-        FROM TBL_PROJECT_IN tpi 
-        JOIN TBL_PROJECT tp 
+        SELECT tp.*, tpi.authority
+        FROM TBL_PROJECT tp
+        JOIN TBL_PROJECT_IN tpi
         ON tp.PRJ_NO = tpi.PRJ_NO
-        where cond = "완료" and rmv_YN = 'N'
-        AND tpi.EMAIL = #{email}
+        WHERE cond IN ('완료')
+        AND rmv_YN in ('N')
+        AND tpi.EMAIL in (#{email})
     </select>
     <update id="deleteProject" parameterType="Integer">
         update tbl_project set rmv_YN = 'Y' where prj_no = #{prj_no}

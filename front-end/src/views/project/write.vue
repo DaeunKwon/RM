@@ -42,6 +42,7 @@
           <v-row>
             <v-col cols="12" lg="6">
               <v-menu
+                ref="menu1"
                 v-model="start_d8"
                 :close-on-content-click="false"
                 :return-value.sync="start_date"
@@ -52,14 +53,20 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-if="$route.params.flag == 1"
-                    v-model="$route.params.project.start_d8"
+                    :value="
+                      start_date.length <= 0
+                        ? $moment($route.params.project.start_d8).format(
+                            'YYYY-MM-DD'
+                          )
+                        : start_date
+                    "
                     label="프로젝트 시작 날짜"
                     v-bind="attrs"
                     v-on="on"
                     outlined
                   ></v-text-field>
                   <v-text-field
-                    v-else-if="$route.params.flag == 0"
+                    v-else
                     v-model="start_date"
                     label="프로젝트 시작 날짜"
                     v-bind="attrs"
@@ -72,7 +79,10 @@
                   <v-btn text color="primary" @click="start_d8 = false"
                     >취소</v-btn
                   >
-                  <v-btn text color="primary" @click="$refs.save(start_date)"
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.menu1.save(start_date)"
                     >저장</v-btn
                   >
                 </v-date-picker>
@@ -93,7 +103,11 @@
                   <v-text-field
                     v-if="$route.params.flag == 1"
                     :value="
-                      $moment($route.params.project.end_d8).format('YYYY-MM-DD')
+                      end_date.length <= 0
+                        ? $moment($route.params.project.end_d8).format(
+                            'YYYY-MM-DD'
+                          )
+                        : end_date
                     "
                     label="프로젝트 종료 날짜"
                     v-bind="attrs"
@@ -101,7 +115,7 @@
                     outlined
                   ></v-text-field>
                   <v-text-field
-                    v-else-if="$route.params.flag == 0"
+                    v-else
                     v-model="end_date"
                     label="프로젝트 종료 날짜"
                     v-bind="attrs"
@@ -168,9 +182,11 @@
                   <v-text-field
                     v-if="$route.params.flag == 1"
                     :value="
-                      $moment($route.params.leader.prj_in_d8).format(
-                        'YYYY-MM-DD'
-                      )
+                      lead_in_date.length <= 0
+                        ? $moment($route.params.leader.prj_in_d8).format(
+                            'YYYY-MM-DD'
+                          )
+                        : lead_in_date
                     "
                     label="참여 시작 날짜"
                     v-bind="attrs"
@@ -178,7 +194,7 @@
                     outlined
                   ></v-text-field>
                   <v-text-field
-                    v-else-if="$route.params.flag == 0"
+                    v-else
                     v-model="lead_in_date"
                     label="참여 시작 날짜"
                     v-bind="attrs"
@@ -215,9 +231,11 @@
                   <v-text-field
                     v-if="$route.params.flag == 1"
                     :value="
-                      $moment($route.params.leader.prj_out_d8).format(
-                        'YYYY-MM-DD'
-                      )
+                      lead_out_date.length <= 0
+                        ? $moment($route.params.leader.prj_out_d8).format(
+                            'YYYY-MM-DD'
+                          )
+                        : lead_out_date
                     "
                     label="참여 종료 날짜"
                     v-bind="attrs"
@@ -225,7 +243,7 @@
                     outlined
                   ></v-text-field>
                   <v-text-field
-                    v-else-if="$route.params.flag == 0"
+                    v-else
                     v-model="lead_out_date"
                     label="참여 종료 날짜"
                     v-bind="attrs"
@@ -248,125 +266,80 @@
               </v-menu>
             </v-col>
           </v-row>
-
+          <v-row>
+            {{ inputs }}
+          </v-row>
           <div v-if="$route.params.flag == 1">
+            <v-dialog v-model="openCalendarFlag" width="290px">
+              <v-date-picker v-model="openCalendarDate" full-width>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="openCalendarFlag = false"
+                  >Cancel</v-btn
+                >
+                <v-btn text color="primary" @click="saveCalendarDate()"
+                  >OK</v-btn
+                >
+              </v-date-picker>
+            </v-dialog>
+
             <v-row v-for="(input, k) in inputs" :key="k">
-              <div
-                v-for="follower in $route.params.follower"
-                :key="follower.id"
-              >
-                <v-col cols="12">
-                  <v-select
-                    outlined
-                    v-model="follower.email"
-                    :id="'follower' + k"
-                    :items="userList"
-                    item-text="name"
-                    item-value="email"
-                    label="팀원"
-                    required
-                    persistent-hint
-                    return-object
-                  >
-                  </v-select>
-                </v-col>
-                <v-col cols="12">
-                  <v-dialog
-                    ref="dialog"
-                    v-model="follow_in_d8"
-                    :return-value.sync="input.in_date"
-                    width="290px"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="input.in_date"
-                        :id="'in_date' + k"
-                        label="참여 시작 날짜"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                        outlined
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-if="follow_in_d8"
-                      v-model="input.in_date"
-                      :id="'in_date' + k"
-                      full-width
-                    >
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="follow_in_d8 = false"
-                        >Cancel</v-btn
-                      >
-                      <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.dialog[k].save(input.in_date)"
-                        >OK</v-btn
-                      >
-                    </v-date-picker>
-                  </v-dialog>
-
-                  <v-dialog
-                    ref="dialog2"
-                    v-model="follow_out_d8"
-                    :return-value.sync="input.out_date"
-                    width="290px"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="input.out_date"
-                        :id="'out_date' + k"
-                        label="참여 종료 날짜"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                        outlined
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-if="follow_out_d8"
-                      v-model="input.out_date"
-                      full-width
-                    >
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="follow_out_d8 = false"
-                        >Cancel</v-btn
-                      >
-                      <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.dialog2[k].save(input.out_date)"
-                        >OK</v-btn
-                      >
-                    </v-date-picker>
-                  </v-dialog>
-
-                  <v-btn
-                    class="sm-2 mr-4"
-                    fab
-                    dark
-                    small
-                    color="indigo"
-                    @click="remove(k)"
-                    v-show="k || (!k && inputs.length > 1)"
-                  >
-                    <v-icon dark>mdi-minus</v-icon>
-                  </v-btn>
-                  <v-btn
-                    class="sm-2"
-                    fab
-                    dark
-                    small
-                    color="indigo"
-                    @click="add(k)"
-                    v-show="k === inputs.length - 1"
-                  >
-                    <v-icon dark>mdi-plus</v-icon>
-                  </v-btn>
-                </v-col>
-                <br />
-              </div>
+              <v-col cols="12">
+                <v-select
+                  outlined
+                  v-model="input.email"
+                  :id="'follower' + k"
+                  :items="userList"
+                  item-text="name"
+                  item-value="email"
+                  label="팀원"
+                  required
+                  persistent-hint
+                  return-object
+                >
+                </v-select>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="input.prj_in_d8"
+                  :id="'in_date' + k"
+                  label="참여 시작 날짜"
+                  readonly
+                  outlined
+                  @click="openCalendar(inputs, k, 'prj_in_d8')"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="input.prj_out_d8"
+                  :id="'out_date' + k"
+                  label="참여 종료 날짜"
+                  readonly
+                  outlined
+                  @click="openCalendar(inputs, k, 'prj_out_d8')"
+                ></v-text-field>
+                <v-btn
+                  class="sm-2 mr-4"
+                  fab
+                  dark
+                  small
+                  color="indigo"
+                  @click="remove(k)"
+                  v-show="k || (!k && inputs.length > 1)"
+                >
+                  <v-icon dark>mdi-minus</v-icon>
+                </v-btn>
+                <v-btn
+                  class="sm-2"
+                  fab
+                  dark
+                  small
+                  color="indigo"
+                  @click="add(k)"
+                  v-show="k === inputs.length - 1"
+                >
+                  <v-icon dark>mdi-plus</v-icon>
+                </v-btn>
+              </v-col>
             </v-row>
           </div>
 
@@ -519,13 +492,7 @@
           ></v-textarea>
 
           <br />
-          <v-btn
-            color="primary"
-            class="mr-4"
-            @click="prjWrite($route.params.flag)"
-          >
-            저장
-          </v-btn>
+          <v-btn color="primary" class="mr-4" @click="prjWrite()"> 저장 </v-btn>
           <v-btn color="success" @click="main"> 목록 </v-btn>
         </v-form>
       </v-flex>
@@ -546,22 +513,12 @@ export default {
     Header, //헤더 컴포넌트 추가
     Footer, //풋터 컴포넌트 추가
   },
-  data: () => ({
-    title: "",
-    cond: "",
-    start_date: "",
-    end_date: "",
-    content: "",
-    remark: "",
-    leader: { name: "", email: "" },
-    lead_in_date: "",
-    lead_out_date: "",
-  }),
   data() {
     return {
       valid: false,
       dialog: false,
       dialog2: false,
+      menu1: false,
       menu2: false,
       menu3: false,
       menu4: false,
@@ -588,10 +545,22 @@ export default {
       remark: "",
       show: true,
       //start_date: new Date().toISOString().substr(0, 10),
+      openCalendarFlag: false,
+      openCalendarValues: [],
+      openCalendarType: "",
+      openCalendarIndex: -1,
+      openCalendarDate: "",
     };
   },
   mounted() {
     this.getUserList;
+    if (!!this.$route.params.follower) {
+      this.inputs = this.$route.params.follower;
+      this.inputs.forEach((input) => {
+        input.prj_in_d8 = this.$moment(input.prj_in_d8).format("YYYY-MM-DD");
+        input.prj_out_d8 = this.$moment(input.prj_out_d8).format("YYYY-MM-DD");
+      });
+    }
   },
   computed: {
     getUserList() {
@@ -608,8 +577,9 @@ export default {
     },
   },
   methods: {
-    prjWrite(flag) {
-      if (flag == 0) {
+    prjWrite() {
+      if (this.$route.params.flag == 0) {
+        console.log("등록");
         const project = new FormData();
         project.append("title", this.title);
         project.append("cond", this.cond);
@@ -643,10 +613,10 @@ export default {
             this.$router.push("/main");
           });
         });
-      }
-      if (flag == 1) {
+      } else {
+        console.log("수정");
         const project = new FormData();
-        project.append("prj_no", $route.params.project.prj_no);
+        project.append("prj_no", this.$route.params.project.prj_no);
         project.append("title", this.title);
         project.append("cond", this.cond);
         project.append("start_date", this.start_date);
@@ -656,8 +626,33 @@ export default {
         project.append("remark", this.remark);
 
         this.$axios.post("/api/project/update", project).then((res) => {
-          alert("프로젝트 수정");
+          console.log("프로젝트 수정");
         });
+
+        // const leader = new FormData();
+        // leader.append("email", this.leader.email);
+        // leader.append("prj_in_d8", this.lead_in_date);
+        // leader.append("prj_out_d8", this.lead_out_date);
+        // leader.append("prj_no", this.$route.params.project.prj_no);
+
+        // this.$axios.post("/api/project/in/leader", leader).then((res) => {
+        //   console.log("팀장 수정");
+        // });
+
+        // const follower = new FormData();
+        // for (let i = 0; i < this.inputs.length; i++) {
+        //   follower.append("email", this.inputs[i].email);
+        //   follower.append("prj_in_d8", this.inputs[i].prj_in_d8);
+        //   follower.append("prj_out_d8", this.inputs[i].prj_out_d8);
+        //   follower.append("prj_no", this.$route.params.project.prj_no);
+        // }
+        // // console.log(follower.getAll("email"));
+
+        // this.$axios.post("/api/project/in/follower", follower).then((res) => {
+        //   console.log("팀원 수정");
+        //   // alert("프로젝트 수정 성공");
+        //   // this.$router.push("/main");
+        // });
       }
     },
     add(k) {
@@ -668,6 +663,18 @@ export default {
     },
     main() {
       this.$router.push("/main");
+    },
+    openCalendar(inputs, k, type) {
+      this.openCalendarFlag = true;
+      this.openCalendarValues = inputs;
+      this.openCalendarIndex = k;
+      this.openCalendarType = type;
+    },
+    saveCalendarDate() {
+      this.openCalendarFlag = false;
+      this.openCalendarValues[this.openCalendarIndex][
+        this.openCalendarType
+      ] = this.openCalendarDate;
     },
   },
 };

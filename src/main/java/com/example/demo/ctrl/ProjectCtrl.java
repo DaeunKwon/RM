@@ -81,6 +81,7 @@ public class ProjectCtrl {
     @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
     public void updateProject(HttpServletRequest req) throws ParseException {
         log.info(">>>>>>>>> update project controller");
+        log.info("start_date" + req.getParameter("start_date"));
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         ProjectVO pvo = new ProjectVO();
         pvo.setPrj_no(Integer.parseInt(req.getParameter("prj_no")));

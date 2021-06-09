@@ -15,4 +15,10 @@ public interface ProjectInDAO {
 
     public List<ProjectInVO> getFollowerInfo(int prj_no);
 
+    public List<ProjectInVO> getUserProjectInfo(String email);
+
+    public void updateLeader(ProjectInVO pINvo);
+
+    public void updateFollower(List<ProjectInVO> projectInList);
+
 }
