@@ -471,8 +471,9 @@ export default {
             params: { email: this.$store.getters.getCurrentUser.email },
           })
           .then((res) => {
+            console.log(res.data);
             this.$store.commit("setUserProjectInfo", res.data);
-            //console.log(this.$store.getter.getUserProjectInfo.prj_no);
+            console.log(this.$store.getters.getUserProjectInfo.prj_no);
           });
 
         this.$axios

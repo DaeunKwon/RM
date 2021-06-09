@@ -303,6 +303,8 @@ export default {
   },
   data() {
     return {
+      startModel: false,
+      endModel: false,
       updateDialog: false,
       selectedDate: "",
       reportList: [],
@@ -354,29 +356,6 @@ export default {
           console.log(e);
         });
     },
-    // getReportDetailList({ date }) {
-    //   this.$axios.get("/api/report/detail/list").then((res) => {
-    //     this.reportDetailList = res.data;
-    //     const reportDetailList = this.reportDetailList;
-    //     const selectedDateReport = [];
-    //     for (let i = 0; i < reportDetailList.length; i++) {
-    //       if (
-    //         this.$moment(reportDetailList[i].rpt_start_time).format(
-    //           "YYYY-MM-DD"
-    //         ) == this.$moment(date).format("YYYY-MM-DD")
-    //       ) {
-    //         selectedDateReport.push({
-    //           rpt_detail_no: reportDetailList[i].rpt_detail_no,
-    //           rpt_start_time: reportDetailList[i].rpt_start_time,
-    //           rpt_end_time: reportDetailList[i].rpt_end_time,
-    //           rpt_content: reportDetailList[i].rpt_content,
-    //           rpt_no: reportDetailList[i].rpt_no,
-    //         });
-    //       }
-    //     }
-    //     this.selectedDateReport = selectedDateReport;
-    //   });
-    // },
   },
   methods: {
     updateReport() {},
