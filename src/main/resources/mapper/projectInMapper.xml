@@ -63,19 +63,21 @@
     <update id="updateLeader" parameterType="com.example.demo.domain.ProjectInVO">
         update tbl_project_in set
          email = #{email},
-         authority = 'ROLE_ADMIN',
          prj_in_d8 = #{prj_in_d8},
          prj_out_d8 = #{prj_out_d8}
-        where prj_no = #{prj_no}
+        where prj_no = #{prj_no} and authority = 'ROLE_ADMIN'
     </update>
     <update id="updateFollower" parameterType="java.util.List">
         <foreach collection="list" item="pINvo" index="index" separator=";" open="DECLARE BEGIN" close="; END;">
             update tbl_project_in
-            set email = ${email},
+            set email = #{email},
             authority = 'ROLE_USER',
             prj_in_d8 = #{prj_in_d8},
             prj_out_d8 = #{prj_out_d8}
             where prj_no = #{prj_no}
         </foreach>
     </update>
+    <delete id="deleteFollower" parameterType="Integer">
+        delete from tbl_project_in where prj_no = #{num} and authority = 'ROLE_USER'
+    </delete>
 </mapper>

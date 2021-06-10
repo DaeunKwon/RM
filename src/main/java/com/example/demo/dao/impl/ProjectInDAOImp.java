@@ -59,8 +59,9 @@ public class ProjectInDAOImp implements ProjectInDAO {
     }
 
     @Override
-    public void updateFollower(List<ProjectInVO> projectInList) {
-        sql.update(ns + ".updateFollower", projectInList);
+    public void updateFollower(List<ProjectInVO> projectInList, int num) {
+        sql.delete(ns + ".deleteFollower", num);
+        sql.insert(ns + ".addFollower", projectInList);
     }
 
 }

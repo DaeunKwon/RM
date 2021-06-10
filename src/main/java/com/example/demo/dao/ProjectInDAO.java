@@ -19,6 +19,6 @@ public interface ProjectInDAO {
 
     public void updateLeader(ProjectInVO pINvo);
 
-    public void updateFollower(List<ProjectInVO> projectInList);
+    public void updateFollower(List<ProjectInVO> projectInList, int num);
 
 }

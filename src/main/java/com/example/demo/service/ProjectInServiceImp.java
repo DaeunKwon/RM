@@ -38,9 +38,9 @@ public class ProjectInServiceImp implements ProjectInService {
     }
 
     @Override
-    public void addFollower(List<ProjectInVO> projectInList, int flag) {
+    public void addFollower(List<ProjectInVO> projectInList, int flag, int num) {
         if (flag > 0) {
-            pINdao.updateFollower(projectInList);
+            pINdao.updateFollower(projectInList, num);
         } else {
             pINdao.addFollower(projectInList);
         }

@@ -12,7 +12,7 @@ public interface ProjectInService {
 
     public ProjectInVO getLeaderInfo(int prj_no);
 
-    public void addFollower(List<ProjectInVO> projectInList, int flag);
+    public void addFollower(List<ProjectInVO> projectInList, int flag, int num);
 
     public List<ProjectInVO> getFollowerInfo(int prj_no);
 

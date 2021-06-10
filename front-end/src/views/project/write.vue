@@ -4,7 +4,7 @@
     <v-container>
       <v-flex md6 offset-md3>
         <br />
-        <h5>프로젝트 등록</h5>
+        <h5>프로젝트 {{ $route.params.flag == 0 ? "등록" : "수정" }}</h5>
         <br />
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
@@ -38,7 +38,7 @@
             required
             outlined
           ></v-select>
-
+          <v-row> {{ start_date }}</v-row>
           <v-row>
             <v-col cols="12" lg="6">
               <v-menu
@@ -139,6 +139,7 @@
             </v-col>
           </v-row>
 
+          <v-row>{{ leader }} {{ $route.params.leader }}</v-row>
           <v-select
             v-if="$route.params.flag == 1"
             v-model="$route.params.leader.email"
@@ -150,7 +151,6 @@
             label="팀장"
             required
             persistent-hint
-            return-object
           ></v-select>
           <v-select
             v-else-if="$route.params.flag == 0"
@@ -343,7 +343,7 @@
             </v-row>
           </div>
 
-          <div v-else-if="$route.params.flag == 0">
+          <div v-else>
             <v-row v-for="(input, k) in inputs" :key="k">
               <v-col cols="12">
                 <v-select
@@ -492,7 +492,9 @@
           ></v-textarea>
 
           <br />
-          <v-btn color="primary" class="mr-4" @click="prjWrite()"> 저장 </v-btn>
+          <v-btn color="primary" class="mr-4" @click="prjWrite()">
+            {{ $route.params.flag == 0 ? "저장" : "수정" }}
+          </v-btn>
           <v-btn color="success" @click="main"> 목록 </v-btn>
         </v-form>
       </v-flex>
@@ -596,6 +598,7 @@ export default {
           leader.append("prj_in_d8", this.lead_in_date);
           leader.append("prj_out_d8", this.lead_out_date);
           leader.append("prj_no", res.data);
+          leader.append("flag", this.$route.params.flag);
 
           this.$axios.post("/api/project/in/leader", leader);
 
@@ -605,6 +608,7 @@ export default {
             follower.append("prj_in_d8", this.inputs[i].in_date);
             follower.append("prj_out_d8", this.inputs[i].out_date);
             follower.append("prj_no", res.data);
+            follower.append("flag", this.$route.params.flag);
           }
           // console.log(follower.getAll("email"));
 
@@ -615,44 +619,129 @@ export default {
         });
       } else {
         console.log("수정");
-        const project = new FormData();
-        project.append("prj_no", this.$route.params.project.prj_no);
-        project.append("title", this.title);
-        project.append("cond", this.cond);
-        project.append("start_date", this.start_date);
-        project.append("end_date", this.end_date);
-        project.append("mod_writer", this.$store.getters.getCurrentUser.email);
-        project.append("content", this.content);
-        project.append("remark", this.remark);
+        // const project = new FormData();
+        // project.append("prj_no", this.$route.params.project.prj_no);
+        // console.log(this.title);
+        // switch (true) {
+        //   case this.title == "":
+        //     project.append("prj_title", this.$route.params.project.prj_title);
+        //   case this.title !== "":
+        //     project.append("prj_title", this.title);
 
-        this.$axios.post("/api/project/update", project).then((res) => {
-          console.log("프로젝트 수정");
-        });
+        //   case this.cond == "":
+        //     project.append("cond", this.$route.params.project.cond);
+        //   case this.cond !== "":
+        //     project.append("cond", this.cond);
+
+        //   case this.content == "":
+        //     project.append("content", this.$route.params.project.prj_content);
+        //   case this.content !== "":
+        //     project.append("content", this.content);
+
+        //   case this.remark == "":
+        //     project.append("remark", this.$route.params.project.prj_remark);
+        //   case this.remark !== "":
+        //     project.append("remark", this.remark);
+        // }
+        // switch (true) {
+        //   case this.start_date == "":
+        //     project.append(
+        //       "start_date",
+        //       this.$moment(this.$route.params.project.start_d8).format(
+        //         "YYYY-MM-DD"
+        //       )
+        //     );
+        //     break;
+        //   case this.start_date !== "":
+        //     project.append("start_date", this.start_date);
+        // }
+
+        // switch (true) {
+        //   case this.end_date == "":
+        //     project.append(
+        //       "end_date",
+        //       this.$moment(this.$route.params.project.end_d8).format(
+        //         "YYYY-MM-DD"
+        //       )
+        //     );
+        //     break;
+        //   case this.end_date !== "":
+        //     project.append(
+        //       "end_date",
+        //       this.$moment(this.end_date).format("YYYY-MM-DD")
+        //     );
+        // }
+
+        // project.append("mod_writer", this.$store.getters.getCurrentUser.email);
+
+        // this.$axios.post("/api/project/update", project).then((res) => {
+        //   console.log("프로젝트 수정");
+        // });
 
         // const leader = new FormData();
-        // leader.append("email", this.leader.email);
-        // leader.append("prj_in_d8", this.lead_in_date);
-        // leader.append("prj_out_d8", this.lead_out_date);
-        // leader.append("prj_no", this.$route.params.project.prj_no);
-
-        // this.$axios.post("/api/project/in/leader", leader).then((res) => {
-        //   console.log("팀장 수정");
-        // });
-
-        // const follower = new FormData();
-        // for (let i = 0; i < this.inputs.length; i++) {
-        //   follower.append("email", this.inputs[i].email);
-        //   follower.append("prj_in_d8", this.inputs[i].prj_in_d8);
-        //   follower.append("prj_out_d8", this.inputs[i].prj_out_d8);
-        //   follower.append("prj_no", this.$route.params.project.prj_no);
+        // switch (true) {
+        //   case this.lead_in_date == "":
+        //     leader.append(
+        //       "prj_in_d8",
+        //       this.$moment(this.$route.params.leader.prj_in_d8).format(
+        //         "YYYY-MM-DD"
+        //       )
+        //     );
+        //     break;
+        //   case this.lead_in_date !== "":
+        //     leader.append(
+        //       "prj_in_d8",
+        //       this.$moment(this.lead_in_date).format("YYYY-MM-DD")
+        //     );
         // }
-        // // console.log(follower.getAll("email"));
+        // switch (true) {
+        //   case this.lead_out_date == "":
+        //     leader.append(
+        //       "prj_out_d8",
+        //       this.$moment(this.$route.params.leader.prj_out_d8).format(
+        //         "YYYY-MM-DD"
+        //       )
+        //     );
+        //     break;
+        //   case this.lead_out_date !== "":
+        //     leader.append(
+        //       "prj_out_d8",
+        //       this.$moment(this.lead_out_date).format("YYYY-MM-DD")
+        //     );
+        // }
+        // leader.append("email", this.$route.params.leader.email);
+        // leader.append("prj_no", this.$route.params.project.prj_no);
+        // leader.append("flag", this.$route.params.flag);
 
-        // this.$axios.post("/api/project/in/follower", follower).then((res) => {
-        //   console.log("팀원 수정");
-        //   // alert("프로젝트 수정 성공");
-        //   // this.$router.push("/main");
-        // });
+        // this.$axios
+        //   .post("/api/project/in/update/leader", leader)
+        //   .then((res) => {
+        //     console.log("팀장 수정");
+        //   });
+
+        const follower = new FormData();
+        for (let i = 0; i < this.inputs.length; i++) {
+          if (typeof this.inputs[i].email === "object") {
+            follower.append("email", this.inputs[i].email.email);
+          } else {
+            follower.append("email", this.inputs[i].email);
+          }
+          follower.append("prj_in_d8", this.inputs[i].prj_in_d8);
+          follower.append("prj_out_d8", this.inputs[i].prj_out_d8);
+          follower.append("prj_no", this.$route.params.project.prj_no);
+        }
+        follower.append("flag", this.$route.params.flag);
+        // console.log(follower.getAll("email"));
+        console.log(this.inputs[0].email);
+        console.log(typeof this.inputs[1].email);
+
+        this.$axios
+          .post("/api/project/in/update/follower", follower)
+          .then((res) => {
+            console.log("팀원 수정");
+            // alert("프로젝트 수정 성공");
+            // this.$router.push("/main");
+          });
       }
     },
     add(k) {
@@ -672,9 +761,8 @@ export default {
     },
     saveCalendarDate() {
       this.openCalendarFlag = false;
-      this.openCalendarValues[this.openCalendarIndex][
-        this.openCalendarType
-      ] = this.openCalendarDate;
+      this.openCalendarValues[this.openCalendarIndex][this.openCalendarType] =
+        this.openCalendarDate;
     },
   },
 };

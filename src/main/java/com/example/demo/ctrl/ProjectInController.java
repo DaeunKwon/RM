@@ -37,6 +37,12 @@ public class ProjectInController {
     public void write(HttpServletRequest req) throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         ProjectInVO pINvo = new ProjectInVO();
+        // log.info(">>>>>>>>>>" + req.getParameter("email"));
+        // log.info(">>>>>>>>>>" + req.getParameter("prj_in_d8"));
+        // log.info(">>>>>>>>>>" + req.getParameter("prj_out_d8"));
+        // log.info(">>>>>>>>>>" + req.getParameter("prj_no"));
+        // log.info(">>>>>>>>>>" + req.getParameter("flag"));
+
         pINvo.setEmail(req.getParameter("email"));
         pINvo.setPrj_in_d8(df.parse(req.getParameter("prj_in_d8")));
         pINvo.setPrj_out_d8(df.parse(req.getParameter("prj_out_d8")));
@@ -65,7 +71,13 @@ public class ProjectInController {
             pINvo.setPrj_no(Integer.parseInt(prj_no[i]));
             projectInList.add(pINvo);
         }
-        projectINService.addFollower(projectInList, flag);
+        int num = Integer.parseInt(prj_no[0]);
+        for (ProjectInVO pvo : projectInList) {
+            log.info(">>>>>>>>pinvo:" + pvo);
+            log.info(">>>>>>>>>>>>>>>" + pvo.getEmail());
+        }
+        log.info(">>>>>> flag:" + flag);
+        projectINService.addFollower(projectInList, flag, num);
     }
 
     @GetMapping(value = "/leader/list")

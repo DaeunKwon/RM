@@ -80,12 +80,18 @@ public class ProjectCtrl {
     @ResponseBody
     @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
     public void updateProject(HttpServletRequest req) throws ParseException {
-        log.info(">>>>>>>>> update project controller");
-        log.info("start_date" + req.getParameter("start_date"));
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+        log.info(">>>>>>>>> update project controller");
+        log.info("project title" + req.getParameter("prj_title"));
+        // log.info("project title" + req.getParameter("cond"));
+        // log.info("project title" + req.getParameter("start_date"));
+        // log.info("project title" + req.getParameter("end_date"));
+        // log.info("project title" + req.getParameter("content"));
+        // log.info("project title" + req.getParameter("remark"));
         ProjectVO pvo = new ProjectVO();
         pvo.setPrj_no(Integer.parseInt(req.getParameter("prj_no")));
-        pvo.setPrj_title(req.getParameter("title"));
+        pvo.setPrj_title(req.getParameter("prj_title"));
         pvo.setCond(req.getParameter("cond"));
         pvo.setStart_d8(df.parse(req.getParameter("start_date")));
         pvo.setEnd_d8(df.parse(req.getParameter("end_date")));
