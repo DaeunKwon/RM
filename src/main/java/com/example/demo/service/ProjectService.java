@@ -13,7 +13,7 @@ public interface ProjectService {
 
     public List<ProjectVO> getProjectList(String email, String authority);
 
-    public List<ProjectVO> getDoneProjectList(String email);
+    public List<ProjectVO> getDoneProjectList(String email, String authority);
 
     public void deleteProject(int prj_no);
 

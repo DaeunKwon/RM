@@ -67,7 +67,8 @@ public class ProjectCtrl {
     public List<ProjectVO> getDoneProjectlist(HttpServletRequest req) {
         log.info(">>>>>>project list get");
         String email = req.getParameter("email");
-        return projectService.getDoneProjectList(email);
+        String authority = req.getParameter("authority");
+        return projectService.getDoneProjectList(email, authority);
 
     }
 

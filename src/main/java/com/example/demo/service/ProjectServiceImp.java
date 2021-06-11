@@ -41,8 +41,8 @@ public class ProjectServiceImp implements ProjectService {
     }
 
     @Override
-    public List<ProjectVO> getDoneProjectList(String email) {
-        return pdao.getDoneProjectList(email);
+    public List<ProjectVO> getDoneProjectList(String email, String authority) {
+        return pdao.getDoneProjectList(email, authority);
     }
 
     @Override

@@ -51,8 +51,12 @@ public class ProjectDAOImp implements ProjectDAO {
     }
 
     @Override
-    public List<ProjectVO> getDoneProjectList(String email) {
-        return sql.selectList(ns + ".getDoneProjectList", email);
+    public List<ProjectVO> getDoneProjectList(String email, String authority) {
+        if (authority.equals("ROLE_ROOT")) {
+            return sql.selectList(ns + ".getAllDoneProjectList");
+        } else {
+            return sql.selectList(ns + ".getDoneProjectList", email);
+        }
     }
 
     @Override
