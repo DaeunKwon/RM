@@ -1,4 +1,5 @@
 export default {
     currentUser: {},
-    userProjectInfo: [],
+    userProject: [],
+    userINProject: [],
 }

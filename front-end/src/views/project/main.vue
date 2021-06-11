@@ -498,8 +498,8 @@ export default {
           })
           .then((res) => {
             console.log(res.data);
-            this.$store.commit("setUserProjectInfo", res.data);
-            console.log(this.$store.getters.getUserProjectInfo.prj_no);
+            // this.$store.commit("setUserProjectInfo", res.data);
+            // console.log(this.$store.getters.getUserProjectInfo.prj_no);
           });
 
         //projectList 안에 프로젝트 번호에 해당되는 권한도 가져옴
@@ -513,6 +513,23 @@ export default {
           .then((res) => {
             this.projectList = res.data;
             console.log(this.projectList);
+            // for (let i = 0; i < this.projectList.length; i++) {
+            //   console.log(
+            //     this.projectList[i].prj_no,
+            //     this.projectList[i].authority
+            //   );
+            // }
+            // this.$store.commit("setProject", this.projectList);
+            for (let i = 0; i < this.projectList.length; i++) {
+              this.$store.commit("setProjectINinfo", {
+                prj_no: this.projectList[i].prj_no,
+                authority: this.projectList[i].authority,
+              });
+            }
+            console.log(this.$store.state.userINProject);
+            // for (let i = 0; i < this.$store.state.userProject.length; i++) {
+            //   console.log(this.$store.state.userProject[i].prj_no);
+            // }
             return this.projectList;
           })
           .catch((e) => {

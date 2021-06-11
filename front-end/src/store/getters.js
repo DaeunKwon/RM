@@ -4,7 +4,10 @@ export default {
     getCurrentUser(state) {
         return state.currentUser;
     },
-    getUserProjectInfo(state) {
-        return state.userProjectInfo;
+    getProjectINInfo(state) {
+        state => state.userINProject;
+    },
+    getProjectInfo(state) {
+        state => state.userProject;
     }
 }
