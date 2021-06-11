@@ -11,7 +11,7 @@ public interface ProjectService {
 
     public void remove(ProjectVO pvo);
 
-    public List<ProjectVO> getProjectList(String email);
+    public List<ProjectVO> getProjectList(String email, String authority);
 
     public List<ProjectVO> getDoneProjectList(String email);
 

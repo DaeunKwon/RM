@@ -14,6 +14,11 @@
         <div>
           <v-sheet class="mx-auto" elevation="8" max-width="1000"
             ><br />진행중인 프로젝트
+            <div v-if="!projectList">
+              <br /><br /><br />
+              <h5>No project</h5>
+              <br /><br /><br />
+            </div>
             <v-slide-group
               v-model="ingModel"
               class="pa-4"
@@ -68,8 +73,10 @@
         <div class="mt-12">
           <v-sheet class="mx-auto" elevation="8" max-width="1000"
             ><br />완료된 프로젝트
-            <div v-if="this.doneProjectList == null">
-              <h5>{{ message }}</h5>
+            <div v-if="doneProjectList.length">
+              <br /><br /><br />
+              <h5>No project</h5>
+              <br /><br /><br />
             </div>
             <v-slide-group
               v-model="doneModel"
@@ -465,6 +472,7 @@ export default {
         this.$store.commit("setCurrentUser", res.data);
         console.log(this.$store.getters.getCurrentUser);
         console.log(this.$store.getters.getCurrentUser.email);
+        console.log(this.$store.getters.getCurrentUser.authority);
 
         this.$axios
           .get("/api/project/in/info", {
@@ -479,7 +487,10 @@ export default {
         //projectList 안에 프로젝트 번호에 해당되는 권한도 가져옴
         this.$axios
           .get("/api/project/main", {
-            params: { email: this.$store.getters.getCurrentUser.email },
+            params: {
+              email: this.$store.getters.getCurrentUser.email,
+              authority: this.$store.getters.getCurrentUser.authority,
+            },
           })
           .then((res) => {
             this.projectList = res.data;

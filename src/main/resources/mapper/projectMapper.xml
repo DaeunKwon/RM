@@ -39,6 +39,11 @@
         AND rmv_YN in ('N')
         AND tpi.EMAIL in (#{email})
     </select>
+    <select id="getAllProjectList" resultType="com.example.demo.domain.ProjectVO">
+        select * from tbl_project
+        where cond IN ('예정', '진행중')
+        AND rmv_YN in ('N') 
+    </select>
     <select id="getDoneProjectList" parameterType="java.lang.String" resultType="com.example.demo.domain.ProjectVO">
         SELECT tp.*, tpi.authority
         FROM TBL_PROJECT tp
