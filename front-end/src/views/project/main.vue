@@ -476,6 +476,7 @@ export default {
             console.log(this.$store.getters.getUserProjectInfo.prj_no);
           });
 
+        //projectList 안에 프로젝트 번호에 해당되는 권한도 가져옴
         this.$axios
           .get("/api/project/main", {
             params: { email: this.$store.getters.getCurrentUser.email },
@@ -567,8 +568,8 @@ export default {
       //로그인한 유저의 프로젝트 참여 번호도 보내야 함
       const report = new FormData();
       report.append("prj_no", this.selectedProject.prj_no);
-      report.append("rpt_writer", this.$store.getters.getCurrentUser);
-      report.append("rpt_mod_writer", this.$store.getters.getCurrentUser);
+      report.append("rpt_writer", this.selectedProject.prj_in_no);
+      report.append("rpt_mod_writer", this.selectedProject.prj_in_no);
 
       this.$axios.post("/api/report/write", report).then((res) => {
         console.log(res.data);
@@ -590,6 +591,8 @@ export default {
           .post("/api/report/write/detail", reportDetail)
           .then((res) => {
             alert("업무 일지 등록 성공");
+            this.reportDialog = false;
+            this.$route.push("/rptList");
           });
       });
     },

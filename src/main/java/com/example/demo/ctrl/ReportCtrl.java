@@ -7,8 +7,6 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.http.MediaType;
-
 import com.example.demo.domain.ReportDetailVO;
 import com.example.demo.domain.ReportVO;
 import com.example.demo.service.ReportService;
@@ -16,13 +14,9 @@ import com.example.demo.service.ReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,8 +50,8 @@ public class ReportCtrl {
         log.info(">>>>>> add report post");
         ReportVO rvo = new ReportVO();
         rvo.setPrj_no(Integer.parseInt(req.getParameter("prj_no")));
-        rvo.setRpt_writer(req.getParameter("rpt_writer"));
-        rvo.setRpt_mod_writer(req.getParameter("rpt_mod_writer"));
+        rvo.setRpt_writer(Integer.parseInt(req.getParameter("rpt_writer")));
+        rvo.setRpt_mod_writer(Integer.parseInt(req.getParameter("rpt_mod_writer")));
         reportService.write(rvo);
         return rvo.getRpt_no();
     }

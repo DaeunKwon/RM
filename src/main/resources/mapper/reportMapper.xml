@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.report">
 	<insert id="write" parameterType="com.example.demo.domain.ReportVO">
-		insert into tbl_report values (tbl_report_seq.nextval, #{prj_no}, 'N', sysdate, 28, sysdate, 28)
+		insert into tbl_report values (tbl_report_seq.nextval, #{prj_no}, 'N', sysdate, #{rpt_writer}, sysdate, #{rpt_mod_writer})
 		<selectKey keyProperty="rpt_no" resultType="Integer" order="AFTER"> SELECT tbl_report_seq.currval FROM dual </selectKey>
 	</insert>
 	<select id="list" resultType="com.example.demo.domain.ReportVO">

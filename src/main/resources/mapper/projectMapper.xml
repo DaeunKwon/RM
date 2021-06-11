@@ -31,7 +31,7 @@
         <selectKey keyProperty="prj_no" resultType="Integer" order="AFTER"> SELECT tbl_project_seq.currval FROM dual </selectKey>
     </insert>
     <select id="getProjectList" parameterType="java.lang.String" resultType="com.example.demo.domain.ProjectVO">
-        SELECT tp.*, tpi.authority
+        SELECT tp.*, tpi.authority, tpi.prj_in_no
         FROM TBL_PROJECT tp
         JOIN TBL_PROJECT_IN tpi
         ON tp.PRJ_NO = tpi.PRJ_NO
