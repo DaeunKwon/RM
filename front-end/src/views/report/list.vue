@@ -3,7 +3,10 @@
     <Header />
     <v-container
       ><br />
-      <div>업무 일지 목록</div>
+      <div>
+        업무 일지 목록 {{ this.$store.state.userINProject }}
+        {{ this.$store.getters.getProjectINInfo }}
+      </div>
       <div align="right">
         <v-btn color="primary" class="mr-2" @click="rptList"> 주간 </v-btn>
         <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
