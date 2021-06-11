@@ -5,7 +5,12 @@
       <br />
       <div>프로젝트 목록</div>
       <div align="right">
-        <button type="submit" class="btn btn-warning" @click="prjWrite">
+        <button
+          type="submit"
+          class="btn btn-warning"
+          @click="prjWrite"
+          v-if="$store.getters.getCurrentUser.authority == 'ROLE_ROOT'"
+        >
           작성
         </button>
       </div>
@@ -35,7 +40,13 @@
                 <v-card color="green" class="ma-4" height="200" width="200">
                   <v-card-title
                     >{{ project.prj_title }} <v-spacer></v-spacer>
-                    <v-btn icon @click="openDeleteDialog(project)">
+                    <v-btn
+                      icon
+                      @click="openDeleteDialog(project)"
+                      v-if="
+                        $store.getters.getCurrentUser.authority == 'ROLE_ROOT'
+                      "
+                    >
                       <v-icon>mdi-delete-outline</v-icon></v-btn
                     ></v-card-title
                   >
@@ -73,7 +84,7 @@
         <div class="mt-12">
           <v-sheet class="mx-auto" elevation="8" max-width="1000"
             ><br />완료된 프로젝트
-            <div v-if="doneProjectList.length">
+            <div v-if="!doneProjectList">
               <br /><br /><br />
               <h5>No project</h5>
               <br /><br /><br />
@@ -96,7 +107,13 @@
                 >
                   <v-card-title
                     >{{ project.prj_title }}<v-spacer></v-spacer>
-                    <v-btn icon @click="openDeleteDialog(project)">
+                    <v-btn
+                      icon
+                      @click="openDeleteDialog(project)"
+                      v-if="
+                        $store.getters.getCurrentUser.authority == 'ROLE_ROOT'
+                      "
+                    >
                       <v-icon>mdi-delete-outline</v-icon></v-btn
                     ></v-card-title
                   >
@@ -503,7 +520,10 @@ export default {
 
         this.$axios
           .get("/api/project/main/done", {
-            params: { email: this.$store.getters.getCurrentUser.email },
+            params: {
+              email: this.$store.getters.getCurrentUser.email,
+              authority: this.$store.getters.getCurrentUser.authority,
+            },
           })
           .then((res) => {
             console.log(res.data);
