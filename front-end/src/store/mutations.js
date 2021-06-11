@@ -10,7 +10,6 @@ export default {
     },
 
     setProjectINinfo: function (state, payload) {
-        //새로고침 할때마다 push -> 초기화 필요
-        state.userINProject.push(payload)
+        state.userINProject = payload
     }
 }

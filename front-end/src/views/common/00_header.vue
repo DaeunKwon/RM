@@ -57,7 +57,7 @@ export default {
         this.$axios.post("http://localhost:8090/logout").then((res) => {
           alert("logout");
           //로그아웃시 프로젝트 참여 정보 초기화
-          this.$store.commit("setProjectINinfo", null);
+          //this.$store.commit("setProjectINinfo", null);
           this.$router.push("/");
         });
       }

@@ -520,12 +520,18 @@ export default {
             //   );
             // }
             // this.$store.commit("setProject", this.projectList);
+            const userINProject = [];
             for (let i = 0; i < this.projectList.length; i++) {
-              this.$store.commit("setProjectINinfo", {
+              userINProject.push({
                 prj_no: this.projectList[i].prj_no,
                 authority: this.projectList[i].authority,
               });
+              // this.$store.commit("setProjectINinfo", {
+              //   prj_no: this.projectList[i].prj_no,
+              //   authority: this.projectList[i].authority,
+              // });
             }
+            this.$store.commit("setProjectINinfo", userINProject);
             console.log(this.$store.state.userINProject);
             // for (let i = 0; i < this.$store.state.userProject.length; i++) {
             //   console.log(this.$store.state.userProject[i].prj_no);
