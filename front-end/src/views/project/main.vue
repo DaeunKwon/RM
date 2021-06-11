@@ -419,6 +419,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
+                v-if="selectedProject.authority !== 'ROLE_USER'"
                 color="blue darken-1"
                 text
                 @click="
