@@ -619,105 +619,105 @@ export default {
         });
       } else {
         console.log("수정");
-        // const project = new FormData();
-        // project.append("prj_no", this.$route.params.project.prj_no);
-        // console.log(this.title);
-        // switch (true) {
-        //   case this.title == "":
-        //     project.append("prj_title", this.$route.params.project.prj_title);
-        //   case this.title !== "":
-        //     project.append("prj_title", this.title);
+        const project = new FormData();
+        project.append("prj_no", this.$route.params.project.prj_no);
+        console.log(this.title);
+        switch (true) {
+          case this.title == "":
+            project.append("prj_title", this.$route.params.project.prj_title);
+          case this.title !== "":
+            project.append("prj_title", this.title);
 
-        //   case this.cond == "":
-        //     project.append("cond", this.$route.params.project.cond);
-        //   case this.cond !== "":
-        //     project.append("cond", this.cond);
+          case this.cond == "":
+            project.append("cond", this.$route.params.project.cond);
+          case this.cond !== "":
+            project.append("cond", this.cond);
 
-        //   case this.content == "":
-        //     project.append("content", this.$route.params.project.prj_content);
-        //   case this.content !== "":
-        //     project.append("content", this.content);
+          case this.content == "":
+            project.append("content", this.$route.params.project.prj_content);
+          case this.content !== "":
+            project.append("content", this.content);
 
-        //   case this.remark == "":
-        //     project.append("remark", this.$route.params.project.prj_remark);
-        //   case this.remark !== "":
-        //     project.append("remark", this.remark);
-        // }
-        // switch (true) {
-        //   case this.start_date == "":
-        //     project.append(
-        //       "start_date",
-        //       this.$moment(this.$route.params.project.start_d8).format(
-        //         "YYYY-MM-DD"
-        //       )
-        //     );
-        //     break;
-        //   case this.start_date !== "":
-        //     project.append("start_date", this.start_date);
-        // }
+          case this.remark == "":
+            project.append("remark", this.$route.params.project.prj_remark);
+          case this.remark !== "":
+            project.append("remark", this.remark);
+        }
+        switch (true) {
+          case this.start_date == "":
+            project.append(
+              "start_date",
+              this.$moment(this.$route.params.project.start_d8).format(
+                "YYYY-MM-DD"
+              )
+            );
+            break;
+          case this.start_date !== "":
+            project.append("start_date", this.start_date);
+        }
 
-        // switch (true) {
-        //   case this.end_date == "":
-        //     project.append(
-        //       "end_date",
-        //       this.$moment(this.$route.params.project.end_d8).format(
-        //         "YYYY-MM-DD"
-        //       )
-        //     );
-        //     break;
-        //   case this.end_date !== "":
-        //     project.append(
-        //       "end_date",
-        //       this.$moment(this.end_date).format("YYYY-MM-DD")
-        //     );
-        // }
+        switch (true) {
+          case this.end_date == "":
+            project.append(
+              "end_date",
+              this.$moment(this.$route.params.project.end_d8).format(
+                "YYYY-MM-DD"
+              )
+            );
+            break;
+          case this.end_date !== "":
+            project.append(
+              "end_date",
+              this.$moment(this.end_date).format("YYYY-MM-DD")
+            );
+        }
 
-        // project.append("mod_writer", this.$store.getters.getCurrentUser.email);
+        project.append("mod_writer", this.$store.getters.getCurrentUser.email);
 
-        // this.$axios.post("/api/project/update", project).then((res) => {
-        //   console.log("프로젝트 수정");
-        // });
+        this.$axios.post("/api/project/update", project).then((res) => {
+          console.log("프로젝트 수정");
+        });
 
-        // const leader = new FormData();
-        // switch (true) {
-        //   case this.lead_in_date == "":
-        //     leader.append(
-        //       "prj_in_d8",
-        //       this.$moment(this.$route.params.leader.prj_in_d8).format(
-        //         "YYYY-MM-DD"
-        //       )
-        //     );
-        //     break;
-        //   case this.lead_in_date !== "":
-        //     leader.append(
-        //       "prj_in_d8",
-        //       this.$moment(this.lead_in_date).format("YYYY-MM-DD")
-        //     );
-        // }
-        // switch (true) {
-        //   case this.lead_out_date == "":
-        //     leader.append(
-        //       "prj_out_d8",
-        //       this.$moment(this.$route.params.leader.prj_out_d8).format(
-        //         "YYYY-MM-DD"
-        //       )
-        //     );
-        //     break;
-        //   case this.lead_out_date !== "":
-        //     leader.append(
-        //       "prj_out_d8",
-        //       this.$moment(this.lead_out_date).format("YYYY-MM-DD")
-        //     );
-        // }
-        // leader.append("email", this.$route.params.leader.email);
-        // leader.append("prj_no", this.$route.params.project.prj_no);
-        // leader.append("flag", this.$route.params.flag);
+        const leader = new FormData();
+        switch (true) {
+          case this.lead_in_date == "":
+            leader.append(
+              "prj_in_d8",
+              this.$moment(this.$route.params.leader.prj_in_d8).format(
+                "YYYY-MM-DD"
+              )
+            );
+            break;
+          case this.lead_in_date !== "":
+            leader.append(
+              "prj_in_d8",
+              this.$moment(this.lead_in_date).format("YYYY-MM-DD")
+            );
+        }
+        switch (true) {
+          case this.lead_out_date == "":
+            leader.append(
+              "prj_out_d8",
+              this.$moment(this.$route.params.leader.prj_out_d8).format(
+                "YYYY-MM-DD"
+              )
+            );
+            break;
+          case this.lead_out_date !== "":
+            leader.append(
+              "prj_out_d8",
+              this.$moment(this.lead_out_date).format("YYYY-MM-DD")
+            );
+        }
+        leader.append("email", this.$route.params.leader.email);
+        leader.append("prj_no", this.$route.params.project.prj_no);
+        leader.append("flag", this.$route.params.flag);
 
-        // this.$axios
-        //   .post("/api/project/in/update/leader", leader)
-        //   .then((res) => {
-        //     console.log("팀장 수정");
-        //   });
+        this.$axios
+          .post("/api/project/in/update/leader", leader)
+          .then((res) => {
+            console.log("팀장 수정");
+          });
 
         const follower = new FormData();
         for (let i = 0; i < this.inputs.length; i++) {
@@ -732,15 +732,15 @@ export default {
         }
         follower.append("flag", this.$route.params.flag);
         // console.log(follower.getAll("email"));
-        console.log(this.inputs[0].email);
-        console.log(typeof this.inputs[1].email);
+        // console.log(this.inputs[0].email);
+        // console.log(typeof this.inputs[1].email);
 
         this.$axios
           .post("/api/project/in/update/follower", follower)
           .then((res) => {
             console.log("팀원 수정");
-            // alert("프로젝트 수정 성공");
-            // this.$router.push("/main");
+            alert("프로젝트 수정 성공");
+            this.$router.push("/main");
           });
       }
     },
