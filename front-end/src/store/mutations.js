@@ -11,5 +11,9 @@ export default {
 
     setProjectINinfo: function (state, payload) {
         state.userINProject = payload
+    },
+
+    setReport: function (state, payload) {
+        state.userReport = payload
     }
 }

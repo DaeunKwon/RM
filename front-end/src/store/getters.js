@@ -5,9 +5,12 @@ export default {
         return state.currentUser;
     },
     getProjectINInfo(state) {
-        state => state.userINProject;
+        return state.userINProject;
     },
     getProjectInfo(state) {
         state => state.userProject;
+    },
+    getUserReport(state) {
+        return state.userReport;
     }
 }
