@@ -523,6 +523,7 @@ export default {
             const userINProject = [];
             for (let i = 0; i < this.projectList.length; i++) {
               userINProject.push({
+                prj_in_no: this.projectList[i].prj_in_no,
                 prj_no: this.projectList[i].prj_no,
                 authority: this.projectList[i].authority,
               });
@@ -647,7 +648,7 @@ export default {
           .then((res) => {
             alert("업무 일지 등록 성공");
             this.reportDialog = false;
-            this.$route.push("/rptList");
+            this.$router.push("/rptList");
           });
       });
     },
