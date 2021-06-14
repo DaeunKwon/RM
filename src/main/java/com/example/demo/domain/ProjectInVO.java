@@ -3,8 +3,12 @@ package com.example.demo.domain;
 import java.util.Date;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
+@Getter
+@Setter
 public class ProjectInVO {
     private int prj_in_no;
     private String email;

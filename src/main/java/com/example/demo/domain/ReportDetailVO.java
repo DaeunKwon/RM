@@ -15,5 +15,6 @@ public class ReportDetailVO {
     private Date rpt_start_time;
     private Date rpt_end_time;
     private String rpt_content;
+    private String name;
 
 }

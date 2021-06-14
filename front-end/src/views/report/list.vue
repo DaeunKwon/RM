@@ -17,23 +17,37 @@
         <v-row>
           <v-col cols="6" md="3">
             <v-card
-              class="pa-2"
+              class="pa-2 scroll"
               outlined
               tile
               elevation="1"
-              height="400"
+              height="680"
               width="400"
             >
-              {{ selectedDate }}<br />
-              <br />
+              <v-app-bar light color="white" flat>
+                <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
+
+                <v-toolbar-title alight="center">{{
+                  selectedDate
+                }}</v-toolbar-title>
+
+                <!-- <v-spacer></v-spacer> -->
+
+                <!-- <v-btn icon>
+                  <v-icon>mdi-magnify</v-icon>
+                </v-btn> -->
+              </v-app-bar>
+
               <div
                 v-for="reportDetail in selectedDateReport"
                 :key="reportDetail.id"
               >
-                <v-card color="light grey">
+                <v-card color="white">
                   <v-card-title>
-                    {{ reportDetail.rpt_content }}
+                    {{ reportDetail.name }}
                   </v-card-title>
+                  {{ reportDetail.rpt_start_time }} ~
+                  {{ reportDetail.rpt_end_time }}
                 </v-card>
                 <br />
               </div>
@@ -136,10 +150,12 @@
                     </v-btn>
                   </v-toolbar>
                   <v-card-text>
-                    <span v-html="selectedEvent.start"></span><br />
-                    <span v-html="selectedEvent.end"></span>
+                    <span v-html="selectedEvent.start"></span>
+                    ~ <span v-html="selectedEvent.end"></span><br /><br />
+                    <span v-html="selectedEvent.content"></span>
                   </v-card-text>
                   <v-card-actions>
+                    <v-spacer></v-spacer>
                     <v-btn text color="secondary" @click="selectedOpen = false">
                       Cancel
                     </v-btn>
@@ -306,6 +322,20 @@ export default {
   },
   data() {
     return {
+      items: [
+        {
+          color: "#1F7087",
+          src: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
+          title: "Supermodel",
+          artist: "Foster the People",
+        },
+        {
+          color: "#952175",
+          src: "https://cdn.vuetifyjs.com/images/cards/halcyon.png",
+          title: "Halcyon Days",
+          artist: "Ellie Goulding",
+        },
+      ],
       startModel: false,
       endModel: false,
       updateDialog: false,
@@ -342,23 +372,23 @@ export default {
     };
   },
   mounted() {
-    this.getReportList;
+    // this.getReportList;
     this.getToday();
     //this.getReportDetailList;
   },
   computed: {
-    getReportList() {
-      this.$axios
-        .get("/api/report/list")
-        .then((res) => {
-          this.reportList = res.data;
-          console.log(this.reportList);
-          return this.reportList;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
+    // getReportList() {
+    //   this.$axios
+    //     .get("/api/report/list")
+    //     .then((res) => {
+    //       this.reportList = res.data;
+    //       console.log(this.reportList);
+    //       return this.reportList;
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //     });
+    // },
   },
   methods: {
     updateReport() {},
@@ -367,26 +397,121 @@ export default {
       this.selectedReportDetail = reportDetail;
     },
     getEvents() {
-      const events = [];
-      this.$axios.get("/api/report/detail/list").then((res) => {
-        const reportDetailList = res.data;
-        for (let i = 0; i < reportDetailList.length; i++) {
-          const startTime = this.$moment(
-            reportDetailList[i].rpt_start_time
-          ).format("YYYY-MM-DD HH:mm");
-          const endTime = this.$moment(reportDetailList[i].rpt_end_time).format(
-            "YYYY-MM-DD HH:mm"
-          );
-
-          events.push({
-            name: reportDetailList[i].rpt_content,
-            start: startTime,
-            end: endTime,
-            color: this.colors[this.rnd(0, this.colors.length - 1)],
-          });
+      if (this.$store.getters.getProjectINInfo[0].authority == null) {
+        this.$axios.get("/api/report/detail/getAll").then((res) => {
+          this.$store.commit("setReport", res.data);
+          console.log(this.$store.getters.getUserReport);
+        });
+      } else {
+        const reportList = [];
+        console.log(this.$store.getters.getProjectINInfo.length);
+        for (let i = 0; i < this.$store.getters.getProjectINInfo.length; i++) {
+          if (
+            this.$store.getters.getProjectINInfo[i].authority == "ROLE_ADMIN"
+          ) {
+            console.log("admin");
+            this.$axios
+              .get("/api/report/detail/getADMIN", {
+                params: {
+                  prj_no: this.$store.getters.getProjectINInfo[i].prj_no,
+                },
+              })
+              .then((res) => {
+                reportList.push(res.data);
+              });
+          } else if (
+            this.$store.getters.getProjectINInfo[i].authority == "ROLE_USER"
+          ) {
+            console.log("user");
+            this.$axios
+              .get("/api/report/detail/getUSER", {
+                params: {
+                  prj_in_no: this.$store.getters.getProjectINInfo[i].prj_in_no,
+                },
+              })
+              .then((res) => {
+                reportList.push(res.data);
+                console.log(reportList);
+              });
+          }
+          this.reportList = reportList;
+          console.log(this.reportList);
         }
-        this.events = events;
-      });
+        console.log(this.reportList);
+        this.$store.commit("setReport", this.reportList);
+      }
+      console.log(this.$store.getters.getUserReport);
+      console.log(this.$store.state.userReport);
+      const events = [];
+      const reportDetailList = this.$store.getters.getUserReport;
+      this.reportDetailList = reportDetailList;
+      console.log(this.reportDetailList);
+      console.log(Object.keys(this.reportDetailList).length);
+      for (let i = 0; i < reportDetailList.length; i++) {
+        console.log(reportDetailList[i].name);
+        const startTime = this.$moment(
+          reportDetailList[i].rpt_start_time
+        ).format("YYYY-MM-DD HH:mm");
+        const endTime = this.$moment(reportDetailList[i].rpt_end_time).format(
+          "YYYY-MM-DD HH:mm"
+        );
+
+        events.push({
+          name: reportDetailList[i].name,
+          start: startTime,
+          end: endTime,
+          color: this.colors[this.rnd(0, this.colors.length - 1)],
+          content: reportDetailList[i].rpt_content,
+        });
+      }
+      console.log(events);
+      this.events = events;
+
+      // else {
+      //   const events = [];
+      //   const INinfo = [];
+      //   console.log(this.$store.getters.getProjectINInfo[0].prj_in_no);
+      //   for (let i = 0; i < this.$store.state.userINProject.length; i++) {
+      //     INinfo.push(this.$store.getters.getProjectINInfo[i]);
+      //     console.log(INinfo);
+      //   }
+      //   console.log(INinfo);
+      //   const qs = require("qs");
+      //   const formData = new FormData();
+      //   formData.append("name", "daeun");
+      //   formData.append("age", 25);
+      //   this.$axios
+      //     .get("/api/report/detail/list", {
+      //       params: {
+      //         email: this.$store.getters.getCurrentUser.email,
+      //       },
+      //       // paramsSerializer: function (params) {
+      //       //   return qs.stringify(params, { arrayFormat: "repeat" });
+      //       // },
+      //     })
+      //     .then((res) => {
+      //       this.$store.commit("setReport", res.data);
+      //       console.log(this.$store.getters.getUserReport);
+      //       const reportDetailList = res.data;
+      //       for (let i = 0; i < reportDetailList.length; i++) {
+      //         const startTime = this.$moment(
+      //           reportDetailList[i].rpt_start_time
+      //         ).format("YYYY-MM-DD HH:mm");
+      //         const endTime = this.$moment(
+      //           reportDetailList[i].rpt_end_time
+      //         ).format("YYYY-MM-DD HH:mm");
+
+      //         events.push({
+      //           name: reportDetailList[i].name,
+      //           start: startTime,
+      //           end: endTime,
+      //           color: this.colors[this.rnd(0, this.colors.length - 1)],
+      //           content: reportDetailList[i].rpt_content,
+      //         });
+      //       }
+      //       this.events = events;
+      //     });
+      // }
     },
     viewDay({ date }) {
       this.focus = date;
@@ -396,13 +521,17 @@ export default {
       this.focus = date;
       this.selectedDate = date;
       console.log(date);
-
-      this.$axios
-        .get("/api/report/get", { params: { rpt_write_d8: date } })
-        .then((res) => {
-          console.log(res.data);
-          this.selectedDateReport = res.data;
-        });
+      const selectedDateReport = [];
+      for (let i = 0; i < this.$store.getters.getUserReport.length; i++) {
+        if (
+          this.$moment(
+            this.$store.getters.getUserReport[i].rpt_start_time
+          ).format("YYYY-MM-DD") == date
+        ) {
+          selectedDateReport.push(this.$store.getters.getUserReport[i]);
+        }
+      }
+      this.selectedDateReport = selectedDateReport;
     },
     getEventColor(event) {
       return event.color;
@@ -436,9 +565,9 @@ export default {
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
     },
-    getCount() {
-      return this.reportDetailList.length;
-    },
+    // getCount() {
+    //   return this.reportDetailList.length;
+    // },
     rptList() {
       this.$router.push("/rptList");
     },
@@ -467,4 +596,7 @@ export default {
 </script>
 
 <style>
+.scroll {
+  overflow-y: scroll;
+}
 </style>

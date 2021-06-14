@@ -13,6 +13,30 @@ export default {
             })
     },
 
+    getReportAll: async function (context) {
+        await axios.get('/api/report/detail/getAll').then(res => {
+            context.commit('setReport', res.data)
+        }).catch(err => {
+            context.commit('setReport', 'none')
+        })
+    },
+
+    getReportADMIN: async function (context) {
+        await axios.get('/api/report/detail/getADMIN' + prj_no
+        ).then(res => {
+            context.commit('setReport', res.data)
+        }).catch(err => {
+            context.commit('setReport', 'none')
+        })
+    },
+
+    getReportUSER: async function (context, { prj_in_no }) {
+        await axios.get('/api/report/detail/getUSER', prj_in_no).then(res => {
+            context.commit('setReport', res.data)
+        }).catch(err => {
+            context.commit('setReport', 'none')
+        })
+    },
     // UserProjectInfo: async function (context) {
     //     await axios.get('/api/project/main').then(res => {
     //         context.commit('setUserProjectInfo', res.data)

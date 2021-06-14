@@ -1,16 +1,20 @@
 package com.example.demo.ctrl;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import com.example.demo.domain.ProjectInVO;
 import com.example.demo.domain.ReportDetailVO;
 import com.example.demo.domain.ReportVO;
 import com.example.demo.service.ReportService;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,10 +43,55 @@ public class ReportCtrl {
     }
 
     @ResponseBody
+    @GetMapping(value = "/detail/getAll")
+    public List<ReportDetailVO> getAll() {
+        return reportService.getAll();
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/detail/getADMIN")
+    public List<ReportDetailVO> getADMIN(int prj_no) {
+        return reportService.getADMIN(prj_no);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/detail/getUSER")
+    public List<ReportDetailVO> getUSER(int prj_in_no) {
+        return reportService.getUSER(prj_in_no);
+    }
+
+    @ResponseBody
     @GetMapping(value = "/detail/list")
-    public List<ReportDetailVO> getReportDetailList() {
-        log.info(">>>>>>>>get report detail list");
-        return reportService.getReportDetailList();
+    public List<ReportDetailVO> getReportDetailList(String email) {
+        // List<JSONObject> list = new ArrayList<>();
+        // for (int i = 0; i < data.length; i++) {
+        // JSONObject json = new JSONObject();
+        // json.put("name", data[i]);
+        // json.put("age", data[i]);
+        // list.add(json);
+        // }
+        // log.info(">>>>>>>>list: " + list);
+
+        // String[] s = req.getParameterValues("data");
+        // String st = req.getParameter("data");
+        // log.info(">>>>>>>>>>request array: " + s);
+        // // log.info(">>>>>>>>>>request: " + s[0]);
+
+        // log.info(">>>>>>>>>>request: " + st);
+
+        // for (int i = 0; i < s.length; i++) {
+        // log.info(">>>>>>>>req: " + s[i]);
+        // }
+        // log.info(">>>>>>>>get report detail list" + INinfo.get(0).getPrj_in_no());
+        // log.info(">>>>>>>>info: " + INinfo.get(0).getPrj_no());
+        // log.info(">>>>>>>>>>info: " + req.getParameterValues("INinfo"));
+        // log.info(">>>>>>>>>>>req: " + req.getParameter("prj_in_no"));
+        // int prj_in_no = Integer.parseInt(req.getParameter("prj_in_no"));
+        // log.info(">>>>>>>>> prj_in_no: " + prj_in_no);
+        // int prj_no = Integer.parseInt(req.getParameter("prj_no"));
+        // String authority = req.getParameter("authority");
+        // return reportService.getReportDetailList(prj_in_no, prj_no, authority);
+        return reportService.getReportDetailList(email);
     }
 
     @PostMapping(value = "/write")

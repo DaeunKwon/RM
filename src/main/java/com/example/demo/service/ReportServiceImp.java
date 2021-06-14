@@ -31,8 +31,8 @@ public class ReportServiceImp implements ReportService {
     }
 
     @Override
-    public List<ReportDetailVO> getReportDetailList() {
-        return rdao.getReportDetailList();
+    public List<ReportDetailVO> getReportDetailList(int prj_in_no, int prj_no, String authority) {
+        return rdao.getReportDetailList(prj_in_no, prj_no, authority);
 
     }
 
@@ -44,6 +44,26 @@ public class ReportServiceImp implements ReportService {
     @Override
     public List<ReportDetailVO> getSelectedReport(Date rpt_write_d8) {
         return rdao.getSelectedReport(rpt_write_d8);
+    }
+
+    @Override
+    public List<ReportDetailVO> getReportDetailList(String email) {
+        return rdao.getReportDetailList(email);
+    }
+
+    @Override
+    public List<ReportDetailVO> getAll() {
+        return rdao.getAll();
+    }
+
+    @Override
+    public List<ReportDetailVO> getADMIN(int prj_no) {
+        return rdao.getADMIN(prj_no);
+    }
+
+    @Override
+    public List<ReportDetailVO> getUSER(int prj_in_no) {
+        return rdao.getUSER(prj_in_no);
     }
 
 }

@@ -36,8 +36,14 @@ public class ReportDAOImp implements ReportDAO {
     }
 
     @Override
-    public List<ReportDetailVO> getReportDetailList() {
-        return sql.selectList(ns + ".getReportDetailList");
+    public List<ReportDetailVO> getReportDetailList(int prj_in_no, int prj_no, String authority) {
+        if (authority.equals("ROLE_ADMIN")) {
+            return sql.selectList(ns + ".getReportDetailList_ADMIN", prj_no);
+        } else if (authority.equals("ROLE_USER")) {
+            return sql.selectList(ns + ".getReportDetailList_USER", prj_in_no);
+        } else {
+            return sql.selectList(ns + ".getReportDetailList_ROOT");
+        }
     }
 
     @Override
@@ -48,6 +54,26 @@ public class ReportDAOImp implements ReportDAO {
     @Override
     public List<ReportDetailVO> getSelectedReport(Date rpt_write_d8) {
         return sql.selectList(ns + ".getSelectedReport", rpt_write_d8);
+    }
+
+    @Override
+    public List<ReportDetailVO> getReportDetailList(String email) {
+        return sql.selectList(ns + ".getReport", email);
+    }
+
+    @Override
+    public List<ReportDetailVO> getAll() {
+        return sql.selectList(ns + ".getAll");
+    }
+
+    @Override
+    public List<ReportDetailVO> getADMIN(int prj_no) {
+        return sql.selectList(ns + ".getADMIN", prj_no);
+    }
+
+    @Override
+    public List<ReportDetailVO> getUSER(int prj_in_no) {
+        return sql.selectList(ns + ".getUSER", prj_in_no);
     }
 
 }
