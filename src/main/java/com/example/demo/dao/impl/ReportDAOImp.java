@@ -3,6 +3,7 @@ package com.example.demo.dao.impl;
 import java.util.List;
 
 import com.example.demo.dao.ReportDAO;
+import com.example.demo.domain.ReportDetailVO;
 import com.example.demo.domain.ReportVO;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -33,6 +34,16 @@ public class ReportDAOImp implements ReportDAO {
     public List<ReportVO> list() {
         log.info(">>>>>>>>>>>report list dao");
         return sql.selectList(ns + ".list");
+    }
+
+    @Override
+    public List<ReportDetailVO> getReportDetailList() {
+        return sql.selectList(ns + ".getReportDetailList");
+    }
+
+    @Override
+    public void addReport(int prj_no) {
+        sql.insert(ns + ".addReport", prj_no);
     }
 
 }

@@ -52,4 +52,9 @@ public class UserDAOImp implements UserDAO {
         return sql.selectList(ns + ".getUserList");
     }
 
+    @Override
+    public UserVO getUserfindByUser(UserVO user) {
+        return sql.selectOne(ns + ".getUserfindByUser", user);
+    }
+
 }

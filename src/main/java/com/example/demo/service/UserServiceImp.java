@@ -110,4 +110,9 @@ public class UserServiceImp implements UserService, UserDetailsService {
         return udao.getUserList();
     }
 
+    @Override
+    public UserVO findUserByEmail(UserVO user) {
+        return udao.getUserfindByUser(user);
+    }
+
 }

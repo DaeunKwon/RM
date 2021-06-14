@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.List;
 
 import com.example.demo.dao.ReportDAO;
+import com.example.demo.domain.ReportDetailVO;
 import com.example.demo.domain.ReportVO;
 
 import org.slf4j.Logger;
@@ -28,6 +29,17 @@ public class ReportServiceImp implements ReportService {
     public List<ReportVO> list() {
         log.info(">>>>>>>>>>>> report list service");
         return rdao.list();
+    }
+
+    @Override
+    public List<ReportDetailVO> getReportDetailList() {
+        return rdao.getReportDetailList();
+
+    }
+
+    @Override
+    public void addReport(int prj_no) {
+        rdao.addReport(prj_no);
     }
 
 }

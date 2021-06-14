@@ -108,30 +108,11 @@ COMMENT ON COLUMN tbl_project.rmv_YN IS '삭제 여부'
 
 
 -- tbl_member Table Create SQL
-CREATE TABLE tbl_auth
-(
-    auth_id      NUMBER          DEFAULT 0 NOT NULL, 
-    auth_name    VARCHAR2(20)    DEFAULT 'NONE' NULL, 
-    CONSTRAINT PK_tbl_auth PRIMARY KEY (auth_id)
-)
-/
-
-COMMENT ON TABLE tbl_auth IS '직원 권한'
-/
-
-COMMENT ON COLUMN tbl_auth.auth_id IS '권한 아이디'
-/
-
-COMMENT ON COLUMN tbl_auth.auth_name IS '권한 이름'
-/
-
-
--- tbl_member Table Create SQL
 CREATE TABLE tbl_project_in
 (
     prj_in_no     NUMBER           NOT NULL, 
     email         VARCHAR2(100)    NOT NULL, 
-    auth_id       NUMBER           NOT NULL, 
+    authority     VARCHAR2(50)     NOT NULL, 
     prj_in_d8     DATE             NOT NULL, 
     prj_out_d8    DATE             NOT NULL, 
     prj_no        NUMBER           NOT NULL, 
@@ -187,29 +168,26 @@ ALTER TABLE tbl_project_in
 /
 
 ALTER TABLE tbl_project_in
-    ADD CONSTRAINT FK_tbl_project_in_auth_id_tbl_ FOREIGN KEY (auth_id)
-        REFERENCES tbl_auth (auth_id)
+    ADD CONSTRAINT FK_tbl_project_in_prj_no_tbl_p FOREIGN KEY (prj_no)
+        REFERENCES tbl_project (prj_no)
 /
 
 ALTER TABLE tbl_project_in
-    ADD CONSTRAINT FK_tbl_project_in_prj_no_tbl_p FOREIGN KEY (prj_no)
-        REFERENCES tbl_project (prj_no)
+    ADD CONSTRAINT FK_tbl_project_in_authority FOREIGN KEY (authority)
+        REFERENCES roles (authority)
 /
 
 
 -- tbl_member Table Create SQL
 CREATE TABLE tbl_report
 (
-    rpt_no            NUMBER            NOT NULL, 
-    prj_no            NUMBER            NOT NULL, 
-    rpt_title         VARCHAR2(200)     NOT NULL, 
-    rpt_content       VARCHAR2(2000)    NOT NULL, 
-    rpt_remark        VARCHAR2(1000)    DEFAULT null NULL, 
-    rmv_YN            CHAR(1)           DEFAULT 'N' NOT NULL, 
-    rpt_write_d8      DATE              DEFAULT sysdate NOT NULL, 
-    rpt_writer        NUMBER            NOT NULL, 
-    rpt_mod_d8        DATE              DEFAULT sysdate NOT NULL, 
-    rpt_mod_writer    NUMBER            NOT NULL, 
+    rpt_no            NUMBER     NOT NULL, 
+    prj_no            NUMBER     NOT NULL, 
+    rmv_YN            CHAR(1)    DEFAULT 'N' NOT NULL, 
+    rpt_write_d8      DATE       DEFAULT sysdate NOT NULL, 
+    rpt_writer        NUMBER     NOT NULL, 
+    rpt_mod_d8        DATE       DEFAULT sysdate NOT NULL, 
+    rpt_mod_writer    NUMBER     NOT NULL, 
     CONSTRAINT PK_tbl_report PRIMARY KEY (rpt_no)
 )
 /
@@ -244,15 +222,6 @@ COMMENT ON COLUMN tbl_report.rpt_no IS '업무 일지 번호'
 COMMENT ON COLUMN tbl_report.prj_no IS '프로젝트 번호'
 /
 
-COMMENT ON COLUMN tbl_report.rpt_title IS '업무 일지 제목'
-/
-
-COMMENT ON COLUMN tbl_report.rpt_content IS '업무 일지 내용'
-/
-
-COMMENT ON COLUMN tbl_report.rpt_remark IS '업무 일지 특이사항'
-/
-
 COMMENT ON COLUMN tbl_report.rmv_YN IS '삭제 여부'
 /
 
@@ -284,41 +253,170 @@ ALTER TABLE tbl_report
 /
 
 
-CREATE TABLE ROLES (
-	AUTHORITY VARCHAR2(50) NOT NULL,
-	DESCRIPTION VARCHAR2(100),
-	AUTH_LEVEL INTEGER NOT NULL
-);
-
-ALTER TABLE ROLES
-ADD CONSTRAINT ROLES_PK PRIMARY KEY (AUTHORITY)
-ENABLE;
-
-CREATE TABLE AUTHORITIES (
-	MEMBER_EMAIL VARCHAR2(100) NOT NULL,
-	ROLES_AUTHORITY VARCHAR2(50) NOT NULL
-);
-
-ALTER TABLE AUTHORITIES
-ADD CONSTRAINT AUTHORITIES_PK PRIMARY KEY (MEMBER_EMAIL,ROLES_AUTHORITY)
-ENABLE;
-
-ALTER TABLE AUTHORITIES ADD CONSTRAINT FK_TBL_MEMBER FOREIGN KEY (MEMBER_EMAIL) REFERENCES TBL_MEMBER(EMAIL);
-
-ALTER TABLE AUTHORITIES ADD CONSTRAINT FK_ROLES FOREIGN KEY (ROLES_AUTHORITY) REFERENCES ROLES(AUTHORITY);
-
-CREATE TABLE tbl_commute    /*근태 관리*/
+-- tbl_member Table Create SQL
+CREATE TABLE roles
 (
-    com_no       number    NOT NULL, 
-    com_d8       DATE      NOT NULL, 
-    com_start    DATE      NOT NULL, 
-    com_end      DATE      NULL, 
-    com_total    NUMBER    NULL, 
-    prj_in_no    NUMBER    NOT NULL, 
-    CONSTRAINT  PRIMARY KEY (com_no)
+    authority      VARCHAR2(50)     NOT NULL, 
+    description    VARCHAR2(100)    NOT NULL, 
+    auth_level     NUMBER           NOT NULL, 
+    CONSTRAINT  PK_roles PRIMARY KEY (authority)
 )
 /
 
-CREATE SEQUENCE tbl_commute_SEQ
+COMMENT ON TABLE roles IS '권한 내용'
+/
+
+COMMENT ON COLUMN roles.authority IS '권한 아이디'
+/
+
+COMMENT ON COLUMN roles.description IS '권한 이름'
+/
+
+COMMENT ON COLUMN roles.auth_level IS '권한 번호'
+/
+
+
+-- tbl_member Table Create SQL
+-- CREATE TABLE tbl_commute
+-- (
+--     com_no       number    NOT NULL, 
+--     com_d8       DATE      NOT NULL, 
+--     com_start    DATE      NOT NULL, 
+--     com_end      DATE      NULL, 
+--     com_total    NUMBER    NULL, 
+--     prj_in_no    NUMBER    NOT NULL, 
+--     CONSTRAINT primary☆key PRIMARY KEY (com_no)
+-- )
+-- /
+
+-- CREATE SEQUENCE tbl_commute_SEQ
+-- START WITH 1
+-- INCREMENT BY 1;
+-- /
+
+-- CREATE OR REPLACE TRIGGER tbl_commute_AI_TRG
+-- BEFORE INSERT ON tbl_commute 
+-- REFERENCING NEW AS NEW FOR EACH ROW 
+-- BEGIN 
+--     SELECT tbl_commute_SEQ.NEXTVAL
+--     INTO :NEW.com_no
+--     FROM DUAL;
+-- END;
+-- /
+
+-- --DROP TRIGGER tbl_commute_AI_TRG;
+-- /
+
+-- --DROP SEQUENCE tbl_commute_SEQ;
+-- /
+
+-- COMMENT ON COLUMN tbl_commute.com_no IS '근태 번호'
+-- /
+
+-- COMMENT ON COLUMN tbl_commute.com_d8 IS '근태 날짜'
+-- /
+
+-- COMMENT ON COLUMN tbl_commute.com_start IS '출근시간'
+-- /
+
+-- COMMENT ON COLUMN tbl_commute.com_end IS '퇴근시간'
+-- /
+
+-- COMMENT ON COLUMN tbl_commute.com_total IS '총 근무시간'
+-- /
+
+-- COMMENT ON COLUMN tbl_commute.prj_in_no IS '프로젝트 참여 번호'
+-- /
+
+-- ALTER TABLE tbl_commute
+--     ADD CONSTRAINT FK_tbl_commute_prj_in_no_tbl_p FOREIGN KEY (prj_in_no)
+--         REFERENCES tbl_project_in (prj_in_no)
+-- /
+
+
+-- tbl_member Table Create SQL
+CREATE TABLE tbl_report_detail
+(
+    rpt_detail_no     NUMBER            NOT NULL, 
+    rpt_start_time    DATE              NOT NULL, 
+    rpt_end_time      DATE              NOT NULL, 
+    rpt_content       VARCHAR2(2000)    NOT NULL, 
+    rpt_no            NUMBER            NOT NULL, 
+    CONSTRAINT  PK_tbl_report_detail PRIMARY KEY (rpt_detail_no)
+)
+/
+
+CREATE SEQUENCE tbl_report_detail_SEQ
 START WITH 1
 INCREMENT BY 1;
+/
+
+CREATE OR REPLACE TRIGGER tbl_report_detail_AI_TRG
+BEFORE INSERT ON tbl_report_detail 
+REFERENCING NEW AS NEW FOR EACH ROW 
+BEGIN 
+    SELECT tbl_report_detail_SEQ.NEXTVAL
+    INTO :NEW.rpt_detail_no
+    FROM DUAL;
+END;
+/
+
+--DROP TRIGGER tbl_report_detail_AI_TRG;
+/
+
+--DROP SEQUENCE tbl_report_detail_SEQ;
+/
+
+COMMENT ON TABLE tbl_report_detail IS '업무 일지 상세 내용'
+/
+
+COMMENT ON COLUMN tbl_report_detail.rpt_detail_no IS '업무 일지 내용 번호'
+/
+
+COMMENT ON COLUMN tbl_report_detail.rpt_start_time IS '시작 시간'
+/
+
+COMMENT ON COLUMN tbl_report_detail.rpt_end_time IS '끝난 시간'
+/
+
+COMMENT ON COLUMN tbl_report_detail.rpt_content IS '업무 일지 내용'
+/
+
+COMMENT ON COLUMN tbl_report_detail.rpt_no IS '업무 일지 번호'
+/
+
+ALTER TABLE tbl_report_detail
+    ADD CONSTRAINT FK_tbl_report_detail_rpt_no_tb FOREIGN KEY (rpt_no)
+        REFERENCES tbl_report (rpt_no)
+/
+
+
+-- tbl_member Table Create SQL
+CREATE TABLE authorities
+(
+    member_email       VARCHAR2(100)    NOT NULL, 
+    roles_authority    VARCHAR2(50)     NOT NULL, 
+    CONSTRAINT  PK_authorities PRIMARY KEY (member_email, roles_authority)
+)
+/
+
+COMMENT ON TABLE authorities IS '권한'
+/
+
+COMMENT ON COLUMN authorities.member_email IS '이메일'
+/
+
+COMMENT ON COLUMN authorities.roles_authority IS '권한'
+/
+
+ALTER TABLE authorities
+    ADD CONSTRAINT FK_authorities_member_email_tb FOREIGN KEY (member_email)
+        REFERENCES tbl_member (email)
+/
+
+ALTER TABLE authorities
+    ADD CONSTRAINT FK_authorities_roles_authority FOREIGN KEY (roles_authority)
+        REFERENCES roles (authority)
+/
+
+

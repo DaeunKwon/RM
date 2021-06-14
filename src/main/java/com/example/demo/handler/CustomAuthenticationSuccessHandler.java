@@ -32,6 +32,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         if (request.getParameter("email") != null) {
             UserVO user = udao.getUserfindByEmail(request.getParameter("email"));
             user.setPassword(null);
+            // user.setRoles(roles);
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             log.info(">>>>>>>>>login session: " + session);

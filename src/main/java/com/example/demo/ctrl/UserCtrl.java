@@ -2,6 +2,9 @@ package com.example.demo.ctrl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.example.demo.dao.UserAuthoritiesDAO;
 import com.example.demo.domain.Authorities;
 import com.example.demo.domain.UserVO;
@@ -21,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping(value = "/api/user")
+@RequestMapping("/api/user")
 public class UserCtrl {
         private final Logger log = LoggerFactory.getLogger(UserCtrl.class);
 
@@ -64,6 +67,16 @@ public class UserCtrl {
                 log.info(">>>>>> get user list");
                 log.info(">>>>>>>>user list: " + userService.getlist());
                 return userService.getlist();
+        }
+
+        @GetMapping(value = "/info")
+        public UserVO userInfo(HttpServletRequest request) {
+                log.info(">>>>>>> auth login controller");
+                HttpSession session = request.getSession();
+                log.info(">>> " + session);
+                UserVO user = (UserVO) session.getAttribute("user");
+                log.info(">>> " + user);
+                return user;
         }
 
 }

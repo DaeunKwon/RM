@@ -10,12 +10,11 @@
 
       <v-btn text @click="rptList"> 업무일지 </v-btn>
 
-      <v-btn text @click="com_main"> 근태관리 </v-btn>
+      <v-btn text> 근태관리 </v-btn>
 
-      <v-subheader>Username 님</v-subheader>
+      <v-subheader> {{ $store.getters.getCurrentUser.name }} 님</v-subheader>
 
       <v-menu
-        v-model="value"
         :close-on-click="closeOnClick"
         :close-on-content-click="closeOnContentClick"
         :offset-y="offsetY"
@@ -42,7 +41,6 @@
 <script>
 export default {
   data: () => ({
-    value: "",
     items: [
       { title: "UserInfo", action: "userInfo" },
       { title: "Logout", action: "logout" },
@@ -56,35 +54,16 @@ export default {
       if (action === "userInfo") {
         alert("UserInfo");
       } else if (action === "logout") {
-        alert("logout");
+        this.$axios
+          .post("http://localhost:8090/logout")
+          .then(() => this.$router.push("/")(this.alert("logout")));
       }
     },
     rptList() {
-      this.$axios.get("/api/report/list"),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
       this.$router.push("/rptList");
     },
     main() {
-      this.$axios.get("/api/project/main"),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
       this.$router.push("/main");
-    },
-    com_main() {
-      this.$axios.get("/api/commute/com_main"),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
-      this.$router.push("/com_main");
     },
   },
 };
