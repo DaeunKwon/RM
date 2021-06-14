@@ -10,7 +10,7 @@
 
       <v-btn text @click="rptList"> 업무일지 </v-btn>
 
-      <v-btn text> 근태관리 </v-btn>
+      <v-btn text @click="com_main"> 근태관리 </v-btn>
 
       <v-subheader> {{ $store.getters.getCurrentUser.name }} 님</v-subheader>
 
@@ -64,6 +64,9 @@ export default {
     },
     main() {
       this.$router.push("/main");
+    },
+    com_main() {
+      this.$router.push("/com_main");
     },
   },
 };
