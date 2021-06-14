@@ -13,6 +13,12 @@ export default {
             })
     },
 
-
+    // UserProjectInfo: async function (context) {
+    //     await axios.get('/api/project/main').then(res => {
+    //         context.commit('setUserProjectInfo', res.data)
+    //     }).catch(e => {
+    //         context.commit('setUserProjectInfo', 'none')
+    //     })
+    // }
 
 }

@@ -12,6 +12,12 @@ export default {
     getMonth: (state) => {
         var Month = state.comDate.toISOString().substr(0, 7);
         return Month;
+    },
+    getProjectINInfo(state) {
+        state => state.userINProject;
+    },
+    getProjectInfo(state) {
+        state => state.userProject;
     }
 
 }

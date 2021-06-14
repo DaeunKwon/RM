@@ -20,6 +20,8 @@ public class ProjectVO {
     private String cond;
     private String rmv_YN;
     private List<ProjectInVO> ulist;
+    private int prj_in_no;
+    private String authority;
 
     public ProjectVO() {
     }

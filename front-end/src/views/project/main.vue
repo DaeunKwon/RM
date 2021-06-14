@@ -5,7 +5,12 @@
       <br />
       <div>프로젝트 목록</div>
       <div align="right">
-        <button type="submit" class="btn btn-warning" @click="prjWrite">
+        <button
+          type="submit"
+          class="btn btn-warning"
+          @click="prjWrite"
+          v-if="$store.getters.getCurrentUser.authority == 'ROLE_ROOT'"
+        >
           작성
         </button>
       </div>
@@ -14,12 +19,20 @@
         <div>
           <v-sheet class="mx-auto" elevation="8" max-width="1000"
             ><br />진행중인 프로젝트
+            <div v-if="!projectList">
+              <br /><br /><br />
+              <h5>No project</h5>
+              <br /><br /><br />
+            </div>
             <v-slide-group
               v-model="ingModel"
               class="pa-4"
               active-class="success"
               show-arrows
             >
+              <div v-if="!projectList">
+                <h5>No Project</h5>
+              </div>
               <v-slide-item
                 v-for="project in projectList"
                 :key="project.prj_no"
@@ -27,7 +40,13 @@
                 <v-card color="green" class="ma-4" height="200" width="200">
                   <v-card-title
                     >{{ project.prj_title }} <v-spacer></v-spacer>
-                    <v-btn icon @click="openDeleteDialog(project)">
+                    <v-btn
+                      icon
+                      @click="openDeleteDialog(project)"
+                      v-if="
+                        $store.getters.getCurrentUser.authority == 'ROLE_ROOT'
+                      "
+                    >
                       <v-icon>mdi-delete-outline</v-icon></v-btn
                     ></v-card-title
                   >
@@ -64,6 +83,11 @@
         <div class="mt-12">
           <v-sheet class="mx-auto" elevation="8" max-width="1000"
             ><br />완료된 프로젝트
+            <div v-if="!doneProjectList">
+              <br /><br /><br />
+              <h5>No project</h5>
+              <br /><br /><br />
+            </div>
             <v-slide-group
               v-model="doneModel"
               class="pa-4"
@@ -82,7 +106,13 @@
                 >
                   <v-card-title
                     >{{ project.prj_title }}<v-spacer></v-spacer>
-                    <v-btn icon @click="openDeleteDialog(project)">
+                    <v-btn
+                      icon
+                      @click="openDeleteDialog(project)"
+                      v-if="
+                        $store.getters.getCurrentUser.authority == 'ROLE_ROOT'
+                      "
+                    >
                       <v-icon>mdi-delete-outline</v-icon></v-btn
                     ></v-card-title
                   >
@@ -153,7 +183,7 @@
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                      v-model="date"
+                      v-model="today"
                       label="Date"
                       required
                       readonly
@@ -340,24 +370,33 @@
                         $moment(leaderInfo.prj_out_d8).format('YYYY-MM-DD')
                       "
                     ></v-text-field>
-                    <v-text-field
-                      label="팀원"
-                      required
-                      outlined
-                      readonly
-                    ></v-text-field>
-                    <v-text-field
-                      label="참여 시작 날짜"
-                      required
-                      outlined
-                      readonly
-                    ></v-text-field>
-                    <v-text-field
-                      label="참여 종료 날짜"
-                      required
-                      outlined
-                      readonly
-                    ></v-text-field>
+                    <div v-for="follower in followerList" :key="follower.email">
+                      <v-text-field
+                        label="팀원"
+                        required
+                        outlined
+                        readonly
+                        :value="follower.email"
+                      ></v-text-field>
+                      <v-text-field
+                        label="참여 시작 날짜"
+                        required
+                        outlined
+                        readonly
+                        :value="
+                          $moment(follower.prj_in_d8).format('YYYY-MM-DD')
+                        "
+                      ></v-text-field>
+                      <v-text-field
+                        label="참여 종료 날짜"
+                        required
+                        outlined
+                        readonly
+                        :value="
+                          $moment(follower.prj_out_d8).format('YYYY-MM-DD')
+                        "
+                      ></v-text-field>
+                    </div>
                     <v-textarea
                       label="내용"
                       required
@@ -379,9 +418,12 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
+                v-if="selectedProject.authority !== 'ROLE_USER'"
                 color="blue darken-1"
                 text
-                @click="updateProject(selectedProject, leaderInfo)"
+                @click="
+                  updateProject(selectedProject, leaderInfo, followerList)
+                "
                 >수정</v-btn
               >
               <v-btn color="blue darken-1" text @click="dialogView = false"
@@ -423,10 +465,12 @@ export default {
       doneProjectList: [],
       // leaderList: [],
       inputs: [{ start_time: null, end_time: null, content: "" }],
-      date: "",
+      today: "",
       selectedProject: "",
       leaderInfo: "",
       deletedProject: "",
+      followerList: [],
+      message: "",
     };
   },
 
@@ -437,56 +481,104 @@ export default {
   mounted() {
     this.getProjectList;
     this.getDoneProjectList;
-    // this.getLeaderList;
     this.getUserInfo;
     this.getToday();
   },
   computed: {
-    getProjectList() {
-      this.$axios
-        .get("/api/project/main")
-        .then((res) => {
-          this.projectList = res.data;
-          return this.projectList;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getDoneProjectList() {
-      this.$axios
-        .get("/api/project/main/done")
-        .then((res) => {
-          this.doneProjectList = res.data;
-          return this.getDoneProjectList;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    // getLeaderList() {
-    //   this.$axios.get("/api/project/in/leader/list").then((res) => {
-    //     this.leaderList = res.data;
-    //     console.log(this.leaderList);
-    //     return this.getLeaderList;
-    //   });
-    // },
     getUserInfo() {
       this.$axios.get("/api/user/info").then((res) => {
         this.$store.commit("setCurrentUser", res.data);
         console.log(this.$store.getters.getCurrentUser);
+        console.log(this.$store.getters.getCurrentUser.email);
+        console.log(this.$store.getters.getCurrentUser.authority);
+
+        this.$axios
+          .get("/api/project/in/info", {
+            params: { email: this.$store.getters.getCurrentUser.email },
+          })
+          .then((res) => {
+            console.log(res.data);
+            // this.$store.commit("setUserProjectInfo", res.data);
+            // console.log(this.$store.getters.getUserProjectInfo.prj_no);
+          });
+
+        //projectList 안에 프로젝트 번호에 해당되는 권한도 가져옴
+        this.$axios
+          .get("/api/project/main", {
+            params: {
+              email: this.$store.getters.getCurrentUser.email,
+              authority: this.$store.getters.getCurrentUser.authority,
+            },
+          })
+          .then((res) => {
+            this.projectList = res.data;
+            console.log(this.projectList);
+            // for (let i = 0; i < this.projectList.length; i++) {
+            //   console.log(
+            //     this.projectList[i].prj_no,
+            //     this.projectList[i].authority
+            //   );
+            // }
+            // this.$store.commit("setProject", this.projectList);
+            const userINProject = [];
+            for (let i = 0; i < this.projectList.length; i++) {
+              userINProject.push({
+                prj_no: this.projectList[i].prj_no,
+                authority: this.projectList[i].authority,
+              });
+              // this.$store.commit("setProjectINinfo", {
+              //   prj_no: this.projectList[i].prj_no,
+              //   authority: this.projectList[i].authority,
+              // });
+            }
+            this.$store.commit("setProjectINinfo", userINProject);
+            console.log(this.$store.state.userINProject);
+            // for (let i = 0; i < this.$store.state.userProject.length; i++) {
+            //   console.log(this.$store.state.userProject[i].prj_no);
+            // }
+            return this.projectList;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+
+        this.$axios
+          .get("/api/project/main/done", {
+            params: {
+              email: this.$store.getters.getCurrentUser.email,
+              authority: this.$store.getters.getCurrentUser.authority,
+            },
+          })
+          .then((res) => {
+            console.log(res.data);
+            if (res.data.length == 0) {
+              this.message = "No Project";
+              console.log("no project");
+            } else {
+              this.doneProjectList = res.data;
+              return this.getDoneProjectList;
+            }
+          })
+          .catch((e) => {
+            //console.log(e);
+          });
       });
     },
   },
   methods: {
-    updateProject(selectedProject, leaderInfo) {
+    updateProject(selectedProject, leaderInfo, followerList) {
       this.$router.push({
         name: "prjWrite",
-        params: { project: selectedProject, leader: leaderInfo },
+        params: {
+          flag: 1,
+          project: selectedProject,
+          leader: leaderInfo,
+          follower: followerList,
+        },
       });
     },
     prjWrite() {
-      this.$router.push("/prjWrite");
+      this.$router.push({ name: "prjWrite", params: { flag: 0 } });
     },
     onWork() {
       this.onworkDialog = false;
@@ -498,7 +590,7 @@ export default {
       this.inputs.splice(k, 1);
     },
     getToday() {
-      this.date = this.$moment(new Date()).format("YYYY-MM-DD");
+      this.today = this.$moment(new Date()).format("YYYY-MM-DD");
     },
     openDialogView(project) {
       this.dialogView = true;
@@ -511,51 +603,52 @@ export default {
         })
         .then((res) => {
           this.leaderInfo = res.data;
-          console.log(this.leaderInfo.email);
+          //console.log(this.leaderInfo.email);
         });
 
-      // var leaderInfoList = this.leaderList;
-      // for (var i in leaderInfoList) {
-      //   if (leaderInfoList[i].prj_no == project.prj_no) {
-      //     this.selectedProjectLeader = leaderInfoList[i];
-      //     console.log(this.selectedProjectLeader.email);
-      //     return this.selectedProjectLeader;
-      //   } else {
-      //     return null;
-      //   }
-      // }
+      this.$axios
+        .get("/api/project/in/follower/info", {
+          params: { prj_no: this.selectedProject.prj_no },
+        })
+        .then((res) => {
+          this.followerList = res.data;
+          //console.log(this.followerList);
+        });
     },
     openReportDialog(project) {
       this.reportDialog = true;
       this.selectedProject = project;
     },
-    saveReport: function () {
-      // let report = new FormData();
-      // for (let i = 0; i < this.inputs.length; i++) {
-      //   console.log(this.inputs[i].start_time);
-      //   console.log(this.inputs[i].end_time);
-      //   console.log(this.inputs[i].content);
-      //   report.append("start_time_" + i, this.inputs[i].start_time);
-      //   report.append("end_time_" + i, this.inputs[i].end_time);
-      //   report.append("content_" + i, this.inputs[i].content);
-      // }
-      // console.log(report.get("content_1"));
-      // this.$axios
-      //   .post("/api/report/write", JSON.stringify(report), {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   })
-      //   .then((res) => {
-      //     alert("업무 일지 등록");
-      //     this.reportDialog = false;
-      //   });
+    saveReport() {
       //로그인한 유저의 프로젝트 참여 번호도 보내야 함
       const report = new FormData();
       report.append("prj_no", this.selectedProject.prj_no);
-      this.$axios.post("/api/report/add", report).then((res) => {
-        console.log(res);
-        alert("성공");
+      report.append("rpt_writer", this.selectedProject.prj_in_no);
+      report.append("rpt_mod_writer", this.selectedProject.prj_in_no);
+
+      this.$axios.post("/api/report/write", report).then((res) => {
+        console.log(res.data);
+        const reportDetail = new FormData();
+        for (let i = 0; i < this.inputs.length; i++) {
+          reportDetail.append(
+            "start_time",
+            this.today + " " + this.inputs[i].start_time
+          );
+          reportDetail.append(
+            "end_time",
+            this.today + " " + this.inputs[i].end_time
+          );
+          reportDetail.append("content", this.inputs[i].content);
+          reportDetail.append("rpt_no", res.data);
+        }
+
+        this.$axios
+          .post("/api/report/write/detail", reportDetail)
+          .then((res) => {
+            alert("업무 일지 등록 성공");
+            this.reportDialog = false;
+            this.$route.push("/rptList");
+          });
       });
     },
     openDeleteDialog(project) {

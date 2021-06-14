@@ -21,15 +21,18 @@
               height="400"
               width="400"
             >
-              {{ today }}
-              <div>
+              {{ selectedDate }}<br />
+              <br />
+              <div
+                v-for="reportDetail in selectedDateReport"
+                :key="reportDetail.id"
+              >
+                <v-card color="light grey">
+                  <v-card-title>
+                    {{ reportDetail.rpt_content }}
+                  </v-card-title>
+                </v-card>
                 <br />
-                <h5
-                  v-for="reportDetail in reportDetailList"
-                  :key="reportDetail.id"
-                >
-                  {{ reportDetail.rpt_content }}
-                </h5>
               </div>
             </v-card>
           </v-col>
@@ -93,6 +96,7 @@
                 :type="type"
                 @click:event="showEvent"
                 @click:more="viewDay"
+                @click:date="viewSelectedDay"
                 @change="getEvents"
               ></v-calendar>
               <v-menu
@@ -174,6 +178,8 @@ export default {
         "orange",
         "grey darken-1",
       ],
+      selectedDateReport: [],
+      selectedDate: "",
     };
   },
   mounted() {
@@ -274,6 +280,18 @@ export default {
     },
     monthly() {
       this.$router.push("/monthlyRpt");
+    },
+    viewSelectedDay({ date }) {
+      this.focus = date;
+      this.selectedDate = date;
+      console.log(date);
+
+      this.$axios
+        .get("/api/report/get", { params: { rpt_write_d8: date } })
+        .then((res) => {
+          console.log(res.data);
+          this.selectedDateReport = res.data;
+        });
     },
   },
 };

@@ -3,7 +3,10 @@
     <Header />
     <v-container
       ><br />
-      <div>업무 일지 목록</div>
+      <div>
+        업무 일지 목록 {{ this.$store.state.userINProject }}
+        {{ this.$store.getters.getProjectINInfo }}
+      </div>
       <div align="right">
         <v-btn color="primary" class="mr-2" @click="rptList"> 주간 </v-btn>
         <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
@@ -21,15 +24,27 @@
               height="400"
               width="400"
             >
-              {{ today }}
-              <div>
+              {{ selectedDate }}<br />
+              <br />
+              <div
+                v-for="reportDetail in selectedDateReport"
+                :key="reportDetail.id"
+              >
+                <v-card color="light grey">
+                  <v-card-title>
+                    {{ reportDetail.rpt_content }}
+                  </v-card-title>
+                </v-card>
                 <br />
-                <h5
-                  v-for="reportDetail in reportDetailList"
-                  :key="reportDetail.id"
-                >
-                  {{ reportDetail.rpt_content }}
-                </h5>
+              </div>
+              <div
+                v-if="selectedDate == today"
+                @click="openUpdateDialog(reportDetail)"
+              >
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="warning">수정</v-btn>
+                </v-card-actions>
               </div>
             </v-card>
           </v-col>
@@ -94,6 +109,7 @@
                 :type="type"
                 @click:event="showEvent"
                 @click:more="viewDay"
+                @click:date="viewSelectedDay"
                 @change="getEvents"
               ></v-calendar>
 
@@ -137,6 +153,143 @@
       <br /><br />
       <Footer />
     </v-container>
+
+    <v-dialog v-model="updateDialog" max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">업무 일지 수정</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  label="Project title"
+                  required
+                  readonly
+                  outlined
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="today"
+                  label="Date"
+                  required
+                  readonly
+                  outlined
+                >
+                </v-text-field>
+              </v-col>
+
+              <v-col cols="12" v-for="(input, k) in inputs" :key="k">
+                <v-dialog
+                  ref="startDialog"
+                  v-model="startModel"
+                  :return-value.sync="input.start_time"
+                  width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="input.start_time"
+                      :id="'start_time' + k"
+                      label="시작 시간"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                      outlined
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker
+                    v-if="startModel"
+                    v-model="input.start_time"
+                    :id="'start_time' + k"
+                    full-width
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="startModel = false"
+                      >취소</v-btn
+                    >
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="$refs.startDialog[k].save(input.start_time)"
+                      >저장</v-btn
+                    >
+                  </v-time-picker>
+                </v-dialog>
+
+                <v-dialog
+                  ref="endDialog"
+                  v-model="endModel"
+                  :return-value.sync="input.end_time"
+                  width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="input.end_time"
+                      :id="'end_time' + k"
+                      label="끝난 시간"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                      outlined
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker
+                    v-if="endModel"
+                    v-model="input.end_time"
+                    full-width
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="endModel = false"
+                      >취소</v-btn
+                    >
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="$refs.endDialog[k].save(input.end_time)"
+                      >저장</v-btn
+                    >
+                  </v-time-picker>
+                </v-dialog>
+                <v-textarea
+                  label="업무 내용"
+                  required
+                  outlined
+                  :id="'content' + k"
+                  v-model="input.content"
+                ></v-textarea>
+                <v-btn
+                  fab
+                  dark
+                  small
+                  color="indigo"
+                  @click="remove(k)"
+                  v-show="k || (!k && inputs.length > 1)"
+                  ><v-icon dark>mdi-minus</v-icon></v-btn
+                >&nbsp;&nbsp;
+                <v-btn
+                  fab
+                  dark
+                  small
+                  color="indigo"
+                  @click="add(k)"
+                  v-show="k === inputs.length - 1"
+                  ><v-icon dark>mdi-plus</v-icon></v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="updateDialog = false">
+            닫기
+          </v-btn>
+          <v-btn color="blue darken-1" text @click="updateReport"> 수정 </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -153,7 +306,12 @@ export default {
   },
   data() {
     return {
+      startModel: false,
+      endModel: false,
+      updateDialog: false,
+      selectedDate: "",
       reportList: [],
+      selectedDateReport: [],
       reportDetailList: [],
       dialog5: false,
       today: "",
@@ -186,7 +344,7 @@ export default {
   mounted() {
     this.getReportList;
     this.getToday();
-    this.getReportDetailList;
+    //this.getReportDetailList;
   },
   computed: {
     getReportList() {
@@ -201,13 +359,13 @@ export default {
           console.log(e);
         });
     },
-    getReportDetailList() {
-      this.$axios.get("/api/report/detail/list").then((res) => {
-        this.reportDetailList = res.data;
-      });
-    },
   },
   methods: {
+    updateReport() {},
+    openUpdateDialog(reportDetail) {
+      this.updateDialog = true;
+      this.selectedReportDetail = reportDetail;
+    },
     getEvents() {
       const events = [];
       this.$axios.get("/api/report/detail/list").then((res) => {
@@ -233,6 +391,18 @@ export default {
     viewDay({ date }) {
       this.focus = date;
       this.type = "day";
+    },
+    viewSelectedDay({ date }) {
+      this.focus = date;
+      this.selectedDate = date;
+      console.log(date);
+
+      this.$axios
+        .get("/api/report/get", { params: { rpt_write_d8: date } })
+        .then((res) => {
+          console.log(res.data);
+          this.selectedDateReport = res.data;
+        });
     },
     getEventColor(event) {
       return event.color;
@@ -280,12 +450,6 @@ export default {
     },
     rptList() {
       this.$router.push("/rptList");
-    },
-    // rptList() {
-    //   this.$router.push("/rptList");
-    // },
-    rptWrite() {
-      this.$router.push("/rptWrite");
     },
     daily() {
       this.$router.push("/dailyRpt");

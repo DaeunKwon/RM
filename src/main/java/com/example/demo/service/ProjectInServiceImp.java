@@ -18,8 +18,12 @@ public class ProjectInServiceImp implements ProjectInService {
     private ProjectInDAO pINdao;
 
     @Override
-    public void add(ProjectInVO pINvo) {
-        pINdao.insert(pINvo);
+    public void add(ProjectInVO pINvo, int flag) {
+        if (flag > 0) {
+            pINdao.updateLeader(pINvo);
+        } else {
+            pINdao.insert(pINvo);
+        }
     }
 
     @Override
@@ -31,6 +35,25 @@ public class ProjectInServiceImp implements ProjectInService {
     public ProjectInVO getLeaderInfo(int prj_no) {
         log.info(">>>>>>>>getleaderinfo service");
         return pINdao.getLeaderInfo(prj_no);
+    }
+
+    @Override
+    public void addFollower(List<ProjectInVO> projectInList, int flag, int num) {
+        if (flag > 0) {
+            pINdao.updateFollower(projectInList, num);
+        } else {
+            pINdao.addFollower(projectInList);
+        }
+    }
+
+    @Override
+    public List<ProjectInVO> getFollowerInfo(int prj_no) {
+        return pINdao.getFollowerInfo(prj_no);
+    }
+
+    @Override
+    public List<ProjectInVO> getUserProjectInfo(String email) {
+        return pINdao.getUserProjectInfo(email);
     }
 
 }

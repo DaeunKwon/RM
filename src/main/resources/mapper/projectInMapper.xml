@@ -42,4 +42,42 @@
     <select id="getLeaderInfo" parameterType="java.lang.Integer" resultType="com.example.demo.domain.ProjectInVO">
         select * from tbl_project_in where authority = 'ROLE_ADMIN' and prj_no = #{prj_no}
     </select>
+    <insert id="addFollower" parameterType="java.util.List">
+        <foreach collection="list" item="pINvo" open="INSERT ALL" close="SELECT * FROM SYS.DUAL" separator=" ">
+            INTO tbl_project_in values (
+                tbl_project_in_seq.nextval,
+                #{pINvo.email},
+                'ROLE_USER',
+                #{pINvo.prj_in_d8},
+                #{pINvo.prj_out_d8},
+                #{pINvo.prj_no}
+            )
+        </foreach>
+    </insert>
+    <select id="getFollowerInfo" parameterType="java.lang.Integer" resultType="com.example.demo.domain.ProjectInVO">
+        select * from tbl_project_in where authority = 'ROLE_USER' and prj_no = #{prj_no}
+    </select>
+    <select id="getUserProjectInfo" parameterType="java.lang.String" resultType="com.example.demo.domain.ProjectInVO">
+        select authority, prj_no from tbl_project_in where email = #{email}
+    </select>
+    <update id="updateLeader" parameterType="com.example.demo.domain.ProjectInVO">
+        update tbl_project_in set
+         email = #{email},
+         prj_in_d8 = #{prj_in_d8},
+         prj_out_d8 = #{prj_out_d8}
+        where prj_no = #{prj_no} and authority = 'ROLE_ADMIN'
+    </update>
+    <update id="updateFollower" parameterType="java.util.List">
+        <foreach collection="list" item="pINvo" index="index" separator=";" open="DECLARE BEGIN" close="; END;">
+            update tbl_project_in
+            set email = #{email},
+            authority = 'ROLE_USER',
+            prj_in_d8 = #{prj_in_d8},
+            prj_out_d8 = #{prj_out_d8}
+            where prj_no = #{prj_no}
+        </foreach>
+    </update>
+    <delete id="deleteFollower" parameterType="Integer">
+        delete from tbl_project_in where prj_no = #{num} and authority = 'ROLE_USER'
+    </delete>
 </mapper>

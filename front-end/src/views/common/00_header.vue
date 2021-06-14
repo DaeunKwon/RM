@@ -54,9 +54,12 @@ export default {
       if (action === "userInfo") {
         alert("UserInfo");
       } else if (action === "logout") {
-        this.$axios
-          .post("http://localhost:8090/logout")
-          .then(() => this.$router.push("/")(this.alert("logout")));
+        this.$axios.post("http://localhost:8090/logout").then((res) => {
+          alert("logout");
+          //로그아웃시 프로젝트 참여 정보 초기화
+          //this.$store.commit("setProjectINinfo", null);
+          this.$router.push("/");
+        });
       }
     },
     rptList() {

@@ -1,5 +1,6 @@
 package com.example.demo.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.example.demo.dao.ReportDAO;
@@ -24,10 +25,8 @@ public class ReportDAOImp implements ReportDAO {
     private String ns = "com.example.demo.mapper.report";
 
     @Override
-    public void write(ReportVO rvo) {
-        log.info(">>>>>>>>>>>>report dao 진입");
-        sql.insert(ns + ".write", rvo);
-        log.info(">>>>>>>>>>>>>report db에 넣기 성공");
+    public int write(ReportVO rvo) {
+        return sql.insert(ns + ".write", rvo);
     }
 
     @Override
@@ -42,8 +41,13 @@ public class ReportDAOImp implements ReportDAO {
     }
 
     @Override
-    public void addReport(int prj_no) {
-        sql.insert(ns + ".addReport", prj_no);
+    public void writeDetail(List<ReportDetailVO> reportDetailList) {
+        sql.insert(ns + ".writeDetail", reportDetailList);
+    }
+
+    @Override
+    public List<ReportDetailVO> getSelectedReport(Date rpt_write_d8) {
+        return sql.selectList(ns + ".getSelectedReport", rpt_write_d8);
     }
 
 }

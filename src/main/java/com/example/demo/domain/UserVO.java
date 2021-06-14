@@ -12,6 +12,7 @@ public class UserVO {
     private String password;
     private String rmv_YN;
     private List<String> roles;
+    private String authority;
 
     public UserVO() {
     }

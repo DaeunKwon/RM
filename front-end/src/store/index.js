@@ -4,13 +4,15 @@ import state from "./state";
 import mutations from "./mutations";
 import actions from "./actions";
 import getters from "./getters";
-import createPersistedState from 'vuex-persistedstate';
-
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-    state: state,
+    plugins: [createPersistedState({
+        storage: window.sessionStorage,
+    })],
+    state,
     mutations,
     actions,
     getters: getters,

@@ -3,6 +3,7 @@ package com.example.demo.ctrl;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +18,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -32,27 +31,52 @@ public class ProjectInController {
     @Autowired
     private ProjectInService projectINService;
 
-    @PostMapping(value = "/leader")
+    @PostMapping(value = { "/leader", "/update/leader" })
     @ResponseBody
     public void write(HttpServletRequest req) throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         ProjectInVO pINvo = new ProjectInVO();
+        // log.info(">>>>>>>>>>" + req.getParameter("email"));
+        // log.info(">>>>>>>>>>" + req.getParameter("prj_in_d8"));
+        // log.info(">>>>>>>>>>" + req.getParameter("prj_out_d8"));
+        // log.info(">>>>>>>>>>" + req.getParameter("prj_no"));
+        // log.info(">>>>>>>>>>" + req.getParameter("flag"));
+
         pINvo.setEmail(req.getParameter("email"));
         pINvo.setPrj_in_d8(df.parse(req.getParameter("prj_in_d8")));
         pINvo.setPrj_out_d8(df.parse(req.getParameter("prj_out_d8")));
         pINvo.setPrj_no(Integer.parseInt(req.getParameter("prj_no")));
-        projectINService.add(pINvo);
+        int flag = Integer.parseInt(req.getParameter("flag"));
+        projectINService.add(pINvo, flag);
 
     }
 
-    @PostMapping(value = "/follower")
+    @PostMapping(value = { "/follower", "/update/follower" })
     @ResponseBody
-    public void addFollower(MultipartHttpServletRequest req) {
-        // String[] followers = req.getParameterValues("follower");
-        // for (int i = 0; i < followers.length; i++) {
-        // log.info(">>>>>> followers: " + followers[i]);
-        // }
-        log.info(">>>>>>>>>>length:" + req.getParameterValues("email0"));
+    public void addFollower(HttpServletRequest req) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        log.info(">>>>>> add follower contoroller");
+        List<ProjectInVO> projectInList = new ArrayList<>();
+        String[] email = req.getParameterValues("email");
+        String[] prj_in_d8 = req.getParameterValues("prj_in_d8");
+        String[] prj_out_d8 = req.getParameterValues("prj_out_d8");
+        String[] prj_no = req.getParameterValues("prj_no");
+        int flag = Integer.parseInt(req.getParameter("flag"));
+        for (int i = 0; i < email.length; i++) {
+            ProjectInVO pINvo = new ProjectInVO();
+            pINvo.setEmail(email[i]);
+            pINvo.setPrj_in_d8(df.parse(prj_in_d8[i]));
+            pINvo.setPrj_out_d8(df.parse(prj_out_d8[i]));
+            pINvo.setPrj_no(Integer.parseInt(prj_no[i]));
+            projectInList.add(pINvo);
+        }
+        int num = Integer.parseInt(prj_no[0]);
+        for (ProjectInVO pvo : projectInList) {
+            log.info(">>>>>>>>pinvo:" + pvo);
+            log.info(">>>>>>>>>>>>>>>" + pvo.getEmail());
+        }
+        log.info(">>>>>> flag:" + flag);
+        projectINService.addFollower(projectInList, flag, num);
     }
 
     @GetMapping(value = "/leader/list")
@@ -65,6 +89,17 @@ public class ProjectInController {
     public ProjectInVO getLeaderInfo(int prj_no) {
         log.info(">>>>>>>>getleaderinfo controller");
         return projectINService.getLeaderInfo(prj_no);
+    }
+
+    @GetMapping(value = "/follower/info")
+    public List<ProjectInVO> getFollowerInfo(int prj_no) {
+        log.info(">>>>>>> get follower info controller");
+        return projectINService.getFollowerInfo(prj_no);
+    }
+
+    @GetMapping(value = "/info")
+    public List<ProjectInVO> getUserProjectInfo(HttpServletRequest req) {
+        return projectINService.getUserProjectInfo(req.getParameter("email"));
     }
 
 }
