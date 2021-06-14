@@ -1,44 +1,46 @@
 <template>
-  <v-simple-table>
-    <template v-slot:default>
-      <thead>
-        <tr v-for="item in week" :key="item.name">
-          <th class="text-left">{{ item.Sun }} (일)</th>
-          <th class="text-left">{{ item.Mon }} (월)</th>
-          <th class="text-left">{{ item.Tue }} (화)</th>
-          <th class="text-left">{{ item.Wed }} (수)</th>
-          <th class="text-left">{{ item.Tur }} (목)</th>
-          <th class="text-left">{{ item.Fri }} (금)</th>
-          <th class="text-left">{{ item.Sat }} (토)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in weekdata" :key="item.name">
-          <td>{{ item.sunday }}</td>
-          <td>{{ item.monday }}</td>
-          <td>{{ item.tuesday }}</td>
-          <td>{{ item.wednesday }}</td>
-          <td>{{ item.thursday }}</td>
-          <td>{{ item.friday }}</td>
-          <td>{{ item.saturday }}</td>
-        </tr>
-      </tbody>
-      <span>{{ test }}</span>
-      <v-btn @click="getweekTime">test 버튼</v-btn>
-    </template>
-  </v-simple-table>
+  <div>
+    <v-simple-table>
+      <template v-slot:default>
+        <thead>
+          <tr v-for="item in test" :key="item.name">
+            <th class="text-left">{{ item.Sun }} (일)</th>
+            <th class="text-left">{{ item.Mon }} (월)</th>
+            <th class="text-left">{{ item.Tue }} (화)</th>
+            <th class="text-left">{{ item.Wed }} (수)</th>
+            <th class="text-left">{{ item.Tur }} (목)</th>
+            <th class="text-left">{{ item.Fri }} (금)</th>
+            <th class="text-left">{{ item.Sat }} (토)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td v-for="item in getweeklist" :key="item.name">
+              {{ Math.floor(item.com_total / 60) }} 시간
+              {{ item.com_total % 60 }} 분
+            </td>
+          </tr>
+        </tbody>
+      </template>
+    </v-simple-table>
+    <div align="center" justify="center">
+      <br />
+      이번주 총 근무시간 : {{ sumsum }} {{ getweekTime }}
+    </div>
+  </div>
 </template>
 
 <script>
 var moment = require("moment");
-var now = moment(new Date());
 var end = moment([2015, 0, 4]);
+var nowdate = new Date().toISOString().substr(0, 10);
 
-import eventBus from "../assets/js/eventbus.js";
-import http from "../http-common";
 export default {
   data: () => ({
-    datepick: now,
+    datepick: "",
+    weeklist: [],
+    test1: "",
+    sumsum: "",
     week: [
       {
         Sun: "",
@@ -50,31 +52,16 @@ export default {
         Sat: "",
       },
     ],
-    weekdata: [
-      {
-        sunday: "1",
-        monday: "2",
-        tuesday: "3",
-        wednesday: "4",
-        thursday: "5",
-        friday: "6",
-        saturday: "7",
-      },
-    ],
   }),
-  created() {
-    eventBus.$on("datepick", (datepick) => {
-      this.datepick = datepick;
-      console.log(this.datepick);
-    });
-  },
-
+  created() {},
+  mounted() {},
   computed: {
     test() {
-      const diff = moment(this.datepick).diff(end, "hours");
+      this.datepick = this.$store.getters.getDate;
+      const diff = moment().diff(end, "hours");
       const days = Math.floor(diff / 24);
       const final = days % 7;
-      this.week = [
+      return (this.week = [
         {
           Sun: moment(this.datepick)
             .add(0 - final, "d")
@@ -98,16 +85,15 @@ export default {
             .add(6 - final, "d")
             .format("YYYY-MM-DD"),
         },
-      ];
+      ]);
     },
-  },
-  methods: {
     getweekTime() {
+      this.datepick = this.$store.getters.getDate;
       this.$axios
         .post(
           "http://localhost:8090/api/commute/weekTime",
           {
-            com_d8: "2021-06-01",
+            com_d8: this.datepick,
           },
           {
             headers: {
@@ -116,9 +102,22 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res);
+          this.weeklist = res.data;
+
+          let sum = 0;
+          this.weeklist.forEach((day) => {
+            sum += Number(day.com_total);
+          });
+          this.sumsum = Math.floor(sum / 60) + " 시간 " + (sum % 60) + " 분";
+          console.log(">>>> ", this.sumsum);
         });
     },
+
+    getweeklist() {
+      return this.weeklist;
+    },
   },
+  watch: {},
+  methods: {},
 };
 </script>

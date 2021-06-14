@@ -1,5 +1,7 @@
 package com.example.demo.ctrl;
 
+import java.util.List;
+
 import com.example.demo.domain.ComVO;
 import com.example.demo.service.ComService;
 
@@ -53,7 +55,14 @@ public class ComCtrl {
 
     @PostMapping(value = "/checkWork")
     public boolean checkWork(@RequestBody ComVO cvo) {
+        log.info(">>>>>>>>>>>>>>>checkWork cvo.getCom_d8: " + cvo.getCom_d8());
         return comservice.checkWork(cvo);
+    }
+
+    @PostMapping(value = "/checkoffWork")
+    public boolean checkoffWork(@RequestBody ComVO cvo) {
+        log.info(">>>>>>>>>>>>>>>checkoffWork cvo.getCom_d8: " + cvo.getCom_d8());
+        return comservice.checkoffWork(cvo);
     }
 
     @PostMapping(value = "/offWork", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,9 +74,9 @@ public class ComCtrl {
     }
 
     @PostMapping(value = "/weekTime", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void weekTime(@RequestBody ComVO cvo) {
+    public List<ComVO> weekTime(@RequestBody ComVO cvo) {
         log.info("<<<<<<<<<<<<< ComCtrl 진입");
         log.info(">>>>>>>>>>>>> cvo.getCom_d8: " + cvo.getCom_d8());
-        comservice.weekTime(cvo);
+        return comservice.weekTime(cvo);
     }
 }

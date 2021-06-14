@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import com.example.demo.dao.ComDAO;
 import com.example.demo.domain.ComVO;
 
@@ -28,7 +30,12 @@ public class ComServiceImp implements ComService {
     }
 
     @Override
-    public void weekTime(ComVO cvo) {
-        comdao.weekTime(cvo);
+    public boolean checkoffWork(ComVO cvo) {
+        return comdao.checkoffWork(cvo);
+    }
+
+    @Override
+    public List<ComVO> weekTime(ComVO cvo) {
+        return comdao.weekTime(cvo);
     }
 }

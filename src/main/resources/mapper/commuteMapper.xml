@@ -28,7 +28,7 @@
 
     <select id="checkWork" resultType="com.example.demo.domain.ComVO">
         SELECT 
-                * 
+                com_start 
         FROM tbl_commute
         WHERE com_d8 = #{com_d8}
         AND PRJ_IN_NO = (SELECT 
@@ -39,13 +39,29 @@
                         )
     </select>
 
-    <select id="weekTime" resultType="com.example.demo.domain.ComVO">
+    <select id="checkoffWork" resultType="com.example.demo.domain.ComVO">
+        SELECT 
+             com_end 
+        FROM tbl_commute
+        WHERE com_d8 = #{com_d8}
+        AND PRJ_IN_NO = (SELECT 
+                                PRJ_IN_NO 
+                        FROM TBL_PROJECT_IN tpi 
+                        WHERE EMAIL = #{my_email}
+                        AND PRJ_NO = ${prj_no}
+                        )
+    </select>
+
+    <select id="weekTime" parameterType="com.example.demo.domain.ComVO" resultType="com.example.demo.domain.ComVO">
+
+        <![CDATA[
         SELECT NVL(TC.COM_TOTAL,'0') COM_TOTAL
         FROM tbl_commute TC
         RIGHT OUTER JOIN (SELECT to_char(day + LEVEL - 1, 'yyyy-mm-dd') as DAY FROM 
-        ( SELECT trunc(TO_DATE('#{com_d8, jdbcType=VARCHAR}','yyyy-mm-dd'),'DAY') as DAY FROM dual )
-        CONNECT BY LEVEL
-        <![CDATA[ < ]]>
-        = 7)DA ON TC.COM_D8 = DA.DAY ORDER BY DA.DAY;
+        ( SELECT trunc(TO_DATE(#{com_d8},'yyyy-mm-dd'),'DAY') as DAY FROM dual )
+        CONNECT BY LEVEL<= 7)DA ON TC.COM_D8 = DA.DAY ORDER BY DA.DAY
+        ]]>
+
     </select>
-</mapper> 
+
+</mapper>

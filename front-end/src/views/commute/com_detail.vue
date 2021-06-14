@@ -22,7 +22,7 @@
                 v-on="on"
                 :disabled="test"
               >
-                {{ date }}
+                출근
               </v-btn>
               <v-btn
                 v-else
@@ -49,7 +49,7 @@
                 <v-btn
                   color="green darken-1"
                   text
-                  @click="[gotoWork(), (dialog = false), (work = '근무중')]"
+                  @click="[gotoWork(), (dialog = false)]"
                 >
                   Agree
                 </v-btn>
@@ -84,7 +84,7 @@
                 <v-btn
                   color="green darken-1"
                   text
-                  @click="[offWork(), (dialog2 = false), (work = '퇴근')]"
+                  @click="[offWork(), (dialog2 = false)]"
                 >
                   Agree
                 </v-btn>
@@ -95,57 +95,24 @@
       </v-layout>
 
       <v-layout fluid grid-list-sm pa-15>
-        <v-flex>
-          <v-row align="center" justify="center">
-            <v-col cols="10" sm="1" md="2">
-              <v-menu
-                ref="menu"
-                v-model="menu"
-                :close-on-content-click="false"
-                :return-value.sync="date"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="date"
-                    label="Picker in menu"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker v-model="date" no-title scrollable>
-                  <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="menu = false">
-                    Cancel
-                  </v-btn>
-                  <v-btn
-                    text
-                    color="primary"
-                    @click="[$refs.menu.save(date), dateCommand()]"
-                  >
-                    OK
-                  </v-btn>
-                </v-date-picker>
-              </v-menu>
-            </v-col>
-          </v-row>
-        </v-flex>
-      </v-layout>
-
-      <v-layout>
-        <v-row align="center" justify="center">
-          <v-col cols="2" sm="2"> 현재시간 </v-col>
-          <v-col cols="6" sm="4">
-            <v-text-field v-model="time" readonly solo> </v-text-field>
+        <v-row justify="center">
+          <v-col cols="5">
+            <Datepicker :date="this.date" />
           </v-col>
         </v-row>
       </v-layout>
 
-      <v-layout>
+      <div>
+        <v-layout>
+          <v-row align="center" justify="center">
+            <v-col cols="2" sm="2"> 현재시간 </v-col>
+            <v-col cols="6" sm="4">
+              <v-text-field v-model="time" readonly solo> </v-text-field>
+            </v-col>
+          </v-row>
+        </v-layout>
+
+        <!-- <v-layout>
         <v-row justify="center">
           <v-col> </v-col>
           <v-col> 근무시간 </v-col>
@@ -156,25 +123,22 @@
           </v-progress-linear>
         </v-flex>
       </v-layout>
-      <br />
+      <br /> -->
 
-      <v-layout>
-        <v-row align="center" justify="center">
-          <v-col cols="2" sm="2"> 근무상태 </v-col>
-          <v-col cols="6" sm="4">
-            <v-text-field v-model="work" solo readonly></v-text-field>
-          </v-col>
-        </v-row>
-      </v-layout>
+        <v-layout>
+          <v-row align="center" justify="center">
+            <v-col cols="2" sm="2"> 근무상태 </v-col>
+            <v-col cols="6" sm="4">
+              <v-text-field v-model="work" solo readonly></v-text-field>
+            </v-col>
+          </v-row>
+        </v-layout>
+      </div>
 
       <v-layout>
         <v-row align="center" justify="center">
           <Mydatatable />
         </v-row>
-      </v-layout>
-      <br />
-      <v-layout>
-        <v-flex> 이번주 총 근무시간 : 00시간 </v-flex>
       </v-layout>
     </v-container>
     <Footer />
@@ -186,19 +150,19 @@
 import Header from "../../views/common/00_header"; //import 헤더 추가
 import Footer from "../../views/common/90_footer"; //import 풋터 추가
 import Mydatatable from "../../components/mydatatable"; // 주간 표 추가
+import Datepicker from "../../components/datepicker.vue"; //날짜 선택컴포넌트
 var nowdate = new Date().toISOString().substr(0, 10);
-import eventBus from "../../assets/js/eventbus.js";
+
 export default {
   data() {
     return {
       nowdate: nowdate,
-      date: nowdate,
+      date: "",
       menu: false,
       dialog: false,
       dialog2: false,
       time: "",
       skill: 20,
-      knowledge: 35,
       power: 78,
       dateif: true,
       test: "",
@@ -216,6 +180,7 @@ export default {
     Header, //헤더 컴포넌트 추가
     Footer, //풋터 컴포넌트 추가
     Mydatatable, // 주간 표
+    Datepicker,
   },
 
   created() {
@@ -225,7 +190,7 @@ export default {
       .post(
         "http://localhost:8090/api/commute/checkWork",
         {
-          com_d8: this.date,
+          com_d8: nowdate,
           prj_no: this.prj_no,
           my_email: this.myEmail,
         },
@@ -240,15 +205,44 @@ export default {
 
         // 출근
         if (res.data) {
-          this.test = false;
+          this.test = true;
           this.test2 = false;
+          this.work = "근무중";
           // 미출근
         } else {
           this.test = false;
-          this.test2 = false;
+          this.test2 = true;
+          this.work = "출근전";
+        }
+      });
+
+    this.$axios
+      .post(
+        "http://localhost:8090/api/commute/checkoffWork",
+        {
+          com_d8: nowdate,
+          prj_no: this.prj_no,
+          my_email: this.myEmail,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        //퇴근
+        if (res.data) {
+          this.test2 = true;
+          this.work = "퇴근";
+          // 미퇴근
+        } else {
         }
       });
   },
+
+  computed: {},
   methods: {
     com_detail() {
       this.$router.push("/com_detail");
@@ -266,15 +260,6 @@ export default {
       }, 1000);
     },
 
-    dateCommand() {
-      if (this.date == this.nowdate) {
-        this.dateif = true;
-      } else {
-        this.dateif = false;
-      }
-      eventBus.$emit("datepick", this.date);
-    },
-
     gotoWork() {
       alert("출근등록");
 
@@ -282,7 +267,7 @@ export default {
         .post(
           "http://localhost:8090/api/commute/gotoWork",
           {
-            com_d8: this.date,
+            com_d8: nowdate,
             prj_no: this.prj_no,
           },
           {
@@ -295,6 +280,7 @@ export default {
           console.log(res);
           this.test = true;
           this.test2 = false;
+          this.work = "근무중";
         });
     },
 
@@ -305,7 +291,7 @@ export default {
         .post(
           "http://localhost:8090/api/commute/offWork",
           {
-            com_d8: this.date,
+            com_d8: nowdate,
             prj_no: this.prj_no,
             my_email: this.myEmail,
           },
@@ -318,6 +304,8 @@ export default {
         .then((res) => {
           console.log(res);
           this.test2 = true;
+          this.work = "퇴근";
+          this.$refs.dateTable.getweekTime();
         });
     },
   },

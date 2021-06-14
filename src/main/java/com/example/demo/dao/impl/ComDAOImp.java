@@ -1,5 +1,7 @@
 package com.example.demo.dao.impl;
 
+import java.util.List;
+
 import com.example.demo.dao.ComDAO;
 import com.example.demo.domain.ComVO;
 
@@ -38,9 +40,14 @@ public class ComDAOImp implements ComDAO {
     }
 
     @Override
-    public void weekTime(ComVO cvo) {
+    public boolean checkoffWork(ComVO cvo) {
+        return sql.selectOne(ns + ".checkoffWork", cvo) != null;
+    }
+
+    @Override
+    public List<ComVO> weekTime(ComVO cvo) {
         log.info(">>>>>>>>>>>>>>comdao weekTime 진입");
         log.info(cvo.getCom_d8());
-        sql.selectOne(ns + ".weekTime", cvo);
+        return sql.selectList(ns + ".weekTime", cvo);
     }
 }

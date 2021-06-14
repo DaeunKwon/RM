@@ -23,7 +23,11 @@
         <v-date-picker v-model="date" no-title scrollable>
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
-          <v-btn text color="primary" @click="$refs.menu.save(date)">
+          <v-btn
+            text
+            color="primary"
+            @click="[$refs.menu.save(date), dateCommand()]"
+          >
             OK
           </v-btn>
         </v-date-picker>
@@ -33,16 +37,25 @@
 </template>
 
 <script>
-import eventBus from "../assets/js/eventbus.js";
 export default {
   data: () => ({
-    date: new Date().toISOString().substr(0, 10),
+    date: "",
     menu: false,
   }),
   created() {
-    eventBus.$on("date", (date) => {
-      this.date = date;
-    });
+    this.today;
+  },
+  computed: {
+    today() {
+      this.date = this.$store.state.comDate;
+      return this.date;
+    },
+  },
+
+  methods: {
+    dateCommand() {
+      this.$store.commit("setComdate", this.date);
+    },
   },
 };
 </script>

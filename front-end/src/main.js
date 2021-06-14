@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex';
 import './plugins/axios'
 import App from './App.vue'
-import store from './store'
+import store from '@/store/index.js'
 import router from './router/index.js'
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css'

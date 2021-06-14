@@ -7,5 +7,6 @@
         <mapper resource="mapper/reportMapper.xml" />
         <mapper resource="mapper/projectMapper.xml" />
         <mapper resource="mapper/authMapper.xml" />
+        <mapper resource="mapper/commuteMapper.xml" />
     </mappers>
 </configuration>
