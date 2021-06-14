@@ -1,8 +1,7 @@
-package com.example.demo.dao.impl;
+package com.example.demo.dao;
 
 import java.util.List;
 
-import com.example.demo.dao.UserAuthoritiesDAO;
 import com.example.demo.domain.Authorities;
 
 import org.mybatis.spring.SqlSessionTemplate;

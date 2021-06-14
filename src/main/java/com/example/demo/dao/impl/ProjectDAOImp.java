@@ -31,8 +31,7 @@ public class ProjectDAOImp implements ProjectDAO {
 
     @Override
     public void update(ProjectVO pvo) {
-        // TODO Auto-generated method stub
-
+        sql.update(ns + ".update", pvo);
     }
 
     @Override
@@ -42,13 +41,22 @@ public class ProjectDAOImp implements ProjectDAO {
     }
 
     @Override
-    public List<ProjectVO> getProjectList() {
-        return sql.selectList(ns + ".getProjectList");
+    public List<ProjectVO> getProjectList(String email, String authority) {
+        log.info(">>>>>>" + authority);
+        if (authority.equals("ROLE_ROOT")) {
+            return sql.selectList(ns + ".getAllProjectList");
+        } else {
+            return sql.selectList(ns + ".getProjectList", email);
+        }
     }
 
     @Override
-    public List<ProjectVO> getDoneProjectList() {
-        return sql.selectList(ns + ".getDoneProjectList");
+    public List<ProjectVO> getDoneProjectList(String email, String authority) {
+        if (authority.equals("ROLE_ROOT")) {
+            return sql.selectList(ns + ".getAllDoneProjectList");
+        } else {
+            return sql.selectList(ns + ".getDoneProjectList", email);
+        }
     }
 
     @Override

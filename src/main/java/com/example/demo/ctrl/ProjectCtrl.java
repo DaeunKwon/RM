@@ -7,33 +7,22 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-// import com.example.demo.domain.AuthorityVO;
-// import com.example.demo.domain.ProjectInVO;
 import com.example.demo.domain.ProjectVO;
-// import com.example.demo.service.AuthService;
-// import com.example.demo.service.ProjectInService;
 import com.example.demo.service.ProjectService;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 @CrossOrigin(origins = "*")
-// @RestController(value = "/api/project")
 @RestController
 @RequestMapping(value = "/api/project")
 public class ProjectCtrl {
@@ -64,32 +53,22 @@ public class ProjectCtrl {
 
     @ResponseBody
     @GetMapping(value = "/main")
-    public List<ProjectVO> list(Model model) {
+    public List<ProjectVO> list(HttpServletRequest req) {
         log.info(">>>>>>project list get");
-        return projectService.getProjectList();
+        String email = req.getParameter("email");
+        String authority = req.getParameter("authority");
+        log.info(">>>>>controller" + authority);
+        return projectService.getProjectList(email, authority);
 
     }
-
-    @PostMapping(value = "/write", produces = MediaType.APPLICATION_JSON_VALUE)
-
-    @ResponseBody
-    public void write(@RequestBody ProjectVO pvo) {
-        log.info(">>>>>>>>>>>>project write POST 요청");
-        projectService.write(pvo);
-        log.info(">>>>>>>>>>>>project db에 넣기 성공");
-
-    }
-
-    @GetMapping(value = "/detail")
-    public String detail() {
-        log.info(">>>>>>>>>>>>>project detail 페이지 출력");
-        return "index.html";
 
     @ResponseBody
     @GetMapping(value = "/main/done")
-    public List<ProjectVO> getDoneProjectlist(Model model) {
+    public List<ProjectVO> getDoneProjectlist(HttpServletRequest req) {
         log.info(">>>>>>project list get");
-        return projectService.getDoneProjectList();
+        String email = req.getParameter("email");
+        String authority = req.getParameter("authority");
+        return projectService.getDoneProjectList(email, authority);
 
     }
 
@@ -98,22 +77,29 @@ public class ProjectCtrl {
     public void deleteProject(@RequestBody int prj_no) {
         log.info(">>>>>delete project controller");
         projectService.deleteProject(prj_no);
-
     }
 
     @ResponseBody
-    @GetMapping(value = "/api/project/main")
-    public List<ProjectVO> list(Model model) {
-        log.info(">>>>>>project list get");
-        return projectService.getProjectList();
+    @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void updateProject(HttpServletRequest req) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-    }
-
-    @ResponseBody
-    @GetMapping(value = "/api/project/main/done")
-    public List<ProjectVO> getDoneProjectlist(Model model) {
-        log.info(">>>>>>project list get");
-        return projectService.getDoneProjectList();
-
+        log.info(">>>>>>>>> update project controller");
+        log.info("project title" + req.getParameter("prj_title"));
+        // log.info("project title" + req.getParameter("cond"));
+        // log.info("project title" + req.getParameter("start_date"));
+        // log.info("project title" + req.getParameter("end_date"));
+        // log.info("project title" + req.getParameter("content"));
+        // log.info("project title" + req.getParameter("remark"));
+        ProjectVO pvo = new ProjectVO();
+        pvo.setPrj_no(Integer.parseInt(req.getParameter("prj_no")));
+        pvo.setPrj_title(req.getParameter("prj_title"));
+        pvo.setCond(req.getParameter("cond"));
+        pvo.setStart_d8(df.parse(req.getParameter("start_date")));
+        pvo.setEnd_d8(df.parse(req.getParameter("end_date")));
+        pvo.setPrj_mod_writer(req.getParameter("mod_writer"));
+        pvo.setPrj_content(req.getParameter("content"));
+        pvo.setPrj_remark(req.getParameter("remark"));
+        projectService.update(pvo);
     }
 }

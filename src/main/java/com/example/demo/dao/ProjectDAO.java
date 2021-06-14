@@ -11,9 +11,9 @@ public interface ProjectDAO {
 
     public void delete(Integer prj_no);
 
-    public List<ProjectVO> getProjectList();
+    public List<ProjectVO> getProjectList(String email, String authority);
 
-    public List<ProjectVO> getDoneProjectList();
+    public List<ProjectVO> getDoneProjectList(String email, String authority);
 
     public void deleteProject(int prj_no);
 
