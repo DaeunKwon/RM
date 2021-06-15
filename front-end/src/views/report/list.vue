@@ -52,7 +52,7 @@
                 </v-card>
                 <br />
               </div>
-              <div
+              <!-- <div
                 v-if="selectedDate == today"
                 @click="openUpdateDialog(reportDetail)"
               >
@@ -60,7 +60,7 @@
                   <v-spacer></v-spacer>
                   <v-btn color="warning">수정</v-btn>
                 </v-card-actions>
-              </div>
+              </div> -->
             </v-card>
           </v-col>
           <v-col cols="12" md="9">
@@ -136,19 +136,21 @@
               >
                 <v-card color="grey lighten-4" min-width="350px" flat>
                   <v-toolbar :color="selectedEvent.color" dark>
-                    <v-btn icon>
+                    <v-btn
+                      icon
+                      v-if="
+                        this.$store.getters.getCurrentUser.name ==
+                        selectedEvent.name
+                      "
+                      @click="openUpdateDialog(selectedEvent)"
+                    >
                       <v-icon>mdi-pencil</v-icon>
                     </v-btn>
                     <v-toolbar-title
-                      v-html="selectedEvent.name"
-                    ></v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-btn icon>
-                      <v-icon>mdi-heart</v-icon>
-                    </v-btn>
-                    <v-btn icon>
-                      <v-icon>mdi-dots-vertical</v-icon>
-                    </v-btn>
+                      ><span v-html="selectedEvent.name" /> (<span
+                        v-html="selectedEvent.prj_title"
+                      />)</v-toolbar-title
+                    >
                   </v-toolbar>
                   <v-card-text>
                     <span v-html="selectedEvent.start"></span>
@@ -185,6 +187,7 @@
                   required
                   readonly
                   outlined
+                  v-model="selectedReportDetail.prj_title"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
@@ -276,6 +279,7 @@
                   :id="'content' + k"
                   v-model="input.content"
                 ></v-textarea>
+
                 <v-btn
                   fab
                   dark
@@ -356,6 +360,7 @@ export default {
         "orange",
         "grey darken-1",
       ],
+      selectedReportDetail: [],
     };
   },
   mounted() {
@@ -379,9 +384,9 @@ export default {
   },
   methods: {
     updateReport() {},
-    openUpdateDialog(reportDetail) {
+    openUpdateDialog(selectedEvent) {
       this.updateDialog = true;
-      this.selectedReportDetail = reportDetail;
+      this.selectedReportDetail = selectedEvent;
     },
     getEvents() {
       if (this.$store.getters.getProjectINInfo[0].authority == null) {
