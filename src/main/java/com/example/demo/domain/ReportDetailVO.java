@@ -16,5 +16,6 @@ public class ReportDetailVO {
     private Date rpt_end_time;
     private String rpt_content;
     private String name;
+    private String prj_title;
 
 }

@@ -44,14 +44,11 @@
               >
                 <v-card color="white">
                   <v-card-title>
-                    {{ reportDetail.name }}
+                    {{ reportDetail.name }} ({{ reportDetail.prj_title }})
                   </v-card-title>
-                  <v-card-content>
-                    {{ reportDetail.prj_title }}
-                  </v-card-content>
-
-                  {{ reportDetail.rpt_start_time }} ~
-                  {{ reportDetail.rpt_end_time }}
+                  <v-card-text>
+                    {{ reportDetail.rpt_content }}
+                  </v-card-text>
                 </v-card>
                 <br />
               </div>
@@ -326,20 +323,6 @@ export default {
   },
   data() {
     return {
-      items: [
-        {
-          color: "#1F7087",
-          src: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
-          title: "Supermodel",
-          artist: "Foster the People",
-        },
-        {
-          color: "#952175",
-          src: "https://cdn.vuetifyjs.com/images/cards/halcyon.png",
-          title: "Halcyon Days",
-          artist: "Ellie Goulding",
-        },
-      ],
       startModel: false,
       endModel: false,
       updateDialog: false,
@@ -407,13 +390,14 @@ export default {
           console.log(this.$store.getters.getUserReport);
         });
       } else {
-        var reportList = [];
+        const reportList = [];
         console.log(this.$store.getters.getProjectINInfo.length);
         for (let i = 0; i < this.$store.getters.getProjectINInfo.length; i++) {
           if (
             this.$store.getters.getProjectINInfo[i].authority == "ROLE_ADMIN"
           ) {
             console.log("admin");
+            console.log(this.$store.getters.getProjectINInfo[i].prj_no);
             this.$axios
               .get("/api/report/detail/getADMIN", {
                 params: {
@@ -421,7 +405,11 @@ export default {
                 },
               })
               .then((res) => {
-                reportList.push(res.data);
+                console.log(res.data);
+                for (let i = 0; i < res.data.length; i++) {
+                  reportList.push(res.data[i]);
+                }
+                console.log(reportList);
               });
           } else if (
             this.$store.getters.getProjectINInfo[i].authority == "ROLE_USER"
@@ -435,8 +423,11 @@ export default {
                 },
               })
               .then((res) => {
+                console.log("완료");
                 console.log(res.data);
-                reportList.push(res.data);
+                for (let i = 0; i < res.data.length; i++) {
+                  reportList.push(res.data[i]);
+                }
                 console.log(reportList);
               });
           }
@@ -444,80 +435,51 @@ export default {
         this.reportList = reportList;
         console.log(this.reportList);
         this.$store.commit("setReport", this.reportList);
+        console.log(this.$store.getters.getUserReport);
       }
-      const events = [];
-      const reportDetailList = this.$store.getters.getUserReport;
-      this.reportDetailList = reportDetailList;
-      // console.log(this.getCount());
-      console.log(reportDetailList, reportDetailList.length);
-      // console.log(reportDetailList.length);
-      // console.log(reportDetailList);
-      for (let i = 0; i < reportDetailList.length; i++) {
-        console.log(reportDetailList[i].name);
-        const startTime = this.$moment(
-          reportDetailList[i].rpt_start_time
-        ).format("YYYY-MM-DD HH:mm");
-        const endTime = this.$moment(reportDetailList[i].rpt_end_time).format(
-          "YYYY-MM-DD HH:mm"
-        );
-        console.log(reportDetailList[i].prj_title);
-        events.push({
-          name: reportDetailList[i].name,
-          start: startTime,
-          end: endTime,
-          color: this.colors[this.rnd(0, this.colors.length - 1)],
-          content: reportDetailList[i].rpt_content,
-          prj_title: reportDetailList[i].prj_title,
-        });
-      }
-      console.log(events);
-      this.events = events;
 
-      // else {
-      //   const events = [];
-      //   const INinfo = [];
-      //   console.log(this.$store.getters.getProjectINInfo[0].prj_in_no);
-      //   for (let i = 0; i < this.$store.state.userINProject.length; i++) {
-      //     INinfo.push(this.$store.getters.getProjectINInfo[i]);
-      //     console.log(INinfo);
-      //   }
-      //   console.log(INinfo);
-      //   const qs = require("qs");
-      //   const formData = new FormData();
-      //   formData.append("name", "daeun");
-      //   formData.append("age", 25);
-      //   this.$axios
-      //     .get("/api/report/detail/list", {
-      //       params: {
-      //         email: this.$store.getters.getCurrentUser.email,
-      //       },
-      //       // paramsSerializer: function (params) {
-      //       //   return qs.stringify(params, { arrayFormat: "repeat" });
-      //       // },
-      //     })
-      //     .then((res) => {
-      //       this.$store.commit("setReport", res.data);
-      //       console.log(this.$store.getters.getUserReport);
-      //       const reportDetailList = res.data;
-      //       for (let i = 0; i < reportDetailList.length; i++) {
-      //         const startTime = this.$moment(
-      //           reportDetailList[i].rpt_start_time
-      //         ).format("YYYY-MM-DD HH:mm");
-      //         const endTime = this.$moment(
-      //           reportDetailList[i].rpt_end_time
-      //         ).format("YYYY-MM-DD HH:mm");
-
-      //         events.push({
-      //           name: reportDetailList[i].name,
-      //           start: startTime,
-      //           end: endTime,
-      //           color: this.colors[this.rnd(0, this.colors.length - 1)],
-      //           content: reportDetailList[i].rpt_content,
-      //         });
-      //       }
-      //       this.events = events;
-      //     });
+      // function delay(item) {
+      //   return new Promise((resolve) =>
+      //     setTimeout(() => {
+      //       console.log(item);
+      //       resolve();
+      //     }, 500)
+      //   );
       // }
+      // async function loop1(array) {
+      //   array.forEach(async (item) => {
+      //     await delay(item);
+      //   });
+      //   console.log("Done!");
+      // }
+      // loop1([1, 2, 3]);
+
+      setTimeout(() => {
+        const events = [];
+        const reportDetailList = this.$store.getters.getUserReport;
+        this.reportDetailList = reportDetailList;
+        console.log(reportDetailList, reportDetailList.length);
+        for (let i = 0; i < reportDetailList.length; i++) {
+          console.log(reportDetailList[i].name);
+          const startTime = this.$moment(
+            reportDetailList[i].rpt_start_time
+          ).format("YYYY-MM-DD HH:mm");
+          const endTime = this.$moment(reportDetailList[i].rpt_end_time).format(
+            "YYYY-MM-DD HH:mm"
+          );
+          console.log(reportDetailList[i].prj_title);
+          events.push({
+            name: reportDetailList[i].name,
+            start: startTime,
+            end: endTime,
+            color: this.colors[this.rnd(0, this.colors.length - 1)],
+            content: reportDetailList[i].rpt_content,
+            prj_title: reportDetailList[i].prj_title,
+          });
+        }
+        console.log(events);
+        this.events = events;
+      }, 500);
     },
     viewDay({ date }) {
       this.focus = date;

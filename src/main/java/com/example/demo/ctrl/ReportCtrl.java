@@ -1,20 +1,16 @@
 package com.example.demo.ctrl;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import com.example.demo.domain.ProjectInVO;
 import com.example.demo.domain.ReportDetailVO;
 import com.example.demo.domain.ReportVO;
 import com.example.demo.service.ReportService;
 
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +18,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,8 +51,9 @@ public class ReportCtrl {
 
     @ResponseBody
     @GetMapping(value = "/detail/getUSER")
-    public List<ReportDetailVO> getUSER(int prj_in_no) {
-        return reportService.getUSER(prj_in_no);
+    public List<ReportDetailVO> getUSER(HttpServletRequest req) {
+        log.info(">>>>>>>> get user" + reportService.getUSER(Integer.parseInt(req.getParameter("prj_in_no"))));
+        return reportService.getUSER(Integer.parseInt(req.getParameter("prj_in_no")));
     }
 
     @ResponseBody

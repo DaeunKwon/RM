@@ -9,7 +9,7 @@
 		select * from tbl_report
 	</select>
 	<select id="getAll" resultType="com.example.demo.domain.ReportDetailVO">
-		SELECT trd.*, tr.prj_no, tr.RPT_WRITER, tpi.EMAIL, tm.name, tpi.AUTHORITY
+		SELECT trd.*, tr.prj_no, tr.RPT_WRITER, tpi.EMAIL, tm.name, tpi.AUTHORITY, tp.prj_title
 		FROM TBL_REPORT_DETAIL trd
 		JOIN TBL_REPORT tr
 		ON tr.RPT_NO = trd.RPT_NO
@@ -17,6 +17,8 @@
 		ON tpi.PRJ_IN_NO = tr.RPT_WRITER
 		JOIN TBL_MEMBER tm
 		ON tpi.email = tm.EMAIL
+		JOIN TBL_PROJECT tp
+		ON tp.prj_no = tpi.prj_no
 	</select>
 	<select id="getReport" resultType="com.example.demo.domain.ReportDetailVO">
 		SELECT trd.*, tr.prj_no, tr.RPT_WRITER, tpi.EMAIL, tpi.AUTHORITY
@@ -38,7 +40,7 @@
 		ON tpi.EMAIL = tm.EMAIL
 	</select>
 	<select id="getADMIN" parameterType="Integer" resultType="com.example.demo.domain.ReportDetailVO">
-		SELECT trd.*, tr.prj_no, tr.RPT_WRITER, tpi.authority, tpi.EMAIL, tm.NAME
+		SELECT trd.*, tr.prj_no, tr.RPT_WRITER, tpi.authority, tpi.EMAIL, tm.NAME, tp.prj_title
 		FROM TBL_REPORT tr
 		JOIN TBL_REPORT_DETAIL trd
 		ON trd.RPT_NO = tr.RPT_NO
@@ -46,10 +48,12 @@
 		ON tpi.PRJ_IN_NO = tr.RPT_WRITER
 		JOIN TBL_MEMBER tm
 		ON tpi.EMAIL = tm.EMAIL
+		JOIN TBL_PROJECT tp
+		ON tp.prj_no = tpi.prj_no
 		WHERE tr.prj_no = #{prj_no}
 	</select>
 	<select id="getUSER" parameterType="Integer" resultType="com.example.demo.domain.ReportDetailVO">
-		SELECT trd.*, tr.prj_no, tr.RPT_WRITER, tpi.authority, tpi.EMAIL, tm.NAME
+		SELECT trd.*, tr.prj_no, tr.RPT_WRITER, tpi.authority, tpi.EMAIL, tm.NAME, tp.prj_title
 		FROM TBL_REPORT tr
 		JOIN TBL_REPORT_DETAIL trd
 		ON trd.RPT_NO = tr.RPT_NO
@@ -57,6 +61,8 @@
 		ON tpi.PRJ_IN_NO = tr.RPT_WRITER
 		JOIN TBL_MEMBER tm
 		ON tpi.EMAIL = tm.EMAIL
+		JOIN TBL_PROJECT tp
+		ON tp.prj_no = tpi.prj_no
 		WHERE rpt_writer = #{prj_in_no}
 	</select>
 	<insert id="writeDetail" parameterType="java.util.List">
