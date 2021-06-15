@@ -4,7 +4,7 @@
     <v-container
       ><br />
       <div>
-        업무 일지 목록 {{ this.$store.state.userINProject }}
+        업무 일지 목록
         {{ this.$store.getters.getProjectINInfo }}
       </div>
       <div align="right">
@@ -46,6 +46,10 @@
                   <v-card-title>
                     {{ reportDetail.name }}
                   </v-card-title>
+                  <v-card-content>
+                    {{ reportDetail.prj_title }}
+                  </v-card-content>
+
                   {{ reportDetail.rpt_start_time }} ~
                   {{ reportDetail.rpt_end_time }}
                 </v-card>
@@ -403,7 +407,7 @@ export default {
           console.log(this.$store.getters.getUserReport);
         });
       } else {
-        const reportList = [];
+        var reportList = [];
         console.log(this.$store.getters.getProjectINInfo.length);
         for (let i = 0; i < this.$store.getters.getProjectINInfo.length; i++) {
           if (
@@ -423,6 +427,7 @@ export default {
             this.$store.getters.getProjectINInfo[i].authority == "ROLE_USER"
           ) {
             console.log("user");
+            console.log(this.$store.getters.getProjectINInfo[i].prj_in_no);
             this.$axios
               .get("/api/report/detail/getUSER", {
                 params: {
@@ -430,23 +435,23 @@ export default {
                 },
               })
               .then((res) => {
+                console.log(res.data);
                 reportList.push(res.data);
                 console.log(reportList);
               });
           }
-          this.reportList = reportList;
-          console.log(this.reportList);
         }
+        this.reportList = reportList;
         console.log(this.reportList);
         this.$store.commit("setReport", this.reportList);
       }
-      console.log(this.$store.getters.getUserReport);
-      console.log(this.$store.state.userReport);
       const events = [];
       const reportDetailList = this.$store.getters.getUserReport;
       this.reportDetailList = reportDetailList;
-      console.log(this.reportDetailList);
-      console.log(Object.keys(this.reportDetailList).length);
+      // console.log(this.getCount());
+      console.log(reportDetailList, reportDetailList.length);
+      // console.log(reportDetailList.length);
+      // console.log(reportDetailList);
       for (let i = 0; i < reportDetailList.length; i++) {
         console.log(reportDetailList[i].name);
         const startTime = this.$moment(
@@ -455,13 +460,14 @@ export default {
         const endTime = this.$moment(reportDetailList[i].rpt_end_time).format(
           "YYYY-MM-DD HH:mm"
         );
-
+        console.log(reportDetailList[i].prj_title);
         events.push({
           name: reportDetailList[i].name,
           start: startTime,
           end: endTime,
           color: this.colors[this.rnd(0, this.colors.length - 1)],
           content: reportDetailList[i].rpt_content,
+          prj_title: reportDetailList[i].prj_title,
         });
       }
       console.log(events);
@@ -532,6 +538,9 @@ export default {
         }
       }
       this.selectedDateReport = selectedDateReport;
+    },
+    getCount() {
+      return this.reportDetailList.length;
     },
     getEventColor(event) {
       return event.color;
