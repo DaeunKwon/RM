@@ -642,6 +642,7 @@ export default {
           reportDetail.append("content", this.inputs[i].content);
           reportDetail.append("rpt_no", res.data);
         }
+        reportDetail.append("flag", 0);
 
         this.$axios
           .post("/api/report/write/detail", reportDetail)
