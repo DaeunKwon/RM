@@ -86,11 +86,6 @@ public class ProjectCtrl {
 
         log.info(">>>>>>>>> update project controller");
         log.info("project title" + req.getParameter("prj_title"));
-        // log.info("project title" + req.getParameter("cond"));
-        // log.info("project title" + req.getParameter("start_date"));
-        // log.info("project title" + req.getParameter("end_date"));
-        // log.info("project title" + req.getParameter("content"));
-        // log.info("project title" + req.getParameter("remark"));
         ProjectVO pvo = new ProjectVO();
         pvo.setPrj_no(Integer.parseInt(req.getParameter("prj_no")));
         pvo.setPrj_title(req.getParameter("prj_title"));
