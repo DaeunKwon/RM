@@ -3,10 +3,7 @@
     <Header />
     <v-container
       ><br />
-      <div>
-        업무 일지 목록
-        {{ this.$store.getters.getProjectINInfo }}
-      </div>
+      <div>업무 일지 목록</div>
       <div align="right">
         <v-btn color="primary" class="mr-2" @click="rptList"> 주간 </v-btn>
         <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
@@ -43,10 +40,20 @@
                 :key="reportDetail.id"
               >
                 <v-card color="white">
-                  <v-card-title>
+                  <v-card-title class="justify-center">
                     {{ reportDetail.name }} ({{ reportDetail.prj_title }})
                   </v-card-title>
                   <v-card-text>
+                    {{
+                      reportDetail.rpt_start_time
+                        | moment("YYYY-MM-DD HH:mm:ss")
+                    }}
+                    ~
+                    {{
+                      reportDetail.rpt_end_time | moment("YYYY-MM-DD HH:mm:ss")
+                    }}
+
+                    <br />
                     {{ reportDetail.rpt_content }}
                   </v-card-text>
                 </v-card>
@@ -191,7 +198,7 @@
                 >
                 </v-text-field>
               </v-col>
-              <v-col> {{ inputs }} </v-col>
+              <!-- <v-col> {{ inputs }} </v-col> -->
               <v-dialog v-model="openTimeFlag" width="290px">
                 <v-time-picker v-model="openTime" full-width>
                   <v-spacer></v-spacer>
@@ -340,6 +347,10 @@ export default {
     //     );
     //   });
     // }
+    if (this.focus == "") {
+      this.selectedDate = this.today;
+      //this.viewSelectedDay(this.selectedDate);
+    }
   },
   computed: {
     // getReportList() {
