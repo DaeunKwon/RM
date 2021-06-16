@@ -25,4 +25,8 @@ public interface ReportDAO {
 
     public List<ReportDetailVO> getUSER(int prj_in_no);
 
+    public void updateReport(ReportVO report);
+
+    public void updateDetail(List<ReportDetailVO> reportDetailList);
+
 }

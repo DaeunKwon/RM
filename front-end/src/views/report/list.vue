@@ -52,15 +52,6 @@
                 </v-card>
                 <br />
               </div>
-              <!-- <div
-                v-if="selectedDate == today"
-                @click="openUpdateDialog(reportDetail)"
-              >
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="warning">수정</v-btn>
-                </v-card-actions>
-              </div> -->
             </v-card>
           </v-col>
           <v-col cols="12" md="9">
@@ -192,7 +183,7 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
-                  v-model="today"
+                  v-model="selectedReportDetail.write_d8"
                   label="Date"
                   required
                   readonly
@@ -200,104 +191,68 @@
                 >
                 </v-text-field>
               </v-col>
-
-              <v-col cols="12" v-for="(input, k) in inputs" :key="k">
-                <v-dialog
-                  ref="startDialog"
-                  v-model="startModel"
-                  :return-value.sync="input.start_time"
-                  width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="input.start_time"
-                      :id="'start_time' + k"
-                      label="시작 시간"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                      outlined
-                    ></v-text-field>
-                  </template>
-                  <v-time-picker
-                    v-if="startModel"
-                    v-model="input.start_time"
-                    :id="'start_time' + k"
-                    full-width
+              <v-col> {{ inputs }} </v-col>
+              <v-dialog v-model="openTimeFlag" width="290px">
+                <v-time-picker v-model="openTime" full-width>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="openTimeFlag = false"
+                    >취소</v-btn
                   >
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="startModel = false"
-                      >취소</v-btn
-                    >
-                    <v-btn
-                      text
-                      color="primary"
-                      @click="$refs.startDialog[k].save(input.start_time)"
-                      >저장</v-btn
-                    >
-                  </v-time-picker>
-                </v-dialog>
-
-                <v-dialog
-                  ref="endDialog"
-                  v-model="endModel"
-                  :return-value.sync="input.end_time"
-                  width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="input.end_time"
-                      :id="'end_time' + k"
-                      label="끝난 시간"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                      outlined
-                    ></v-text-field>
-                  </template>
-                  <v-time-picker
-                    v-if="endModel"
-                    v-model="input.end_time"
-                    full-width
-                  >
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="endModel = false"
-                      >취소</v-btn
-                    >
-                    <v-btn
-                      text
-                      color="primary"
-                      @click="$refs.endDialog[k].save(input.end_time)"
-                      >저장</v-btn
-                    >
-                  </v-time-picker>
-                </v-dialog>
+                  <v-btn text color="primary" @click="saveTime()">저장</v-btn>
+                </v-time-picker>
+              </v-dialog>
+            </v-row>
+            <v-row v-for="(input, k) in inputs" :key="k">
+              <v-col cols="12">
+                <v-text-field
+                  v-model="input.rpt_start_time"
+                  :id="'start_time' + k"
+                  label="시작 시간"
+                  outlined
+                  readonly
+                  @click="openTimeSaver(inputs, k, 'rpt_start_time')"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="input.rpt_end_time"
+                  :id="'end_time' + k"
+                  label="시작 시간"
+                  outlined
+                  readonly
+                  @click="openTimeSaver(inputs, k, 'rpt_end_time')"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
                 <v-textarea
+                  v-model="input.rpt_content"
                   label="업무 내용"
                   required
                   outlined
                   :id="'content' + k"
-                  v-model="input.content"
                 ></v-textarea>
-
                 <v-btn
+                  class="sm-2 mr-4"
                   fab
                   dark
                   small
                   color="indigo"
                   @click="remove(k)"
                   v-show="k || (!k && inputs.length > 1)"
-                  ><v-icon dark>mdi-minus</v-icon></v-btn
-                >&nbsp;&nbsp;
+                >
+                  <v-icon dark>mdi-minus</v-icon>
+                </v-btn>
                 <v-btn
+                  class="sm-2"
                   fab
                   dark
                   small
                   color="indigo"
                   @click="add(k)"
                   v-show="k === inputs.length - 1"
-                  ><v-icon dark>mdi-plus</v-icon></v-btn
                 >
+                  <v-icon dark>mdi-plus</v-icon>
+                </v-btn>
               </v-col>
             </v-row>
           </v-container>
@@ -361,12 +316,30 @@ export default {
         "grey darken-1",
       ],
       selectedReportDetail: [],
+      selectedReport: [],
+      openTimeFlag: false,
+      openTimeValues: [],
+      openTimeType: "",
+      openTimeIndex: -1,
+      openTime: "",
     };
   },
   mounted() {
     // this.getReportList;
     this.getToday();
     //this.getReportDetailList;
+    // if (true) {
+    //   console.log(this.selc)
+    //   this.inputs = this.selectedReport;
+    //   this.inputs.forEach((input) => {
+    //     input.rpt_start_time = this.$moment(input.rpt_start_time).format(
+    //       "HH:mm:ss"
+    //     );
+    //     input.rpt_end_time = this.$moment(input.rpt_end_time).format(
+    //       "HH:mm:ss"
+    //     );
+    //   });
+    // }
   },
   computed: {
     // getReportList() {
@@ -383,10 +356,67 @@ export default {
     // },
   },
   methods: {
-    updateReport() {},
+    updateReport() {
+      // console.log(this.selectedReportDetail.rpt_no);
+      // console.log(this.selectedReportDetail.rpt_writer);
+      console.log(this.sel);
+      const report = new FormData();
+      report.append("rpt_no", this.selectedReportDetail.rpt_no);
+      report.append("rpt_mod_writer", this.selectedReportDetail.rpt_writer);
+      // this.$axios.post("/api/report/update", report).then((res) => {
+      //   alert("수정 성공");
+      // });
+      const reportDetail = new FormData();
+      for (let i = 0; i < this.inputs.length; i++) {
+        reportDetail.append("rpt_no", this.selectedReportDetail.rpt_no);
+        reportDetail.append(
+          "rpt_start_time",
+          this.selectedReportDetail.write_d8 +
+            " " +
+            this.inputs[i].rpt_start_time
+        );
+        reportDetail.append(
+          "rpt_end_time",
+          this.selectedReportDetail.write_d8 + " " + this.inputs[i].rpt_end_time
+        );
+        reportDetail.append("rpt_content", this.inputs[i].rpt_content);
+      }
+      reportDetail.append("flag", 1);
+      for (var value of reportDetail.values()) {
+        console.log(value);
+      }
+      this.$axios
+        .post("/api/report/update/detail", reportDetail)
+        .then((res) => {
+          alert("성공");
+        });
+    },
     openUpdateDialog(selectedEvent) {
       this.updateDialog = true;
       this.selectedReportDetail = selectedEvent;
+      console.log(selectedEvent.rpt_no);
+      console.log(this.$store.getters.getUserReport.length);
+      const selectedReport = [];
+      for (let i = 0; i < this.$store.getters.getUserReport.length; i++) {
+        if (
+          this.$store.getters.getUserReport[i].rpt_no == selectedEvent.rpt_no &&
+          this.$store.getters.getUserReport[i].name ==
+            this.$store.getters.getCurrentUser.name
+        ) {
+          selectedReport.push(this.$store.getters.getUserReport[i]);
+          console.log(selectedReport);
+        }
+      }
+      this.selectedReport = selectedReport;
+      this.inputs = this.selectedReport;
+      this.inputs.forEach((input) => {
+        input.rpt_start_time = this.$moment(input.rpt_start_time).format(
+          "HH:mm:ss"
+        );
+        input.rpt_end_time = this.$moment(input.rpt_end_time).format(
+          "HH:mm:ss"
+        );
+      });
     },
     getEvents() {
       if (this.$store.getters.getProjectINInfo[0].authority == null) {
@@ -472,7 +502,10 @@ export default {
           const endTime = this.$moment(reportDetailList[i].rpt_end_time).format(
             "YYYY-MM-DD HH:mm"
           );
-          console.log(reportDetailList[i].prj_title);
+          const date = this.$moment(reportDetailList[i].rpt_start_time).format(
+            "YYYY-MM-DD"
+          );
+          console.log(reportDetailList[i]);
           events.push({
             name: reportDetailList[i].name,
             start: startTime,
@@ -480,6 +513,9 @@ export default {
             color: this.colors[this.rnd(0, this.colors.length - 1)],
             content: reportDetailList[i].rpt_content,
             prj_title: reportDetailList[i].prj_title,
+            rpt_no: reportDetailList[i].rpt_no,
+            rpt_writer: reportDetailList[i].rpt_writer,
+            write_d8: date,
           });
         }
         console.log(events);
@@ -566,7 +602,17 @@ export default {
       this.today = this.$moment(new Date()).format("YYYY-MM-DD");
       console.log(this.today);
     },
-    rptWritePOST() {},
+    openTimeSaver(inputs, k, type) {
+      this.openTimeFlag = true;
+      this.openTimeValues = inputs;
+      this.openTimeIndex = k;
+      this.openTimeType = type;
+    },
+    saveTime() {
+      this.openTimeFlag = false;
+      this.openTimeValues[this.openTimeIndex][this.openTimeType] =
+        this.openTime;
+    },
   },
 };
 </script>

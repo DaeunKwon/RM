@@ -83,4 +83,13 @@
 		ON tr.RPT_NO = trd.RPT_NO AND RPT_WRITE_D8 >= #{rpt_write_d8}
 		<![CDATA[AND rpt_write_d8 < #{rpt_write_d8}+1]]>
 	</select>
+	<update id="updateReport" parameterType="com.example.demo.domain.ReportVO">
+		update tbl_report set
+		 rpt_mod_d8 = sysdate,
+		 rpt_mod_writer = #{rpt_mod_writer}
+		where rpt_no = #{rpt_no}
+	</update>
+	<delete id="deleteDetail" parameterType="Integer">
+		delete from tbl_report_detail where rpt_no = #{rpt_no}
+	</delete>
 </mapper>

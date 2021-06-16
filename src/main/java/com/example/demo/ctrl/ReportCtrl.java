@@ -102,14 +102,19 @@ public class ReportCtrl {
         return rvo.getRpt_no();
     }
 
-    @PostMapping(value = "/write/detail")
+    @PostMapping(value = { "/write/detail", "/update/detail" })
     public void writeDetail(HttpServletRequest req) throws ParseException {
         log.info(">>>>>>> write report detail controller");
+        int flag = Integer.parseInt(req.getParameter("flag"));
+        log.info(">>>>>>>>>>>>> flag: " + flag);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         List<ReportDetailVO> reportDetailList = new ArrayList<>();
-        String[] rpt_start_time = req.getParameterValues("start_time");
-        String[] rpt_end_time = req.getParameterValues("end_time");
-        String[] rpt_content = req.getParameterValues("content");
+        String[] rpt_start_time = flag > 0 ? req.getParameterValues("rpt_start_time")
+                : req.getParameterValues("start_time");
+        String[] rpt_end_time = flag > 0 ? req.getParameterValues("rpt_end_time") : req.getParameterValues("end_time");
+        String[] rpt_content = flag > 0 ? req.getParameterValues("rpt_content") : req.getParameterValues("content");
+        log.info(">>>>>>>>content:" + req.getParameter("rpt_content"));
+
         String[] rpt_no = req.getParameterValues("rpt_no");
         for (int i = 0; i < rpt_start_time.length; i++) {
             ReportDetailVO reportDetail = new ReportDetailVO();
@@ -119,8 +124,19 @@ public class ReportCtrl {
             reportDetail.setRpt_no(Integer.parseInt(rpt_no[i]));
             reportDetailList.add(reportDetail);
         }
-        reportService.writeDetail(reportDetailList);
+        for (ReportDetailVO rdvo : reportDetailList) {
+            log.info(">>>>>> rpt detail # " + rdvo);
+        }
+        reportService.writeDetail(reportDetailList, flag);
+    }
 
+    @PostMapping(value = "/update")
+    @ResponseBody
+    public void updateReport(HttpServletRequest req) {
+        ReportVO report = new ReportVO();
+        report.setRpt_no(Integer.parseInt(req.getParameter("rpt_no")));
+        report.setRpt_mod_writer(Integer.parseInt(req.getParameter("rpt_mod_writer")));
+        reportService.updateReport(report);
     }
 
     @GetMapping(value = "/get")

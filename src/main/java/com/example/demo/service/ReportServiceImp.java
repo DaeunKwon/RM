@@ -37,8 +37,13 @@ public class ReportServiceImp implements ReportService {
     }
 
     @Override
-    public void writeDetail(List<ReportDetailVO> reportDetailList) {
-        rdao.writeDetail(reportDetailList);
+    public void writeDetail(List<ReportDetailVO> reportDetailList, int flag) {
+        if (flag > 0) {
+            log.info(">>>>>>> update report detail service flag : " + flag);
+            rdao.updateDetail(reportDetailList);
+        } else {
+            rdao.writeDetail(reportDetailList);
+        }
     }
 
     @Override
@@ -64,6 +69,11 @@ public class ReportServiceImp implements ReportService {
     @Override
     public List<ReportDetailVO> getUSER(int prj_in_no) {
         return rdao.getUSER(prj_in_no);
+    }
+
+    @Override
+    public void updateReport(ReportVO report) {
+        rdao.updateReport(report);
     }
 
 }

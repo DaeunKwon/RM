@@ -13,7 +13,7 @@ public interface ReportService {
 
     public List<ReportDetailVO> getReportDetailList(int prj_in_no, int prj_no, String authority);
 
-    public void writeDetail(List<ReportDetailVO> reportDetailList);
+    public void writeDetail(List<ReportDetailVO> reportDetailList, int flag);
 
     public List<ReportDetailVO> getSelectedReport(Date rpt_write_d8);
 
@@ -24,5 +24,7 @@ public interface ReportService {
     public List<ReportDetailVO> getADMIN(int prj_no);
 
     public List<ReportDetailVO> getUSER(int prj_in_no);
+
+    public void updateReport(ReportVO report);
 
 }

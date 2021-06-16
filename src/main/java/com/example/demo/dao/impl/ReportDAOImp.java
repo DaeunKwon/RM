@@ -76,4 +76,15 @@ public class ReportDAOImp implements ReportDAO {
         return sql.selectList(ns + ".getUSER", prj_in_no);
     }
 
+    @Override
+    public void updateReport(ReportVO report) {
+        sql.update(ns + ".updateReport", report);
+    }
+
+    @Override
+    public void updateDetail(List<ReportDetailVO> reportDetailList) {
+        sql.delete(ns + ".deleteDetail", reportDetailList.get(0).getRpt_no());
+        sql.insert(ns + ".writeDetail", reportDetailList);
+    }
+
 }

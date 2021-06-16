@@ -17,5 +17,6 @@ public class ReportDetailVO {
     private String rpt_content;
     private String name;
     private String prj_title;
+    private int rpt_writer;
 
 }
