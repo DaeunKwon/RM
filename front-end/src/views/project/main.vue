@@ -3,7 +3,7 @@
     <Header />
     <v-container>
       <br />
-      <div>프로젝트 목록</div>
+      <div align="left" class="display-1">프로젝트 목록</div>
       <div align="right">
         <button
           type="submit"
@@ -18,7 +18,8 @@
       <div>
         <div>
           <v-sheet class="mx-auto" elevation="8" max-width="1000"
-            ><br />진행중인 프로젝트
+            ><br />
+            <div>진행중인 프로젝트</div>
             <div v-if="!projectList">
               <br /><br /><br />
               <h5>No project</h5>
@@ -37,14 +38,20 @@
                 v-for="project in projectList"
                 :key="project.prj_no"
               >
-                <v-card color="green" class="ma-4" height="200" width="200">
+                <v-card
+                  :color="project.rmv_YN == 'Y' ? 'red' : 'green'"
+                  class="ma-4"
+                  height="200"
+                  width="200"
+                >
                   <v-card-title
                     >{{ project.prj_title }} <v-spacer></v-spacer>
                     <v-btn
                       icon
                       @click="openDeleteDialog(project)"
                       v-if="
-                        $store.getters.getCurrentUser.authority == 'ROLE_ROOT'
+                        $store.getters.getCurrentUser.authority ==
+                          'ROLE_ROOT' && project.rmv_YN == 'N'
                       "
                     >
                       <v-icon>mdi-delete-outline</v-icon></v-btn
@@ -56,6 +63,10 @@
                       color="grey lighten-2"
                       light
                       @click="onworkDialog = true"
+                      :disabled="project.rmv_YN == 'Y'"
+                      v-if="
+                        $store.getters.getCurrentUser.authority !== 'ROLE_ROOT'
+                      "
                     >
                       출근 </v-btn
                     >&nbsp;
@@ -64,6 +75,10 @@
                       color="grey lighten-2"
                       light
                       @click="openReportDialog(project)"
+                      :disabled="project.rmv_YN == 'Y'"
+                      v-if="
+                        $store.getters.getCurrentUser.authority !== 'ROLE_ROOT'
+                      "
                     >
                       업무일지
                     </v-btn>
@@ -100,7 +115,7 @@
                 :key="project.id"
               >
                 <v-card
-                  color="grey lighten-1"
+                  :color="project.rmv_YN == 'Y' ? 'red' : 'grey lighten-1'"
                   class="ma-4"
                   height="200"
                   width="200"
@@ -312,6 +327,19 @@
             </v-card-title>
             <v-card-text>
               <v-container>
+                <!-- <v-row>
+                  <v-col cols="3">
+                    <v-subheader>프로젝트명</v-subheader>
+                  </v-col>
+                  <v-col cols="9">
+                    <v-text-field
+                      required
+                      outlined
+                      readonly
+                      :value="selectedProject.prj_title"
+                    ></v-text-field>
+                  </v-col>
+                </v-row> -->
                 <v-row>
                   <v-col>
                     <v-text-field
@@ -327,6 +355,42 @@
                       outlined
                       readonly
                       :value="selectedProject.cond"
+                    ></v-text-field>
+                    <v-text-field
+                      label="작성자"
+                      required
+                      outlined
+                      readonly
+                      :value="selectedProject.prj_writer"
+                    ></v-text-field>
+                    <v-text-field
+                      label="작성 일자"
+                      required
+                      outlined
+                      readonly
+                      :value="
+                        $moment(selectedProject.prj_write_d8).format(
+                          'YYYY-MM-DD HH:mm:ss'
+                        )
+                      "
+                    ></v-text-field>
+                    <v-text-field
+                      label="수정자"
+                      required
+                      outlined
+                      readonly
+                      :value="selectedProject.prj_writer"
+                    ></v-text-field>
+                    <v-text-field
+                      label="수정 일자"
+                      required
+                      outlined
+                      readonly
+                      :value="
+                        $moment(selectedProject.prj_mod_d8).format(
+                          'YYYY-MM-DD HH:mm:ss'
+                        )
+                      "
                     ></v-text-field>
                     <v-text-field
                       label="시작 날짜"
@@ -351,7 +415,7 @@
                       required
                       outlined
                       readonly
-                      :value="leaderInfo.email"
+                      :value="leaderInfo.name"
                     ></v-text-field>
                     <v-text-field
                       label="참여 시작 날짜"
@@ -377,7 +441,7 @@
                         required
                         outlined
                         readonly
-                        :value="follower.email"
+                        :value="follower.name"
                       ></v-text-field>
                       <v-text-field
                         label="참여 시작 날짜"
@@ -412,6 +476,13 @@
                       readonly
                       :value="selectedProject.prj_remark"
                     ></v-textarea>
+                    <v-text-field
+                      label="삭제여부"
+                      required
+                      outlined
+                      readonly
+                      :value="selectedProject.rmv_YN"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>

@@ -6,50 +6,52 @@
           <v-card-title class="justify-center">Report Management</v-card-title>
           <v-card-subtitle class="justify-center">Join</v-card-subtitle>
           <v-card-text>
-            <v-form ref="form" v-model="valid" lazy-validation>
-              <v-text-field
-                v-model="name"
-                :rules="nameRules"
-                label="Name"
-                required
-              ></v-text-field
-              ><br />
-
-              <v-layout row>
-                <v-flex xs9>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="name"
+                    :rules="nameRules"
+                    label="Name"
+                    required
+                  ></v-text-field
+                ></v-col>
+                <v-col cols="9">
                   <v-text-field
                     v-model="email"
                     :rules="emailRules"
-                    label="E-mail"
+                    label="Email"
                     required
+                  ></v-text-field
+                ></v-col>
+                <v-col cols="3">
+                  <v-btn dark color="green" @click="emailCheck">중복확인</v-btn>
+                </v-col>
+
+                <div :color="doubleCheck == true ? 'green' : 'red'">
+                  {{ emailAlert }}
+                </div>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="password"
+                    :rules="passwordRules"
+                    label="Password"
+                    required
+                    type="password"
                   ></v-text-field>
-                </v-flex>
-                <v-flex x1 class="pt-3">
-                  <v-btn dark color="light grey" @click="emailCheck"
-                    >중복확인</v-btn
-                  >
-                </v-flex>
-              </v-layout>
-              <div>
-                {{ emailAlert }}
-              </div>
-              <br />
-              <v-text-field
-                v-model="password"
-                :rules="passwordRules"
-                label="Password"
-                required
-                type="password"
-              ></v-text-field>
+                </v-col>
 
-              <br />
+                <v-col>
+                  <v-btn color="primary" class="mr-4" @click="join">
+                    Join
+                  </v-btn>
 
-              <v-btn color="primary" class="mr-4" @click="join"> Join </v-btn>
-
-              <v-btn color="warning" @click="$router.replace('/')">
-                Login
-              </v-btn>
-            </v-form>
+                  <v-btn color="warning" @click="$router.replace('/')">
+                    Login
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -64,8 +66,7 @@ export default {
       email: "",
       name: "",
       password: "",
-      doubleCheck: "",
-      emailAlert: "",
+
       show: true,
     };
   },
@@ -76,6 +77,8 @@ export default {
     nameRules: [(v) => !!v || "이름을 입력하세요."],
     password: "",
     passwordRules: [(v) => !!v || "비밀번호를 입력하세요."],
+    emailAlert: "",
+    doubleCheck: "",
   }),
 
   methods: {
@@ -84,8 +87,10 @@ export default {
       if (this.email == "" || this.name == "" || this.password == "") {
         alert("모든 항목을 채워주세요.");
         return;
-      }
-      if (this.doubleCheck && this.name && this.password) {
+      } else if (this.doubleCheck == false) {
+        alert("이메일 중복 확인이 필요합니다.");
+        return;
+      } else if (this.doubleCheck && this.name && this.password) {
         this.$axios
           .post(
             "http://localhost:8090/api/user/join",

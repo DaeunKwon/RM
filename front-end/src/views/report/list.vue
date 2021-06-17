@@ -3,7 +3,9 @@
     <Header />
     <v-container
       ><br />
-      <div>업무 일지 목록</div>
+      <div align="left" class="display-1">
+        업무 일지 목록 {{ this.$store.getters.getProjectINInfo }}
+      </div>
       <div align="right">
         <v-btn color="primary" class="mr-2" @click="rptList"> 주간 </v-btn>
         <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
@@ -350,6 +352,7 @@ export default {
     if (this.focus == "") {
       this.selectedDate = this.today;
       //this.viewSelectedDay(this.selectedDate);
+      // this.selectedDateReport = this.viewSelectedDay;
     }
   },
   computed: {
@@ -506,7 +509,7 @@ export default {
         this.reportDetailList = reportDetailList;
         console.log(reportDetailList, reportDetailList.length);
         for (let i = 0; i < reportDetailList.length; i++) {
-          console.log(reportDetailList[i].name);
+          //console.log(reportDetailList[i].name);
           const startTime = this.$moment(
             reportDetailList[i].rpt_start_time
           ).format("YYYY-MM-DD HH:mm");
@@ -516,7 +519,7 @@ export default {
           const date = this.$moment(reportDetailList[i].rpt_start_time).format(
             "YYYY-MM-DD"
           );
-          console.log(reportDetailList[i]);
+          //console.log(reportDetailList[i]);
           events.push({
             name: reportDetailList[i].name,
             start: startTime,

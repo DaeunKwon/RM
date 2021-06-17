@@ -5,34 +5,44 @@
         <v-card>
           <v-card-title class="justify-center">Report Management</v-card-title>
           <v-card-text>
-            <v-form ref="form" lazy-validation method="post" action="/login">
-              <v-text-field
-                v-model="email"
-                :rules="emailRules"
-                label="E-mail"
-                required
-                name="email"
-              ></v-text-field>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="email"
+                    :rules="emailRules"
+                    label="E-mail"
+                    required
+                    name="email"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="password"
+                    :counter="10"
+                    :rules="passwordRules"
+                    label="Password"
+                    required
+                    type="password"
+                    name="password"
+                  ></v-text-field
+                ></v-col>
+                <v-col cols="12">
+                  <v-btn
+                    color="primary"
+                    class="mr-4"
+                    type="submit"
+                    @click="login"
+                  >
+                    Login
+                  </v-btn>
 
-              <v-text-field
-                v-model="password"
-                :counter="10"
-                :rules="passwordRules"
-                label="Password"
-                required
-                type="password"
-                name="password"
-              ></v-text-field
-              ><br />
-
-              <v-btn color="primary" class="mr-4" type="submit" @click="login">
-                Login
-              </v-btn>
-
-              <v-btn color="warning" @click="$router.replace('/join')">
-                Join
-              </v-btn>
-            </v-form>
+                  <v-btn color="warning" @click="$router.replace('/join')">
+                    Join
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -58,7 +68,9 @@ export default {
   }),
   methods: {
     login() {
-      console.log("login");
+      if (this.email == "" || this.password == "") {
+        alert("빈 칸을 채워주세요.");
+      }
     },
   },
 };
