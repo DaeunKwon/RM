@@ -40,7 +40,11 @@
         select * from tbl_project_in where authority = 'ROLE_ADMIN'
     </select>
     <select id="getLeaderInfo" parameterType="java.lang.Integer" resultType="com.example.demo.domain.ProjectInVO">
-        select * from tbl_project_in where authority = 'ROLE_ADMIN' and prj_no = #{prj_no}
+        select tpi.*, tm.name
+        from tbl_project_in tpi
+        join tbl_member tm
+        on tpi.email = tm.email
+        where tpi.authority = 'ROLE_ADMIN' and tpi.prj_no = #{prj_no}
     </select>
     <insert id="addFollower" parameterType="java.util.List">
         <foreach collection="list" item="pINvo" open="INSERT ALL" close="SELECT * FROM SYS.DUAL" separator=" ">
@@ -55,7 +59,11 @@
         </foreach>
     </insert>
     <select id="getFollowerInfo" parameterType="java.lang.Integer" resultType="com.example.demo.domain.ProjectInVO">
-        select * from tbl_project_in where authority = 'ROLE_USER' and prj_no = #{prj_no}
+        select tpi.*, tm.name
+        from tbl_project_in tpi
+        join tbl_member tm
+        on tpi.email = tm.email
+        where tpi.authority = 'ROLE_USER' and tpi.prj_no = #{prj_no}
     </select>
     <select id="getUserProjectInfo" parameterType="java.lang.String" resultType="com.example.demo.domain.ProjectInVO">
         select authority, prj_no from tbl_project_in where email = #{email}

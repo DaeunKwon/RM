@@ -16,6 +16,7 @@ public class ProjectInVO {
     private Date prj_in_d8;
     private Date prj_out_d8;
     private int prj_no;
+    private String name;
 
     public ProjectInVO() {
     }

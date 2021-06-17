@@ -55,7 +55,7 @@ const router = new VueRouter({
                 axios.get('/api/user/info')
                     .then(res => {
                         user = res.data
-                        console.log(user)
+                        //console.log(user)
                         if (!!user['email']) {
                             next()
                         } else {
@@ -73,7 +73,7 @@ const router = new VueRouter({
                 axios.get('/api/user/info')
                     .then(res => {
                         user = res.data
-                        console.log(user)
+                        //console.log(user)
                         if (!!user['email']) {
                             next('/main')
                         } else {
