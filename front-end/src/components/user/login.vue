@@ -5,7 +5,7 @@
         <v-card>
           <v-card-title class="justify-center">Report Management</v-card-title>
           <v-card-text>
-            <v-container>
+            <v-form ref="form" lazy-validation method="post" action="/login">
               <v-row>
                 <v-col cols="12">
                   <v-text-field
@@ -25,8 +25,8 @@
                     required
                     type="password"
                     name="password"
-                  ></v-text-field
-                ></v-col>
+                  ></v-text-field>
+                </v-col>
                 <v-col cols="12">
                   <v-btn
                     color="primary"
@@ -42,7 +42,7 @@
                   </v-btn>
                 </v-col>
               </v-row>
-            </v-container>
+            </v-form>
           </v-card-text>
         </v-card>
       </v-flex>

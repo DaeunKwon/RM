@@ -373,7 +373,7 @@ export default {
     updateReport() {
       // console.log(this.selectedReportDetail.rpt_no);
       // console.log(this.selectedReportDetail.rpt_writer);
-      console.log(this.sel);
+      //console.log(this.sel);
       const report = new FormData();
       report.append("rpt_no", this.selectedReportDetail.rpt_no);
       report.append("rpt_mod_writer", this.selectedReportDetail.rpt_writer);
@@ -396,9 +396,9 @@ export default {
         reportDetail.append("rpt_content", this.inputs[i].rpt_content);
       }
       reportDetail.append("flag", 1);
-      for (var value of reportDetail.values()) {
-        console.log(value);
-      }
+      // for (var value of reportDetail.values()) {
+      //   console.log(value);
+      // }
       this.$axios
         .post("/api/report/update/detail", reportDetail)
         .then((res) => {
@@ -408,8 +408,8 @@ export default {
     openUpdateDialog(selectedEvent) {
       this.updateDialog = true;
       this.selectedReportDetail = selectedEvent;
-      console.log(selectedEvent.rpt_no);
-      console.log(this.$store.getters.getUserReport.length);
+      //console.log(selectedEvent.rpt_no);
+      //console.log(this.$store.getters.getUserReport.length);
       const selectedReport = [];
       for (let i = 0; i < this.$store.getters.getUserReport.length; i++) {
         if (
@@ -418,7 +418,7 @@ export default {
             this.$store.getters.getCurrentUser.name
         ) {
           selectedReport.push(this.$store.getters.getUserReport[i]);
-          console.log(selectedReport);
+          //console.log(selectedReport);
         }
       }
       this.selectedReport = selectedReport;
@@ -436,17 +436,17 @@ export default {
       if (this.$store.getters.getProjectINInfo[0].authority == null) {
         this.$axios.get("/api/report/detail/getAll").then((res) => {
           this.$store.commit("setReport", res.data);
-          console.log(this.$store.getters.getUserReport);
+          //console.log(this.$store.getters.getUserReport);
         });
       } else {
         const reportList = [];
-        console.log(this.$store.getters.getProjectINInfo.length);
+        //console.log(this.$store.getters.getProjectINInfo.length);
         for (let i = 0; i < this.$store.getters.getProjectINInfo.length; i++) {
           if (
             this.$store.getters.getProjectINInfo[i].authority == "ROLE_ADMIN"
           ) {
-            console.log("admin");
-            console.log(this.$store.getters.getProjectINInfo[i].prj_no);
+            //console.log("admin");
+            //console.log(this.$store.getters.getProjectINInfo[i].prj_no);
             this.$axios
               .get("/api/report/detail/getADMIN", {
                 params: {
@@ -454,17 +454,17 @@ export default {
                 },
               })
               .then((res) => {
-                console.log(res.data);
+                //console.log(res.data);
                 for (let i = 0; i < res.data.length; i++) {
                   reportList.push(res.data[i]);
                 }
-                console.log(reportList);
+                //console.log(reportList);
               });
           } else if (
             this.$store.getters.getProjectINInfo[i].authority == "ROLE_USER"
           ) {
-            console.log("user");
-            console.log(this.$store.getters.getProjectINInfo[i].prj_in_no);
+            //console.log("user");
+            //console.log(this.$store.getters.getProjectINInfo[i].prj_in_no);
             this.$axios
               .get("/api/report/detail/getUSER", {
                 params: {
@@ -472,19 +472,20 @@ export default {
                 },
               })
               .then((res) => {
-                console.log("완료");
-                console.log(res.data);
+                //console.log("완료");
+                //console.log(res.data);
                 for (let i = 0; i < res.data.length; i++) {
                   reportList.push(res.data[i]);
                 }
-                console.log(reportList);
+                //console.log(reportList);
               });
           }
         }
         this.reportList = reportList;
-        console.log(this.reportList);
+        // console.log(this.reportList);
+
         this.$store.commit("setReport", this.reportList);
-        console.log(this.$store.getters.getUserReport);
+        // console.log(this.$store.getters.getUserReport);
       }
 
       // function delay(item) {
@@ -507,7 +508,7 @@ export default {
         const events = [];
         const reportDetailList = this.$store.getters.getUserReport;
         this.reportDetailList = reportDetailList;
-        console.log(reportDetailList, reportDetailList.length);
+        //console.log(reportDetailList, reportDetailList.length);
         for (let i = 0; i < reportDetailList.length; i++) {
           //console.log(reportDetailList[i].name);
           const startTime = this.$moment(
@@ -532,7 +533,7 @@ export default {
             write_d8: date,
           });
         }
-        console.log(events);
+        //console.log(events);
         this.events = events;
       }, 500);
     },
@@ -543,7 +544,7 @@ export default {
     viewSelectedDay({ date }) {
       this.focus = date;
       this.selectedDate = date;
-      console.log(date);
+      //console.log(date);
       const selectedDateReport = [];
       for (let i = 0; i < this.$store.getters.getUserReport.length; i++) {
         if (
@@ -614,7 +615,7 @@ export default {
     },
     getToday() {
       this.today = this.$moment(new Date()).format("YYYY-MM-DD");
-      console.log(this.today);
+      //console.log(this.today);
     },
     openTimeSaver(inputs, k, type) {
       this.openTimeFlag = true;
