@@ -5,14 +5,20 @@
       <br />
       <div align="left" class="display-1">프로젝트 목록</div>
       <div align="right">
-        <button
-          type="submit"
-          class="btn btn-warning"
+        <v-btn
+          v-scroll="onScroll"
+          class="mx-2"
+          fab
+          fixed
+          bottom
+          right
+          dark
+          color="indigo"
           @click="prjWrite"
           v-if="$store.getters.getCurrentUser.authority == 'ROLE_ROOT'"
         >
-          작성
-        </button>
+          <v-icon dark>mdi-pencil</v-icon>
+        </v-btn>
       </div>
       <br />
       <div>
@@ -521,6 +527,7 @@ export default {
   name: "main_",
   data() {
     return {
+      fab: true,
       show: false,
       ingModel: null,
       doneModel: null,
@@ -638,6 +645,11 @@ export default {
     },
   },
   methods: {
+    onScroll(e) {
+      if (typeof window === "undefined") return;
+      const top = window.pageYOffset || e.target.scrollTop || 0;
+      this.fab = top > 0;
+    },
     updateProject(selectedProject, leaderInfo, followerList) {
       this.$router.push({
         name: "prjWrite",
