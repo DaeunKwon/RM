@@ -87,4 +87,19 @@ public class ReportDAOImp implements ReportDAO {
         sql.insert(ns + ".writeDetail", reportDetailList);
     }
 
+    @Override
+    public List<ReportVO> getReportAll() {
+        return sql.selectList(ns + ".getReportAll");
+    }
+
+    @Override
+    public List<ReportVO> getReportADMIN(int prj_no) {
+        return sql.selectList(ns + ".getReportADMIN", prj_no);
+    }
+
+    @Override
+    public List<ReportVO> getReportUSER(int prj_in_no) {
+        return sql.selectList(ns + ".getReportUSER", prj_in_no);
+    }
+
 }

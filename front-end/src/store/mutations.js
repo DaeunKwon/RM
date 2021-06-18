@@ -15,5 +15,9 @@ export default {
 
     setReport: function (state, payload) {
         state.userReport = payload
+    },
+
+    setReportList: function (state, payload) {
+        state.userReportList = payload
     }
 }

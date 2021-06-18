@@ -38,6 +38,24 @@ public class ReportCtrl {
     }
 
     @ResponseBody
+    @GetMapping(value = "/getAll")
+    public List<ReportVO> getReportAll() {
+        return reportService.getReportAll();
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/getADMIN")
+    public List<ReportVO> getReportADMIN(int prj_no) {
+        return reportService.getReportADMIN(prj_no);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/getUSER")
+    public List<ReportVO> getReportUSER(HttpServletRequest req) {
+        return reportService.getReportUSER(Integer.parseInt(req.getParameter("prj_in_no")));
+    }
+
+    @ResponseBody
     @GetMapping(value = "/detail/getAll")
     public List<ReportDetailVO> getAll() {
         return reportService.getAll();

@@ -3,4 +3,5 @@ export default {
     userProject: [],
     userINProject: [],
     userReport: [],
+    userReportList: [],
 }

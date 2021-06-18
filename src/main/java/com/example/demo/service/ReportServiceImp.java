@@ -76,4 +76,19 @@ public class ReportServiceImp implements ReportService {
         rdao.updateReport(report);
     }
 
+    @Override
+    public List<ReportVO> getReportAll() {
+        return rdao.getReportAll();
+    }
+
+    @Override
+    public List<ReportVO> getReportADMIN(int prj_no) {
+        return rdao.getReportADMIN(prj_no);
+    }
+
+    @Override
+    public List<ReportVO> getReportUSER(int prj_in_no) {
+        return rdao.getReportUSER(prj_in_no);
+    }
+
 }

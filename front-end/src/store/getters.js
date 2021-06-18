@@ -12,5 +12,8 @@ export default {
     },
     getUserReport(state) {
         return state.userReport;
+    },
+    getReportList(state) {
+        return state.userReportList;
     }
 }

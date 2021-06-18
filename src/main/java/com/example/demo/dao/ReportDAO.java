@@ -29,4 +29,10 @@ public interface ReportDAO {
 
     public void updateDetail(List<ReportDetailVO> reportDetailList);
 
+    public List<ReportVO> getReportAll();
+
+    public List<ReportVO> getReportADMIN(int prj_no);
+
+    public List<ReportVO> getReportUSER(int prj_in_no);
+
 }

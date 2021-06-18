@@ -17,6 +17,8 @@ public class ReportVO {
     private Date rpt_write_d8;
     private int rpt_mod_writer;
     private Date rpt_mod_d8;
+    private String name;
+    private String prj_title;
 
     public ReportVO() {
     }

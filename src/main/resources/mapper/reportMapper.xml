@@ -20,6 +20,38 @@
 		JOIN TBL_PROJECT tp
 		ON tp.prj_no = tpi.prj_no
 	</select>
+	<select id="getReportAll" resultType="com.example.demo.domain.ReportVO">
+		SELECT tr.*, tp.prj_title, tm.name
+		FROM TBL_REPORT tr
+		JOIN TBL_PROJECT tp
+		ON tp.PRJ_NO = tr.PRJ_NO
+		JOIN TBL_PROJECT_IN tpi
+		ON tr.RPT_WRITER = tpi.PRJ_IN_NO
+		JOIN TBL_MEMBER tm
+		ON tpi.EMAIL = tm.email
+	</select>
+	<select id="getReportADMIN" resultType="com.example.demo.domain.ReportVO">
+		SELECT tr.*, tp.prj_title, tm.name
+		FROM TBL_REPORT tr
+		JOIN TBL_PROJECT tp
+		ON tp.PRJ_NO = tr.PRJ_NO
+		JOIN TBL_PROJECT_IN tpi
+		ON tr.RPT_WRITER = tpi.PRJ_IN_NO
+		JOIN TBL_MEMBER tm
+		ON tpi.EMAIL = tm.email
+		WHERE tr.prj_no = #{prj_no}
+	</select>
+	<select id="getReportUSER" resultType="com.example.demo.domain.ReportVO">
+		SELECT tr.*, tp.prj_title, tm.name
+		FROM TBL_REPORT tr
+		JOIN TBL_PROJECT tp
+		ON tp.PRJ_NO = tr.PRJ_NO
+		JOIN TBL_PROJECT_IN tpi
+		ON tr.RPT_WRITER = tpi.PRJ_IN_NO
+		JOIN TBL_MEMBER tm
+		ON tpi.EMAIL = tm.email
+		WHERE rpt_writer = #{prj_in_no}
+	</select>
 	<select id="getReport" resultType="com.example.demo.domain.ReportDetailVO">
 		SELECT trd.*, tr.prj_no, tr.RPT_WRITER, tpi.EMAIL, tpi.AUTHORITY
 		FROM TBL_REPORT_DETAIL trd
