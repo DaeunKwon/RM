@@ -3,48 +3,30 @@
     <Header />
     <v-container
       ><br />
-      <div>업무 일지 목록 (전체) {{ this.$store.state.userReportList }}</div>
+      <div align="left" class="display-1">업무 일지 목록 (전체)</div>
       <div align="right">
         <v-btn color="primary" class="mr-2" @click="rptList"> 주간 </v-btn>
         <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
         <v-btn color="primary" @click="daily"> 전체 </v-btn>
       </div>
       <br />
-      <v-simple-table>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-center">Date</th>
-              <th class="text-center">Writer</th>
-              <th class="text-center">Content</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="report in reportList" :key="report.no">
-              <td>{{ $moment(report.rpt_write_d8).format("YYYY-MM-DD") }}</td>
-              <td>{{ report.rpt_writer }}</td>
-              <td>{{ report.rpt_no }}</td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
 
       <v-data-table
         :headers="headers"
-        :items="desserts"
+        :items="reports"
         :single-expand="singleExpand"
         :expanded.sync="expanded"
         item-key="name"
         show-expand
-        class="elevation-1"
+        class="elevation-2"
       >
         <template v-slot:top>
           <v-toolbar flat>
-            <v-toolbar-title>Expandable Table</v-toolbar-title>
+            <v-toolbar-title></v-toolbar-title>
             <v-spacer></v-spacer>
             <v-switch
               v-model="singleExpand"
-              label="Single expand"
+              label="하나씩 펼쳐보기"
               class="mt-2"
             ></v-switch>
           </v-toolbar>
@@ -78,101 +60,19 @@ export default {
       reportList: [],
       expanded: [],
       singleExpand: false,
+
       headers: [
         {
-          text: "Dessert (100g serving)",
+          text: "프로젝트명",
           align: "start",
           sortable: false,
-          value: "name",
+          value: "prj_title",
         },
-        { text: "Calories", value: "calories" },
-        { text: "Fat (g)", value: "fat" },
-        { text: "Carbs (g)", value: "carbs" },
-        { text: "Protein (g)", value: "protein" },
-        { text: "Iron (%)", value: "iron" },
+        { text: "작성자", value: "name" },
+        { text: "작성일자", value: "rpt_write_d8" },
+        { text: "수정일자", value: "rpt_mod_d8" },
+        { text: "삭제여부", value: "rmv_YN" },
         { text: "", value: "data-table-expand" },
-      ],
-      desserts: [
-        {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: "1%",
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: "1%",
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: "7%",
-        },
-        {
-          name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: "8%",
-        },
-        {
-          name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: "16%",
-        },
-        {
-          name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: "0%",
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: "2%",
-        },
-        {
-          name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: "45%",
-        },
-        {
-          name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: "22%",
-        },
-        {
-          name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: "6%",
-        },
       ],
     };
   },
