@@ -91,4 +91,9 @@ public class ReportServiceImp implements ReportService {
         return rdao.getReportUSER(prj_in_no);
     }
 
+    @Override
+    public List<ReportDetailVO> setDetailList(int rpt_no) {
+        return rdao.setDetailList(rpt_no);
+    }
+
 }

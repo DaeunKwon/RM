@@ -35,4 +35,6 @@ public interface ReportDAO {
 
     public List<ReportVO> getReportUSER(int prj_in_no);
 
+    public List<ReportDetailVO> setDetailList(int rpt_no);
+
 }

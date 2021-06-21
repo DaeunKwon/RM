@@ -33,4 +33,6 @@ public interface ReportService {
 
     public List<ReportVO> getReportUSER(int prj_in_no);
 
+    public List<ReportDetailVO> setDetailList(int rpt_no);
+
 }

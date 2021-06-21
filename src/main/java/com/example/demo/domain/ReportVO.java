@@ -1,6 +1,7 @@
 package com.example.demo.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 import lombok.Getter;
@@ -19,8 +20,8 @@ public class ReportVO {
     private Date rpt_mod_d8;
     private String name;
     private String prj_title;
+    private List<ReportDetailVO> detailList;
 
     public ReportVO() {
     }
-
 }

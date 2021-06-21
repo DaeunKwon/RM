@@ -97,6 +97,9 @@
 		ON tp.prj_no = tpi.prj_no
 		WHERE rpt_writer = #{prj_in_no}
 	</select>
+	<select id="setDetailList" parameterType="Integer" resultType="com.example.demo.domain.ReportDetailVO">
+		SELECT * from tbl_report_detail where rpt_no = #{rpt_no}
+	</select>
 	<insert id="writeDetail" parameterType="java.util.List">
 		<foreach collection="list" item="rdvo" open="INSERT ALL" close="SELECT * FROM SYS.DUAL" separator=" ">
             INTO tbl_report_detail values (

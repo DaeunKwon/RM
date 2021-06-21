@@ -75,6 +75,12 @@ public class ReportCtrl {
     }
 
     @ResponseBody
+    @GetMapping(value = "/detail/setDetailList")
+    public List<ReportDetailVO> setDetailList(int rpt_no) {
+        return reportService.setDetailList(rpt_no);
+    }
+
+    @ResponseBody
     @GetMapping(value = "/detail/list")
     public List<ReportDetailVO> getReportDetailList(String email) {
         // List<JSONObject> list = new ArrayList<>();

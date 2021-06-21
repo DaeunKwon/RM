@@ -102,4 +102,9 @@ public class ReportDAOImp implements ReportDAO {
         return sql.selectList(ns + ".getReportUSER", prj_in_no);
     }
 
+    @Override
+    public List<ReportDetailVO> setDetailList(int rpt_no) {
+        return sql.selectList(ns + ".setDetailList", rpt_no);
+    }
+
 }
