@@ -38,4 +38,30 @@ public class ComServiceImp implements ComService {
     public List<ComVO> weekTime(ComVO cvo) {
         return comdao.weekTime(cvo);
     }
+
+    @Override
+    public int prjpeople(int prj_no) {
+        return comdao.prjpeople(prj_no);
+    }
+
+    @Override
+    public List<ComVO> ranklist(String com_d8) {
+        return comdao.ranklist(com_d8);
+    }
+
+    @Override
+    public int gotocount(String com_d8) {
+        return comdao.gotocount(com_d8);
+    }
+
+    @Override
+    public List<ComVO> monthlist(ComVO cvo) {
+        return comdao.monthlist(cvo);
+    }
+
+    @Override
+    public boolean rptCheck(ComVO cvo) {
+        return comdao.rptCheck(cvo);
+
+    }
 }

@@ -3,10 +3,7 @@
     <Header />
     <v-container
       ><br />
-      <div>
-        업무 일지 목록 {{ this.$store.state.userINProject }}
-        {{ this.$store.getters.getProjectINInfo }}
-      </div>
+      <div>업무 일지 목록 {{ this.$store.state.userINProject[0].prj_no }}</div>
       <div align="right">
         <v-btn color="primary" class="mr-2" @click="rptList"> 주간 </v-btn>
         <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
@@ -24,7 +21,7 @@
               height="400"
               width="400"
             >
-              {{ selectedDate }}<br />
+              {{ focus }}<br />
               <br />
               <div
                 v-for="reportDetail in selectedDateReport"

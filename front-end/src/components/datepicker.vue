@@ -5,14 +5,14 @@
         ref="menu"
         v-model="menu"
         :close-on-content-click="false"
-        :return-value.sync="date"
+        :return-value.sync="today"
         transition="scale-transition"
         offset-y
         min-width="auto"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
-            v-model="date"
+            v-model="today"
             label="Picker in menu"
             prepend-icon="mdi-calendar"
             readonly
@@ -21,7 +21,7 @@
           ></v-text-field>
         </template>
         <v-date-picker v-model="date" no-title scrollable>
-          <v-spacer></v-spacer>
+          <v-spacer>{{ this.$store.getters.getDate }}</v-spacer>
           <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
           <v-btn
             text
@@ -42,19 +42,20 @@ export default {
     date: "",
     menu: false,
   }),
-  created() {
-    this.today;
-  },
+  created() {},
   computed: {
-    today() {
-      this.date = this.$store.state.comDate;
-      return this.date;
+    today: {
+      get() {
+        return this.$store.getters.getDate;
+      },
+      set() {},
     },
   },
 
   methods: {
     dateCommand() {
       this.$store.commit("setComdate", this.date);
+      console.log(this.$store.getters.getDate);
     },
   },
 };

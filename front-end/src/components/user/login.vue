@@ -57,8 +57,7 @@ export default {
     passwordRules: [(v) => !!v || "Password is required"],
   }),
   methods: {
-    login(e) {
-      e.preventDefault();
+    login() {
       alert("로그인");
     },
     login() {

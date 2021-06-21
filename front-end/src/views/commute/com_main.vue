@@ -15,29 +15,50 @@
                 <Datepicker :date="this.date" />
               </v-flex>
               <v-flex>
-                <v-text-field value="프로젝트1"> </v-text-field>
+                <v-text-field v-model="projectNum" readonly> </v-text-field>
               </v-flex>
             </v-layout>
-            <v-layout><h3>참여인원: 4명</h3> </v-layout>
+            <v-layout
+              ><h3>참여인원: {{ peoplecount }}명</h3>
+            </v-layout>
             <v-layout>
               <v-avatar style="margin: 20px" color="green" rounded size="93"
-                >출근<br />4명</v-avatar
+                >출근<br />{{ getgotocount }}명</v-avatar
               >
               <v-avatar style="margin: 20px" color="grey" rounded size="93"
-                >미출근<br />0명</v-avatar
+                >미출근<br />{{ peoplecount - getgotocount }}명</v-avatar
               >
             </v-layout>
             <v-col>
               <v-row align="center" justify="center">
                 <template>
-                  <v-data-table
-                    style="width: 300px"
-                    :headers="headers"
-                    :items="contents"
-                    hide-default-footer
-                    disable-sort
-                    class="elevation-1"
-                  ></v-data-table>
+                  <v-simple-table>
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th class="text-center">순위{{ rank }}</th>
+                          <th class="text-center">이름</th>
+                          <th class="text-center">출근시간</th>
+                          <th class="text-center">퇴근시간</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(item, i) in getranklist" :key="item.data">
+                          <td>{{ i + 1 }}</td>
+                          <td width="100px">{{ item.name }}</td>
+                          <td>{{ item.com_start.substring(10) }}</td>
+                          <td>
+                            {{
+                              (item.com_end == null
+                                ? "빈값대체임"
+                                : item.com_end
+                              ).substring(10)
+                            }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
                 </template>
               </v-row>
             </v-col>
@@ -45,14 +66,27 @@
             <v-col>
               <v-row align="center" justify="center">
                 <template>
-                  <v-data-table
-                    style="width: 300px"
-                    :headers="headers2"
-                    :items="contents2"
-                    hide-default-footer
-                    disable-sort
-                    class="elevation-2"
-                  ></v-data-table>
+                  <v-simple-table>
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th class="text-center">이름{{ month }}</th>
+                          <th class="text-center">출근일수</th>
+                          <th class="text-center">근무시간</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="item in monthlist" :key="item.data">
+                          <td>{{ item.name }}</td>
+                          <td>{{ item.monthC }}일</td>
+                          <td>
+                            {{ Math.floor(item.monthS / 60) }} 시간
+                            {{ item.monthS % 60 }} 분
+                          </td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
                 </template>
               </v-row>
             </v-col>
@@ -71,8 +105,8 @@
           </v-container>
         </v-flex>
       </v-layout>
+      <Footer />
     </v-container>
-    <Footer />
   </div>
 </template>
 
@@ -85,61 +119,10 @@ import Datepicker from "../../components/datepicker.vue"; //날짜 선택컴포�
 export default {
   data: () => ({
     date: "",
-
-    headers: [
-      { text: "순위", value: "rank" },
-      { text: "이름", value: "name" },
-      { text: "출근시간", value: "start" },
-      { text: "퇴근시간", value: "end" },
-    ],
-    contents: [
-      {
-        rank: "1",
-        name: "조재승",
-        start: "08:50",
-        end: "17:00",
-      },
-      {
-        rank: "2",
-        name: "권다은",
-        start: "08:52",
-        end: "17:00",
-      },
-      {
-        rank: "3",
-        name: "나인원",
-        start: "08:53",
-        end: "17:00",
-      },
-      {
-        rank: "4",
-        name: "홍길동",
-        start: "09:00",
-        end: "17:00",
-      },
-    ],
-    headers2: [
-      { text: "이름", value: "name" },
-      { text: "출근일수", value: "total" },
-      { text: "근무시간", value: "time" },
-    ],
-    contents2: [
-      {
-        name: "조재승",
-        total: "23일",
-        time: "230시간",
-      },
-      {
-        name: "권다은",
-        total: "22일",
-        time: "220시간",
-      },
-      {
-        name: "홍길동",
-        total: "19일",
-        time: "200시간",
-      },
-    ],
+    pcount: "",
+    ranklist: [],
+    gotocount: "",
+    monthlist: [],
   }),
 
   components: {
@@ -148,6 +131,74 @@ export default {
     Calendar,
     Datepicker,
   },
+  created() {},
+  computed: {
+    projectNum() {
+      return "프로젝트 " + this.$store.state.userINProject[0].prj_no;
+    },
+    peoplecount() {
+      this.$axios
+        .get("/api/commute/prjpeople", {
+          params: { prj_no: this.$store.state.userINProject[0].prj_no },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.pcount = res.data;
+        });
+      return this.pcount;
+    },
+    rank() {
+      this.$axios
+        .get("/api/commute/rank", {
+          params: {
+            com_d8: this.$store.getters.getDate,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.ranklist = res.data;
+        });
+    },
+    getranklist() {
+      return this.ranklist;
+    },
+    getgotocount() {
+      this.$axios
+        .get("/api/commute/gotocount", {
+          params: {
+            com_d8: this.$store.getters.getDate,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.gotocount = res.data;
+        });
+      return this.gotocount;
+    },
+    month() {
+      this.$axios
+        .post(
+          "/api/commute/monthlist",
+          {
+            com_d8: this.$store.getters.getDate,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+          this.monthlist = res.data;
+        });
+    },
+    getmonthlist() {
+      return this.monthlist;
+    },
+  },
+
+  methods: {},
 };
 </script>
 

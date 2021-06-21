@@ -50,4 +50,33 @@ public class ComDAOImp implements ComDAO {
         log.info(cvo.getCom_d8());
         return sql.selectList(ns + ".weekTime", cvo);
     }
+
+    @Override
+    public int prjpeople(int prj_no) {
+        log.info(">>>>>>>>>>>>>> comdao prjpeople 진입");
+        log.info(">>>>>>>>>>>>>> prj_no=" + prj_no);
+        return sql.selectOne(ns + ".prjpeople", prj_no);
+    }
+
+    @Override
+    public List<ComVO> ranklist(String com_d8) {
+        log.info(">>>>>>>>>>>>> comdao ranklist 진입");
+        log.info(">>>>>>>>>>>>> com_d8=" + com_d8);
+        return sql.selectList(ns + ".ranklist", com_d8);
+    }
+
+    @Override
+    public int gotocount(String com_d8) {
+        return sql.selectOne(ns + ".gotocount", com_d8);
+    }
+
+    @Override
+    public List<ComVO> monthlist(ComVO cvo) {
+        return sql.selectList(ns + ".monthlist", cvo);
+    }
+
+    @Override
+    public boolean rptCheck(ComVO cvo) {
+        return sql.selectOne(ns + ".rptCheck", cvo) != null;
+    }
 }

@@ -15,22 +15,11 @@
           <v-dialog v-model="dialog" persistent max-width="290">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                v-if="dateif"
                 class="combtn"
                 color="primary"
                 v-bind="attrs"
                 v-on="on"
                 :disabled="test"
-              >
-                출근
-              </v-btn>
-              <v-btn
-                v-else
-                class="combtn"
-                disabled
-                color="primary"
-                v-bind="attrs"
-                v-on="on"
               >
                 출근
               </v-btn>
@@ -170,8 +159,6 @@ export default {
       work: "출근전",
 
       // test
-      prj_no: 1,
-      myEmail: "tt",
     };
   },
 
@@ -185,44 +172,15 @@ export default {
 
   created() {
     this.getNow();
-
-    this.$axios
-      .post(
-        "http://localhost:8090/api/commute/checkWork",
-        {
-          com_d8: nowdate,
-          prj_no: this.prj_no,
-          my_email: this.myEmail,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-
-        // 출근
-        if (res.data) {
-          this.test = true;
-          this.test2 = false;
-          this.work = "근무중";
-          // 미출근
-        } else {
-          this.test = false;
-          this.test2 = true;
-          this.work = "출근전";
-        }
-      });
+    this.checkwork();
 
     this.$axios
       .post(
         "http://localhost:8090/api/commute/checkoffWork",
         {
           com_d8: nowdate,
-          prj_no: this.prj_no,
-          my_email: this.myEmail,
+          prj_no: this.$store.state.userINProject[0].prj_no,
+          email: this.$store.getters.getCurrentUser.email,
         },
         {
           headers: {
@@ -268,7 +226,8 @@ export default {
           "http://localhost:8090/api/commute/gotoWork",
           {
             com_d8: nowdate,
-            prj_no: this.prj_no,
+            prj_no: this.$store.state.userINProject[0].prj_no,
+            email: this.$store.getters.getCurrentUser.email,
           },
           {
             headers: {
@@ -292,8 +251,8 @@ export default {
           "http://localhost:8090/api/commute/offWork",
           {
             com_d8: nowdate,
-            prj_no: this.prj_no,
-            my_email: this.myEmail,
+            prj_no: this.$store.state.userINProject[0].prj_no,
+            email: this.$store.getters.getCurrentUser.email,
           },
           {
             headers: {
@@ -305,7 +264,37 @@ export default {
           console.log(res);
           this.test2 = true;
           this.work = "퇴근";
-          this.$refs.dateTable.getweekTime();
+        });
+    },
+    checkwork() {
+      this.$axios
+        .post(
+          "http://localhost:8090/api/commute/checkWork",
+          {
+            com_d8: nowdate,
+            prj_no: this.$store.state.userINProject[0].prj_no,
+            email: this.$store.getters.getCurrentUser.email,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+          console.log(this.$store.getters.getCurrentUser.email);
+          // 출근
+          if (res.data) {
+            this.test = true;
+            this.test2 = false;
+            this.work = "근무중";
+            // 미출근
+          } else {
+            this.test = false;
+            this.test2 = true;
+            this.work = "출근전";
+          }
         });
     },
   },

@@ -79,4 +79,35 @@ public class ComCtrl {
         log.info(">>>>>>>>>>>>> cvo.getCom_d8: " + cvo.getCom_d8());
         return comservice.weekTime(cvo);
     }
+
+    @GetMapping(value = "/prjpeople")
+    public int prjpeople(int prj_no) {
+        log.info("<<<<<<<<<< ComCtrl 진입");
+        log.info("<<<<<<<<<< prj_no = " + prj_no);
+        return comservice.prjpeople(prj_no);
+    }
+
+    @GetMapping(value = "/rank")
+    public List<ComVO> ranklist(String com_d8) {
+        log.info("<<<<<<<<<<<<ComCTRL 진입");
+        return comservice.ranklist(com_d8);
+    }
+
+    @GetMapping(value = "/gotocount")
+    public int gotocount(String com_d8) {
+        log.info("<<<<<<<<<<<<ComCTRL 진입");
+        return comservice.gotocount(com_d8);
+    }
+
+    @PostMapping(value = "/monthlist", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ComVO> monthlist(@RequestBody ComVO cvo) {
+        log.info("<<<<<<<<<<<<month ComCTRL 진입");
+        return comservice.monthlist(cvo);
+    }
+
+    @PostMapping(value = "/rptCheck", produces = MediaType.APPLICATION_JSON_VALUE)
+    public boolean rptCheck(@RequestBody ComVO cvo) {
+        log.info("<<<<<<<<<<<<rptCheck ComCTRL 진입");
+        return comservice.rptCheck(cvo);
+    }
 }

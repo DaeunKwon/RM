@@ -14,4 +14,14 @@ public interface ComService {
     public boolean checkoffWork(ComVO cvo);
 
     public List<ComVO> weekTime(ComVO cvo);
+
+    public int prjpeople(int prj_no);
+
+    public List<ComVO> ranklist(String com_d8);
+
+    public int gotocount(String com_d8);
+
+    public List<ComVO> monthlist(ComVO cvo);
+
+    public boolean rptCheck(ComVO cvo);
 }

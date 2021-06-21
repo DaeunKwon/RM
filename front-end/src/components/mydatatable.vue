@@ -3,14 +3,10 @@
     <v-simple-table>
       <template v-slot:default>
         <thead>
-          <tr v-for="item in test" :key="item.name">
-            <th class="text-left">{{ item.Sun }} (일)</th>
-            <th class="text-left">{{ item.Mon }} (월)</th>
-            <th class="text-left">{{ item.Tue }} (화)</th>
-            <th class="text-left">{{ item.Wed }} (수)</th>
-            <th class="text-left">{{ item.Tur }} (목)</th>
-            <th class="text-left">{{ item.Fri }} (금)</th>
-            <th class="text-left">{{ item.Sat }} (토)</th>
+          <tr>
+            <td class="text-left" v-for="item in getweeklist" :key="item.name">
+              {{ item.day }}
+            </td>
           </tr>
         </thead>
         <tbody>
@@ -43,13 +39,13 @@ export default {
     sumsum: "",
     week: [
       {
-        Sun: "",
-        Mon: "",
-        Tue: "",
-        Wed: "",
-        Tur: "",
-        Fri: "",
-        Sat: "",
+        Sun: "(일)",
+        Mon: "(월)",
+        Tue: "(화)",
+        Wed: "(수)",
+        Tur: "(목)",
+        Fri: "(금)",
+        Sat: "(토)",
       },
     ],
   }),
@@ -94,6 +90,8 @@ export default {
           "http://localhost:8090/api/commute/weekTime",
           {
             com_d8: this.datepick,
+            prj_no: this.$store.state.userINProject[0].prj_no,
+            email: this.$store.getters.getCurrentUser.email,
           },
           {
             headers: {
@@ -103,7 +101,7 @@ export default {
         )
         .then((res) => {
           this.weeklist = res.data;
-
+          console.log(res.data);
           let sum = 0;
           this.weeklist.forEach((day) => {
             sum += Number(day.com_total);
