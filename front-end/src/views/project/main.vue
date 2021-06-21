@@ -68,17 +68,28 @@
                       @click="onworkDialog = true"
                       :disabled="project.rmv_YN == 'Y'"
                       v-if="
+                        btnIn &&
                         $store.getters.getCurrentUser.authority !== 'ROLE_ROOT'
                       "
                     >
-                      출근 </v-btn
-                    >&nbsp;
+                      출근
+                    </v-btn>
+                    <v-btn
+                      v-else
+                      color="grey lighten-2"
+                      light
+                      @click="offworkDialog = true"
+                      :disabled="btnIn == true ? false : true"
+                    >
+                      퇴근
+                    </v-btn>
+                    &nbsp;
 
                     <v-btn
                       color="grey lighten-2"
                       light
                       @click="openReportDialog(project)"
-                      :disabled="project.rmv_YN == 'Y'"
+                      :disabled="project.rmv_YN == 'Y' || btnIn"
                       v-if="
                         $store.getters.getCurrentUser.authority !== 'ROLE_ROOT'
                       "
@@ -98,7 +109,6 @@
             </v-slide-group>
           </v-sheet>
         </div>
-
         <div class="mt-12">
           <v-sheet class="mx-auto" elevation="8" max-width="1000"
             ><br />완료된 프로젝트
@@ -167,7 +177,7 @@
           </v-card>
         </v-dialog>
 
-        <v-dialog v-model="onworkDialog" max-width="290">
+        <v-dialog v-if="btnIn" v-model="onworkDialog" max-width="290">
           <v-card>
             <v-card-title>출근하시겠습니까?</v-card-title>
 
@@ -179,6 +189,21 @@
               </v-btn>
 
               <v-btn color="green darken-1" text @click="onWork"> 확인 </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-else v-model="offworkDialog" max-width="290">
+          <v-card>
+            <v-card-title>퇴근하시겠습니까?</v-card-title>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+
+              <v-btn color="red darken-1" text @click="offworkDialog = false">
+                취소
+              </v-btn>
+
+              <v-btn color="green darken-1" text @click="offWork"> 확인 </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -530,6 +555,7 @@ export default {
       doneModel: null,
       deleteDialog: false,
       onworkDialog: false,
+      offworkDialog: false,
       reportDialog: false,
       startDialog: false,
       endDialog: false,
@@ -546,6 +572,7 @@ export default {
       deletedProject: "",
       followerList: [],
       message: "",
+      btnIn: true,
     };
   },
 
@@ -558,6 +585,8 @@ export default {
     this.getDoneProjectList;
     this.getUserInfo;
     this.getToday();
+    this.checkonWork();
+    this.rptCheck();
   },
   computed: {
     getUserInfo() {
@@ -640,6 +669,9 @@ export default {
           });
       });
     },
+    work() {
+      return this.btnIn;
+    },
   },
   methods: {
     onScroll(e) {
@@ -663,7 +695,77 @@ export default {
     },
     onWork() {
       this.onworkDialog = false;
+
+      alert("출근등록");
+
+      this.$axios
+        .post(
+          "/api/commute/gotoWork",
+          {
+            com_d8: new Date().toISOString().substr(0, 10),
+            prj_no: this.$store.state.userINProject[0].prj_no,
+            email: this.$store.getters.getCurrentUser.email,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {});
     },
+
+    checkonWork() {
+      this.$axios
+        .post(
+          "/api/commute/checkWork",
+          {
+            com_d8: new Date().toISOString().substr(0, 10),
+            prj_no: this.$store.state.userINProject[0].prj_no,
+            email: this.$store.getters.getCurrentUser.email,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+
+          // 출근
+          if (res.data) {
+            this.btnIn = false;
+
+            // 미출근
+          } else {
+          }
+        });
+    },
+
+    offWork() {
+      this.offworkDialog = false;
+      alert("퇴근등록");
+
+      this.$axios
+        .post(
+          "http://localhost:8090/api/commute/offWork",
+          {
+            com_d8: new Date().toISOString().substr(0, 10),
+            prj_no: this.$store.state.userINProject[0].prj_no,
+            email: this.$store.getters.getCurrentUser.email,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+        });
+    },
+
     add(k) {
       this.inputs.push({ start_time: null, end_time: null, content: "" });
     },
@@ -749,6 +851,34 @@ export default {
           alert("프로젝트가 삭제되었습니다.");
           this.deleteDialog = false;
           this.$router.push("/main");
+        });
+    },
+    rptCheck() {
+      this.$axios
+        .post(
+          "/api/commute/rptCheck",
+          {
+            com_d8: new Date().toISOString().substr(0, 10),
+            prj_no: this.$store.state.userINProject[0].prj_no,
+            email: this.$store.getters.getCurrentUser.email,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+
+          // 업무일지 작성
+          if (res.data) {
+            console.log("업무일지 작성함");
+            this.btnIn = true;
+            // 업무일지 미작성
+          } else {
+            console.log("업무일지 미작성함");
+          }
         });
     },
   },

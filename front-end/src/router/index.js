@@ -7,6 +7,8 @@ import prjWrite from '../views/project/write.vue';
 import rptList from '../views/report/list.vue';
 import prjDetail from '../views/project/detail.vue';
 import dailyRpt from '../views/report/daily.vue';
+import com_detail from '../views/commute/com_detail.vue'
+import com_main from '../views/commute/com_main.vue'
 import store from '../store';
 
 /** 같은 페이지에서 같은 페이지로 $router.push 한 오류 처리 (ex : 홈페이지에서 홈 로고를 클릭한 경우) */
@@ -80,6 +82,15 @@ const router = new VueRouter({
             path: '/join',
             component: join,
         },
+
+        {
+            path: '/com_detail',
+            component: com_detail,
+        },
+        {
+            path: '/com_main',
+            component: com_main,
+        }
     ]
 });
 
