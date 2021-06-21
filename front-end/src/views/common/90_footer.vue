@@ -1,5 +1,5 @@
 <template>
-  <v-footer>
+  <v-footer absolute>
     <p>@copyright 2021</p>
   </v-footer>
 </template>
