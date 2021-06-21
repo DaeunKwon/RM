@@ -3,8 +3,6 @@ package com.example.demo.config;
 import com.example.demo.handler.CustomAuthenticationSuccessHandler;
 import com.example.demo.service.UserService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +25,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final Logger log = LoggerFactory.getLogger(WebSecurityConfig.class);
+    // private final Logger log = LoggerFactory.getLogger(WebSecurityConfig.class);
 
     @Autowired
     private UserService userService;

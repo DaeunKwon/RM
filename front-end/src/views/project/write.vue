@@ -569,7 +569,7 @@ export default {
         .get("/api/user/list")
         .then((res) => {
           this.userList = res.data;
-          console.log(this.userList);
+          //console.log(this.userList);
           return this.userList;
         })
         .catch((e) => {
@@ -580,7 +580,7 @@ export default {
   methods: {
     prjWrite() {
       if (this.$route.params.flag == 0) {
-        console.log("등록");
+        //console.log("등록");
         const project = new FormData();
         project.append("title", this.title);
         project.append("cond", this.cond);
@@ -612,15 +612,15 @@ export default {
           // console.log(follower.getAll("email"));
 
           this.$axios.post("/api/project/in/follower", follower).then((res) => {
-            alert("프로젝트 등록 성공");
+            alert("프로젝트가 등록되었습니다.");
             this.$router.push("/main");
           });
         });
       } else {
-        console.log("수정");
+        // console.log("수정");
         const project = new FormData();
         project.append("prj_no", this.$route.params.project.prj_no);
-        console.log(this.title);
+        // console.log(this.title);
         switch (true) {
           case this.title == "":
             project.append("prj_title", this.$route.params.project.prj_title);
@@ -674,7 +674,7 @@ export default {
         project.append("mod_writer", this.$store.getters.getCurrentUser.email);
 
         this.$axios.post("/api/project/update", project).then((res) => {
-          console.log("프로젝트 수정");
+          // console.log("프로젝트 수정");
         });
 
         const leader = new FormData();
@@ -715,7 +715,7 @@ export default {
         this.$axios
           .post("/api/project/in/update/leader", leader)
           .then((res) => {
-            console.log("팀장 수정");
+            // console.log("팀장 수정");
           });
 
         const follower = new FormData();
@@ -737,8 +737,8 @@ export default {
         this.$axios
           .post("/api/project/in/update/follower", follower)
           .then((res) => {
-            console.log("팀원 수정");
-            alert("프로젝트 수정 성공");
+            // console.log("팀원 수정");
+            alert("프로젝트가 수정되었습니다.");
             this.$router.push("/main");
           });
       }

@@ -41,7 +41,7 @@
 export default {
   data: () => ({
     items: [
-      { title: "UserInfo", action: "userInfo" },
+      //{ title: "UserInfo", action: "userInfo" },
       { title: "Logout", action: "logout" },
     ],
     closeOnClick: true,
@@ -54,7 +54,7 @@ export default {
         alert("UserInfo");
       } else if (action === "logout") {
         this.$axios.post("http://localhost:8090/logout").then((res) => {
-          alert("logout");
+          alert("로그아웃 되었습니다.");
           //로그아웃시 프로젝트 참여 정보 초기화
           //this.$store.commit("setProjectINinfo", null);
           this.$router.push("/");

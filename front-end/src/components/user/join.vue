@@ -106,8 +106,8 @@ export default {
             }
           )
           .then((res) => {
-            console.log(res);
-            alert("환영합니다.");
+            //console.log(res);
+            alert("회원가입 되었습니다. 환영합니다.");
             this.$router.push("/");
           });
       }
@@ -121,7 +121,7 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res);
+          //console.log(res);
           if (res.data) {
             this.doubleCheck = true;
             this.emailAlert = "사용 가능한 이메일입니다.";

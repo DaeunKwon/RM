@@ -26,7 +26,7 @@
           <v-sheet class="mx-auto" elevation="8" max-width="1000"
             ><br />
             <div>진행중인 프로젝트</div>
-            <div v-if="!projectList">
+            <div v-if="projectList.length == 0">
               <br /><br /><br />
               <h5>No project</h5>
               <br /><br /><br />
@@ -37,9 +37,6 @@
               active-class="success"
               show-arrows
             >
-              <div v-if="!projectList">
-                <h5>No Project</h5>
-              </div>
               <v-slide-item
                 v-for="project in projectList"
                 :key="project.prj_no"
@@ -105,7 +102,7 @@
         <div class="mt-12">
           <v-sheet class="mx-auto" elevation="8" max-width="1000"
             ><br />완료된 프로젝트
-            <div v-if="!doneProjectList">
+            <div v-if="doneProjectList.length == 0">
               <br /><br /><br />
               <h5>No project</h5>
               <br /><br /><br />
@@ -566,16 +563,16 @@ export default {
     getUserInfo() {
       this.$axios.get("/api/user/info").then((res) => {
         this.$store.commit("setCurrentUser", res.data);
-        console.log(this.$store.getters.getCurrentUser);
-        console.log(this.$store.getters.getCurrentUser.email);
-        console.log(this.$store.getters.getCurrentUser.authority);
+        // console.log(this.$store.getters.getCurrentUser);
+        // console.log(this.$store.getters.getCurrentUser.email);
+        // console.log(this.$store.getters.getCurrentUser.authority);
 
         this.$axios
           .get("/api/project/in/info", {
             params: { email: this.$store.getters.getCurrentUser.email },
           })
           .then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             // this.$store.commit("setUserProjectInfo", res.data);
             // console.log(this.$store.getters.getUserProjectInfo.prj_no);
           });
@@ -590,7 +587,7 @@ export default {
           })
           .then((res) => {
             this.projectList = res.data;
-            console.log(this.projectList);
+            // console.log(this.projectList);
             // for (let i = 0; i < this.projectList.length; i++) {
             //   console.log(
             //     this.projectList[i].prj_no,
@@ -611,7 +608,7 @@ export default {
               // });
             }
             this.$store.commit("setProjectINinfo", userINProject);
-            console.log(this.$store.state.userINProject);
+            // console.log(this.$store.state.userINProject);
             // for (let i = 0; i < this.$store.state.userProject.length; i++) {
             //   console.log(this.$store.state.userProject[i].prj_no);
             // }
@@ -629,10 +626,10 @@ export default {
             },
           })
           .then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             if (res.data.length == 0) {
               this.message = "No Project";
-              console.log("no project");
+              //console.log("no project");
             } else {
               this.doneProjectList = res.data;
               return this.getDoneProjectList;
@@ -679,7 +676,7 @@ export default {
     openDialogView(project) {
       this.dialogView = true;
       this.selectedProject = project;
-      console.log(this.selectedProject.prj_no);
+      // console.log(this.selectedProject.prj_no);
 
       this.$axios
         .get("/api/project/in/leader/info", {
@@ -711,7 +708,7 @@ export default {
       report.append("rpt_mod_writer", this.selectedProject.prj_in_no);
 
       this.$axios.post("/api/report/write", report).then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         const reportDetail = new FormData();
         for (let i = 0; i < this.inputs.length; i++) {
           reportDetail.append(
@@ -730,7 +727,7 @@ export default {
         this.$axios
           .post("/api/report/write/detail", reportDetail)
           .then((res) => {
-            alert("업무 일지 등록 성공");
+            alert("업무 일지가 등록되었습니다.");
             this.reportDialog = false;
             this.$router.push("/rptList");
           });
@@ -741,7 +738,7 @@ export default {
       this.selectedProject = project;
     },
     deleteProject() {
-      console.log(this.selectedProject.prj_no);
+      // console.log(this.selectedProject.prj_no);
       this.$axios
         .post("/api/project/delete", this.selectedProject.prj_no, {
           headers: {
@@ -749,7 +746,7 @@ export default {
           },
         })
         .then((res) => {
-          alert("삭제 성공");
+          alert("프로젝트가 삭제되었습니다.");
           this.deleteDialog = false;
           this.$router.push("/main");
         });
