@@ -3,13 +3,12 @@
     <Header />
     <v-container
       ><br />
-      <div align="left" class="display-1">
-        업무 일지 목록 {{ this.$store.getters.getProjectINInfo }}
-      </div>
+      <div align="left" class="display-1">업무 일지 목록</div>
       <div align="right">
-        <v-btn color="primary" class="mr-2" @click="rptList"> 주간 </v-btn>
-        <v-btn color="primary" class="mr-2" @click="monthly"> 월간 </v-btn>
-        <v-btn color="primary" @click="daily"> 전체 </v-btn>
+        <v-btn text color="primary" class="mr-2" @click="rptList">
+          Calendar
+        </v-btn>
+        <v-btn text color="primary" @click="daily"> List </v-btn>
       </div>
       <br />
       <v-container fluid>
@@ -351,8 +350,21 @@ export default {
     // }
     if (this.focus == "") {
       this.selectedDate = this.today;
-      //this.viewSelectedDay(this.selectedDate);
-      // this.selectedDateReport = this.viewSelectedDay;
+      // this.viewSelectedDay(this.today);
+      // this.selectedDateReport = this.viewSelectedDay({ today });
+      const selectedDateReport = [];
+      setTimeout(() => {
+        for (let i = 0; i < this.$store.getters.getUserReport.length; i++) {
+          if (
+            this.$moment(
+              this.$store.getters.getUserReport[i].rpt_start_time
+            ).format("YYYY-MM-DD") == this.today
+          ) {
+            selectedDateReport.push(this.$store.getters.getUserReport[i]);
+          }
+        }
+      }, 400);
+      this.selectedDateReport = selectedDateReport;
     }
   },
   computed: {
@@ -402,7 +414,9 @@ export default {
       this.$axios
         .post("/api/report/update/detail", reportDetail)
         .then((res) => {
-          alert("성공");
+          alert("업무 일지가 수정되었습니다.");
+          this.updateDialog = false;
+          this.$router.push("/rptList");
         });
     },
     openUpdateDialog(selectedEvent) {
