@@ -210,7 +210,7 @@ export default {
         this.$store.commit("setReportList", this.reports);
         // console.log(this.$store.getters.getReportList);
         // console.log(this.$store.getters.getReportList[0].detailList);
-      }, 500);
+      }, 100);
     },
   },
   methods: {
