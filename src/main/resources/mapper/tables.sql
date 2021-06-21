@@ -276,65 +276,65 @@ COMMENT ON COLUMN roles.auth_level IS '권한 번호'
 /
 
 
--- tbl_member Table Create SQL
--- CREATE TABLE tbl_commute
--- (
---     com_no       number    NOT NULL, 
---     com_d8       DATE      NOT NULL, 
---     com_start    DATE      NOT NULL, 
---     com_end      DATE      NULL, 
---     com_total    NUMBER    NULL, 
---     prj_in_no    NUMBER    NOT NULL, 
---     CONSTRAINT primary☆key PRIMARY KEY (com_no)
--- )
--- /
+tbl_member Table Create SQL
+CREATE TABLE tbl_commute
+(
+    com_no       number    NOT NULL, 
+    com_d8       VARCHAR2(20)      NOT NULL, 
+    com_start    DATE      NOT NULL, 
+    com_end      DATE      NULL, 
+    com_total    NUMBER    NULL, 
+    prj_in_no    NUMBER    NOT NULL, 
+    CONSTRAINT TBL_COMMUTE PRIMARY KEY (com_no)
+)
+/
 
--- CREATE SEQUENCE tbl_commute_SEQ
--- START WITH 1
--- INCREMENT BY 1;
--- /
+CREATE SEQUENCE tbl_commute_SEQ
+START WITH 1
+INCREMENT BY 1;
+/
 
--- CREATE OR REPLACE TRIGGER tbl_commute_AI_TRG
--- BEFORE INSERT ON tbl_commute 
--- REFERENCING NEW AS NEW FOR EACH ROW 
--- BEGIN 
---     SELECT tbl_commute_SEQ.NEXTVAL
---     INTO :NEW.com_no
---     FROM DUAL;
--- END;
--- /
+CREATE OR REPLACE TRIGGER tbl_commute_AI_TRG
+BEFORE INSERT ON tbl_commute 
+REFERENCING NEW AS NEW FOR EACH ROW 
+BEGIN 
+    SELECT tbl_commute_SEQ.NEXTVAL
+    INTO :NEW.com_no
+    FROM DUAL;
+END;
+/
 
--- --DROP TRIGGER tbl_commute_AI_TRG;
--- /
+--DROP TRIGGER tbl_commute_AI_TRG;
+/
 
--- --DROP SEQUENCE tbl_commute_SEQ;
--- /
+--DROP SEQUENCE tbl_commute_SEQ;
+/
 
--- COMMENT ON COLUMN tbl_commute.com_no IS '근태 번호'
--- /
+COMMENT ON COLUMN tbl_commute.com_no IS '근태 번호'
+/
 
--- COMMENT ON COLUMN tbl_commute.com_d8 IS '근태 날짜'
--- /
+COMMENT ON COLUMN tbl_commute.com_d8 IS '근태 날짜'
+/
 
--- COMMENT ON COLUMN tbl_commute.com_start IS '출근시간'
--- /
+COMMENT ON COLUMN tbl_commute.com_start IS '출근시간'
+/
 
--- COMMENT ON COLUMN tbl_commute.com_end IS '퇴근시간'
--- /
+COMMENT ON COLUMN tbl_commute.com_end IS '퇴근시간'
+/
 
--- COMMENT ON COLUMN tbl_commute.com_total IS '총 근무시간'
--- /
+COMMENT ON COLUMN tbl_commute.com_total IS '총 근무시간'
+/
 
--- COMMENT ON COLUMN tbl_commute.prj_in_no IS '프로젝트 참여 번호'
--- /
+COMMENT ON COLUMN tbl_commute.prj_in_no IS '프로젝트 참여 번호'
+/
 
--- ALTER TABLE tbl_commute
---     ADD CONSTRAINT FK_tbl_commute_prj_in_no_tbl_p FOREIGN KEY (prj_in_no)
---         REFERENCES tbl_project_in (prj_in_no)
--- /
+ALTER TABLE tbl_commute
+    ADD CONSTRAINT FK_tbl_commute_prj_in_no_tbl_p FOREIGN KEY (prj_in_no)
+        REFERENCES tbl_project_in (prj_in_no)
+/
 
 
--- tbl_member Table Create SQL
+tbl_member Table Create SQL
 CREATE TABLE tbl_report_detail
 (
     rpt_detail_no     NUMBER            NOT NULL, 

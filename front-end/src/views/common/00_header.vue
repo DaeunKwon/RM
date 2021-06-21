@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar fixed>
+    <v-app-bar>
       <v-toolbar-title type="button" @click="main"
         >Report Management</v-toolbar-title
       >
