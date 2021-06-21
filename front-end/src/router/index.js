@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import test from '../views/test.vue';
 import test1 from '../views/test1.vue';
 import hello from '../components/HelloWorld.vue';
 import login from '../components/user/login.vue';
@@ -11,6 +10,8 @@ import rptList from '../views/report/list.vue';
 import prjDetail from '../views/project/detail.vue';
 import dailyRpt from '../views/report/daily.vue';
 import monthlyRpt from '../views/report/monthly.vue';
+import com_detail from '../views/commute/com_detail.vue'
+import com_main from '../views/commute/com_main.vue'
 import store from '../store';
 
 /** 같은 페이지에서 같은 페이지로 $router.push 한 오류 처리 (ex : 홈페이지에서 홈 로고를 클릭한 경우) */
@@ -92,16 +93,18 @@ const router = new VueRouter({
             path: '/hello',
             component: hello,
         },
-
-        {
-            //  path : url 주소
-            path: '/test',
-            // component: url 주소로 갔을 때 표시될 컴포넌트
-            component: test,
-        },
         {
             path: '/test1',
             component: test1,
+        },
+
+        {
+            path: '/com_detail',
+            component: com_detail,
+        },
+        {
+            path: '/com_main',
+            component: com_main,
         }
     ]
 });

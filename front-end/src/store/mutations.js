@@ -5,6 +5,14 @@ export default {
         state.currentUser = payload
     },
 
+    setComdate: (state, payload) => {
+        state.comDate = payload
+    },
+
+    setWeekdata: (state, payload) => {
+        state.week = payload
+    },
+
     setProject: function (state, payload) {
         state.userProject = payload
     },
