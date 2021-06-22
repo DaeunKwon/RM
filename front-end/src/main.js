@@ -10,6 +10,7 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import vueMoment from 'vue-moment'
+import './assets/css/main.css'
 
 
 Vue.use(Vuex)

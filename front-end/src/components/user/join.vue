@@ -1,10 +1,10 @@
 <template>
-  <v-container>
+  <v-container class="header-padding">
     <v-layout>
       <v-flex md6 offset-md3>
         <v-card>
           <v-card-title class="justify-center">Report Management</v-card-title>
-          <v-card-subtitle class="justify-center">Join</v-card-subtitle>
+          <v-card-subtitle class="justify-center">회원가입</v-card-subtitle>
           <v-card-text>
             <v-container>
               <v-row>
@@ -43,11 +43,11 @@
 
                 <v-col>
                   <v-btn color="primary" class="mr-4" @click="join">
-                    Join
+                    가입
                   </v-btn>
 
                   <v-btn color="warning" @click="$router.replace('/')">
-                    Login
+                    로그인 페이지
                   </v-btn>
                 </v-col>
               </v-row>
@@ -66,7 +66,6 @@ export default {
       email: "",
       name: "",
       password: "",
-
       show: true,
     };
   },
@@ -83,7 +82,6 @@ export default {
 
   methods: {
     join: function () {
-      //event.preventDefault();
       if (this.email == "" || this.name == "" || this.password == "") {
         alert("모든 항목을 채워주세요.");
         return;
@@ -106,7 +104,6 @@ export default {
             }
           )
           .then((res) => {
-            //console.log(res);
             alert("회원가입 되었습니다. 환영합니다.");
             this.$router.push("/");
           });
@@ -121,7 +118,6 @@ export default {
           },
         })
         .then((res) => {
-          //console.log(res);
           if (res.data) {
             this.doubleCheck = true;
             this.emailAlert = "사용 가능한 이메일입니다.";
@@ -131,19 +127,9 @@ export default {
           }
         });
     },
-
-    onReset(event) {
-      event.preventDefault();
-      // Reset our form values
-      this.user.email = "";
-      this.user.name = "";
-      this.user.password = "";
-      // Trick to reset/clear native browser form validation state
-      this.show = false;
-      this.$nextTick(() => {
-        this.show = true;
-      });
-    },
   },
 };
 </script>
+
+<style scoped>
+</style>
