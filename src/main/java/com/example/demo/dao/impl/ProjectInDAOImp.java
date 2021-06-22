@@ -34,7 +34,6 @@ public class ProjectInDAOImp implements ProjectInDAO {
 
     @Override
     public ProjectInVO getLeaderInfo(int prj_no) {
-        log.info(">>>>>>>project in vo dao");
         return sql.selectOne(ns + ".getLeaderInfo", prj_no);
     }
 

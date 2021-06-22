@@ -56,15 +56,12 @@ public class UserCtrl {
         @PostMapping(value = "/emailCheck", produces = MediaType.APPLICATION_JSON_VALUE)
         @ResponseBody
         public boolean emailCheck(@RequestBody String email) {
-                log.info(">>>>>return : " + userService.emailCheck(email));
                 return userService.emailCheck(email);
         }
 
         @ResponseBody
         @GetMapping(value = "/list")
         public List<UserVO> userList() {
-                log.info(">>>>>> get user list");
-                log.info(">>>>>>>>user list: " + userService.getlist());
                 return userService.getlist();
         }
 

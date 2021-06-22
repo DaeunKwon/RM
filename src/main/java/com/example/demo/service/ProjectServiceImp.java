@@ -19,7 +19,6 @@ public class ProjectServiceImp implements ProjectService {
 
     @Override
     public int write(ProjectVO pvo) {
-        log.info(">>>>>project post service");
         return pdao.insert(pvo);
     }
 

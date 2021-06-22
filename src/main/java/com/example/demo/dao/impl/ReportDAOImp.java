@@ -31,7 +31,6 @@ public class ReportDAOImp implements ReportDAO {
 
     @Override
     public List<ReportVO> list() {
-        log.info(">>>>>>>>>>>report list dao");
         return sql.selectList(ns + ".list");
     }
 

@@ -24,7 +24,6 @@ public class ProjectDAOImp implements ProjectDAO {
 
     @Override
     public int insert(ProjectVO pvo) {
-        log.info(">>>>>project post dao");
         return sql.insert(ns + ".write", pvo);
 
     }
@@ -36,7 +35,6 @@ public class ProjectDAOImp implements ProjectDAO {
 
     @Override
     public List<ProjectVO> getProjectList(String email, String authority) {
-        log.info(">>>>>>" + authority);
         if (authority.equals("ROLE_ROOT")) {
             return sql.selectList(ns + ".getAllProjectList");
         } else {

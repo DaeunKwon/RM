@@ -50,7 +50,6 @@ public class ProjectInController {
     @ResponseBody
     public void addFollower(HttpServletRequest req) throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        log.info(">>>>>> add follower contoroller");
         List<ProjectInVO> projectInList = new ArrayList<>();
         String[] email = req.getParameterValues("email");
         String[] prj_in_d8 = req.getParameterValues("prj_in_d8");
@@ -66,29 +65,21 @@ public class ProjectInController {
             projectInList.add(pINvo);
         }
         int num = Integer.parseInt(prj_no[0]);
-        for (ProjectInVO pvo : projectInList) {
-            log.info(">>>>>>>>pinvo:" + pvo);
-            log.info(">>>>>>>>>>>>>>>" + pvo.getEmail());
-        }
-        log.info(">>>>>> flag:" + flag);
         projectINService.addFollower(projectInList, flag, num);
     }
 
     @GetMapping(value = "/leader/list")
     public List<ProjectInVO> getLeaderList(Model model) {
-        log.info(">>>>>>>get leader list in project");
         return projectINService.getLedaerList();
     }
 
     @GetMapping(value = "/leader/info")
     public ProjectInVO getLeaderInfo(int prj_no) {
-        log.info(">>>>>>>>getleaderinfo controller");
         return projectINService.getLeaderInfo(prj_no);
     }
 
     @GetMapping(value = "/follower/info")
     public List<ProjectInVO> getFollowerInfo(int prj_no) {
-        log.info(">>>>>>> get follower info controller");
         return projectINService.getFollowerInfo(prj_no);
     }
 

@@ -33,7 +33,6 @@ public class ReportCtrl {
     @ResponseBody
     @GetMapping(value = "/list")
     public List<ReportVO> list() {
-        log.info(">>>>>>>>>>>>>>>>report list 페이지 출력");
         return reportService.list();
     }
 
@@ -70,7 +69,6 @@ public class ReportCtrl {
     @ResponseBody
     @GetMapping(value = "/detail/getUSER")
     public List<ReportDetailVO> getUSER(HttpServletRequest req) {
-        log.info(">>>>>>>> get user" + reportService.getUSER(Integer.parseInt(req.getParameter("prj_in_no"))));
         return reportService.getUSER(Integer.parseInt(req.getParameter("prj_in_no")));
     }
 
@@ -89,7 +87,6 @@ public class ReportCtrl {
     @PostMapping(value = "/write")
     @ResponseBody
     public int write(HttpServletRequest req) {
-        log.info(">>>>>> add report post");
         ReportVO rvo = new ReportVO();
         rvo.setPrj_no(Integer.parseInt(req.getParameter("prj_no")));
         rvo.setRpt_writer(Integer.parseInt(req.getParameter("rpt_writer")));
@@ -100,16 +97,13 @@ public class ReportCtrl {
 
     @PostMapping(value = { "/write/detail", "/update/detail" })
     public void writeDetail(HttpServletRequest req) throws ParseException {
-        log.info(">>>>>>> write report detail controller");
         int flag = Integer.parseInt(req.getParameter("flag"));
-        log.info(">>>>>>>>>>>>> flag: " + flag);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         List<ReportDetailVO> reportDetailList = new ArrayList<>();
         String[] rpt_start_time = flag > 0 ? req.getParameterValues("rpt_start_time")
                 : req.getParameterValues("start_time");
         String[] rpt_end_time = flag > 0 ? req.getParameterValues("rpt_end_time") : req.getParameterValues("end_time");
         String[] rpt_content = flag > 0 ? req.getParameterValues("rpt_content") : req.getParameterValues("content");
-        log.info(">>>>>>>>content:" + req.getParameter("rpt_content"));
 
         String[] rpt_no = req.getParameterValues("rpt_no");
         for (int i = 0; i < rpt_start_time.length; i++) {
@@ -119,9 +113,6 @@ public class ReportCtrl {
             reportDetail.setRpt_content(rpt_content[i]);
             reportDetail.setRpt_no(Integer.parseInt(rpt_no[i]));
             reportDetailList.add(reportDetail);
-        }
-        for (ReportDetailVO rdvo : reportDetailList) {
-            log.info(">>>>>> rpt detail # " + rdvo);
         }
         reportService.writeDetail(reportDetailList, flag);
     }
