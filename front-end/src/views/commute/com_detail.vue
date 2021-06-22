@@ -4,84 +4,78 @@
   <div>
     <Header />
 
-    <v-container>
-      <v-layout>
-        <v-flex></v-flex><v-flex></v-flex>
-        <v-flex>
-          <h1>출퇴근 관리</h1>
-        </v-flex>
-        <v-spacer> </v-spacer>
-        <v-flex>
-          <v-dialog v-model="dialog" persistent max-width="290">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                class="combtn"
-                color="primary"
-                v-bind="attrs"
-                v-on="on"
-                :disabled="test"
-              >
-                출근
+    <v-container class="header-padding">
+      <br />
+      <div align="left" class="display-1">출퇴근 관리</div>
+      <div align="right">
+        <v-dialog v-model="dialog" persistent max-width="290">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="combtn"
+              color="primary"
+              v-bind="attrs"
+              v-on="on"
+              :disabled="test"
+            >
+              출근
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title class="headline"> 출근하시겠습니까? </v-card-title>
+            <v-card-text
+              >한 번 누르면 출근시간은<br />
+              변경할 수 없습니다.</v-card-text
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text @click="dialog = false">
+                Disagree
               </v-btn>
-            </template>
-            <v-card>
-              <v-card-title class="headline"> 출근하시겠습니까? </v-card-title>
-              <v-card-text
-                >한 번 누르면 출근시간은<br />
-                변경할 수 없습니다.</v-card-text
-              >
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="green darken-1" text @click="dialog = false">
-                  Disagree
-                </v-btn>
-                <v-btn
-                  color="green darken-1"
-                  text
-                  @click="[gotoWork(), (dialog = false)]"
-                >
-                  Agree
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-
-          <v-dialog v-model="dialog2" persistent max-width="290">
-            <template v-slot:activator="{ on, attrs }">
               <v-btn
-                class="combtn"
-                :disabled="test2"
-                color="primary"
-                v-bind="attrs"
-                v-on="on"
+                color="green darken-1"
+                text
+                @click="[gotoWork(), (dialog = false)]"
               >
-                퇴근
+                Agree
               </v-btn>
-            </template>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialog2" persistent max-width="290">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="combtn"
+              :disabled="test2"
+              color="primary"
+              v-bind="attrs"
+              v-on="on"
+            >
+              퇴근
+            </v-btn>
+          </template>
 
-            <v-card>
-              <v-card-title class="headline"> 퇴근하시겠습니까? </v-card-title>
-              <v-card-text
-                >한 번 누르면 퇴근시간은<br />
-                변경할 수 없습니다.</v-card-text
+          <v-card>
+            <v-card-title class="headline"> 퇴근하시겠습니까? </v-card-title>
+            <v-card-text
+              >한 번 누르면 퇴근시간은<br />
+              변경할 수 없습니다.</v-card-text
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text @click="dialog2 = false">
+                Disagree
+              </v-btn>
+              <v-btn
+                color="green darken-1"
+                text
+                @click="[offWork(), (dialog2 = false)]"
               >
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="green darken-1" text @click="dialog2 = false">
-                  Disagree
-                </v-btn>
-                <v-btn
-                  color="green darken-1"
-                  text
-                  @click="[offWork(), (dialog2 = false)]"
-                >
-                  Agree
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-flex>
-      </v-layout>
+                Agree
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
 
       <v-layout fluid grid-list-sm pa-15>
         <v-row justify="center">

@@ -1,15 +1,13 @@
 <template>
   <div>
     <Header />
-    <v-container>
+    <v-container class="header-padding">
+      <br />
+      <div align="left" class="display-1">근태관리 메인페이지</div>
       <v-layout>
         <v-flex style="width: 500px">
           <v-container style="height: 800px">
-            <v-layout>
-              <v-flex>
-                <h4>근태관리 메인페이지</h4>
-              </v-flex>
-            </v-layout>
+            <br />
             <v-layout>
               <v-flex>
                 <Datepicker :date="this.date" />
