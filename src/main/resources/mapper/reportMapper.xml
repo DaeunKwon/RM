@@ -61,16 +61,6 @@
 		ON tpi.PRJ_IN_NO = tr.RPT_WRITER
 		WHERE tpi.email = #{email}
 	</select>
-	<select id="getReportDetailList_ROOT" resultType="com.example.demo.domain.ReportDetailVO">
-		SELECT trd.*, tr.prj_no, tr.RPT_WRITER, tpi.authority, tpi.EMAIL, tm.NAME
-		FROM TBL_REPORT tr
-		JOIN TBL_REPORT_DETAIL trd
-		ON trd.RPT_NO = tr.RPT_NO
-		JOIN TBL_PROJECT_IN tpi
-		ON tpi.PRJ_IN_NO = tr.RPT_WRITER
-		JOIN TBL_MEMBER tm
-		ON tpi.EMAIL = tm.EMAIL
-	</select>
 	<select id="getADMIN" parameterType="Integer" resultType="com.example.demo.domain.ReportDetailVO">
 		SELECT trd.*, tr.prj_no, tr.RPT_WRITER, tpi.authority, tpi.EMAIL, tm.NAME, tp.prj_title
 		FROM TBL_REPORT tr
