@@ -89,6 +89,7 @@ const router = new VueRouter({
         },
         {
             path: '/com_main',
+            name: 'com_main',
             component: com_main,
         }
     ]

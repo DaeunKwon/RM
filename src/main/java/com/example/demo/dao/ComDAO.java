@@ -24,4 +24,6 @@ public interface ComDAO {
     public List<ComVO> monthlist(ComVO cvo);
 
     public boolean rptCheck(ComVO cvo);
+
+    public List<ComVO> monthNamelist(String com_d8);
 }

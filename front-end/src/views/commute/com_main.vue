@@ -15,7 +15,7 @@
                 <Datepicker :date="this.date" />
               </v-flex>
               <v-flex>
-                <v-text-field v-model="projectNum" readonly> </v-text-field>
+                <v-text-field v-model="projectTitle" readonly> </v-text-field>
               </v-flex>
             </v-layout>
             <v-layout
@@ -133,13 +133,13 @@ export default {
   },
   created() {},
   computed: {
-    projectNum() {
-      return "프로젝트 " + this.$store.state.userINProject[0].prj_no;
+    projectTitle() {
+      return this.$store.state.userINProject.prj_title;
     },
     peoplecount() {
       this.$axios
         .get("/api/commute/prjpeople", {
-          params: { prj_no: this.$store.state.userINProject[0].prj_no },
+          params: { prj_no: this.$store.state.userINProject.prj_no },
         })
         .then((res) => {
           console.log(res.data);

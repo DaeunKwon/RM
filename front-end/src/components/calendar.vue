@@ -1,153 +1,232 @@
 <template>
-  <section class="section">
-    <div class="container">
-      <h2 class="subtitle has-text-centered">
-        <button
-          class="button is-small is-primary is-outlined mr-5"
-          @click="calendarData(-1)"
+  <v-row class="fill-height">
+    <v-col>
+      <v-sheet height="64">
+        <v-toolbar flat color="white">
+          <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
+            Today
+          </v-btn>
+          <v-btn fab text small color="grey darken-2" @click="prev">
+            <v-icon small>mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-toolbar-title v-if="$refs.calendar">
+            {{ $refs.calendar.title }}
+          </v-toolbar-title>
+          <v-btn fab text small color="grey darken-2" @click="next">
+            <v-icon small>mdi-chevron-right</v-icon>
+          </v-btn>
+
+          <v-spacer></v-spacer>
+          <v-btn @click="com_detail">상세페이지</v-btn>
+
+          <v-menu bottom right>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn outlined color="grey darken-2" v-bind="attrs" v-on="on">
+                <span>{{ typeToLabel[type] }}</span>
+                <v-icon right>mdi-menu-down</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item @click="type = 'day'">
+                <v-list-item-title>Day</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="type = 'week'">
+                <v-list-item-title>Week</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="type = 'month'">
+                <v-list-item-title>Month</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="type = '4day'">
+                <v-list-item-title>4 days</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-toolbar>
+      </v-sheet>
+      <v-sheet height="600">
+        <v-calendar
+          ref="calendar"
+          v-model="focus"
+          color="primary"
+          :events="events"
+          :event-color="getEventColor"
+          :type="type"
+          @click:event="showEvent"
+          @click:more="viewDay"
+          @click:date="viewDay"
+          @change="updateRange"
+        ></v-calendar>
+        <v-menu
+          v-model="selectedOpen"
+          :close-on-content-click="false"
+          :activator="selectedElement"
+          offset-x
         >
-          &lt;
-        </button>
-        {{ year }}년 {{ month }}월
-        <button
-          class="button is-small is-primary is-outlined ml-5"
-          @click="calendarData(1)"
-        >
-          &gt;
-        </button>
-      </h2>
-      <table class="table has-text-centered is-fullwidth">
-        <thead>
-          <th v-for="day in days" :key="day">{{ day }}</th>
-        </thead>
-        <tbody>
-          <tr v-for="(date, idx) in dates" :key="idx">
-            <td
-              v-for="(day, secondIdx) in date"
-              :key="secondIdx"
-              :class="{
-                'has-text-info-dark': idx === 0 && day >= lastMonthStart,
-                'has-text-danger':
-                  dates.length - 1 === idx && nextMonthStart > day,
-                'has-text-primary':
-                  day === today &&
-                  month === currentMonth &&
-                  year === currentYear,
-              }"
-            >
-              {{ day }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+          <v-card color="grey lighten-4" min-width="350px" flat>
+            <v-toolbar :color="selectedEvent.color" dark>
+              <v-btn icon>
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+              <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn icon>
+                <v-icon>mdi-heart</v-icon>
+              </v-btn>
+              <v-btn icon>
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card-text>
+              <span v-html="selectedEvent.details"></span>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn text color="secondary" @click="selectedOpen = false">
+                Cancel
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
+      </v-sheet>
+    </v-col>
+  </v-row>
 </template>
+
 
 <script>
 export default {
-  data() {
-    return {
-      days: [
-        "일요일",
-        "월요일",
-        "화요일",
-        "수요일",
-        "목요일",
-        "금요일",
-        "토요일",
-      ],
-      dates: [],
-      currentYear: 0,
-      currentMonth: 0,
-      year: 0,
-      month: 0,
-      lastMonthStart: 0,
-      nextMonthStart: 0,
-      today: 0,
-    };
-  },
-  created() {
-    // 데이터에 접근이 가능한 첫 번째 라이프 사이클
-    const date = new Date();
-    this.currentYear = date.getFullYear(); // 이하 현재 년, 월 가지고 있기
-    this.currentMonth = date.getMonth() + 1;
-    this.year = this.currentYear;
-    this.month = this.currentMonth;
-    this.today = date.getDate(); // 오늘 날짜
-    this.calendarData();
+  data: () => ({
+    ranklist: [],
+    focus: "",
+    type: "month",
+    typeToLabel: {
+      month: "Month",
+      week: "Week",
+      day: "Day",
+      "4day": "4 Days",
+    },
+    selectedEvent: {},
+    selectedElement: null,
+    selectedOpen: false,
+    events: [],
+    colors: [
+      "blue",
+      "indigo",
+      "deep-purple",
+      "cyan",
+      "green",
+      "orange",
+      "grey darken-1",
+    ],
+    names: [
+      "Meeting",
+      "Holiday",
+      "PTO",
+      "Travel",
+      "Event",
+      "Birthday",
+      "Conference",
+      "Party",
+    ],
+  }),
+  mounted() {
+    this.$refs.calendar.checkChange();
   },
   methods: {
-    calendarData(arg) {
-      // 인자를 추가
-      if (arg < 0) {
-        // -1이 들어오면 지난 달 달력으로 이동
-        this.month -= 1;
-      } else if (arg === 1) {
-        // 1이 들어오면 다음 달 달력으로 이동
-        this.month += 1;
-      }
-      if (this.month === 0) {
-        // 작년 12월
-        this.year -= 1;
-        this.month = 12;
-      } else if (this.month > 12) {
-        // 내년 1월
-        this.year += 1;
-        this.month = 1;
-      }
-      const [monthFirstDay, monthLastDate, lastMonthLastDate] =
-        this.getFirstDayLastDate(this.year, this.month);
-      this.dates = this.getMonthOfDays(
-        monthFirstDay,
-        monthLastDate,
-        lastMonthLastDate
-      );
+    viewDay({ date }) {
+      this.focus = date;
+      this.type = "day";
     },
-    getFirstDayLastDate(year, month) {
-      const firstDay = new Date(year, month - 1, 1).getDay(); // 이번 달 시작 요일
-      const lastDate = new Date(year, month, 0).getDate(); // 이번 달 마지막 날짜
-      let lastYear = year;
-      let lastMonth = month - 1;
-      if (month === 1) {
-        lastMonth = 12;
-        lastYear -= 1;
-      }
-      const prevLastDate = new Date(lastYear, lastMonth, 0).getDate(); // 지난 달 마지막 날짜
-      return [firstDay, lastDate, prevLastDate];
+    getEventColor(event) {
+      return event.color;
     },
-    getMonthOfDays(monthFirstDay, monthLastDate, prevMonthLastDate) {
-      let day = 1;
-      let prevDay = prevMonthLastDate - monthFirstDay + 1;
-      const dates = [];
-      let weekOfDays = [];
-      while (day <= monthLastDate) {
-        if (day === 1) {
-          // 1일이 어느 요일인지에 따라 테이블에 그리기 위한 지난 셀의 날짜들을 구할 필요가 있다.
-          for (let j = 0; j < monthFirstDay; j += 1) {
-            if (j === 0) this.lastMonthStart = prevDay; // 지난 달에서 제일 작은 날짜
-            weekOfDays.push(prevDay);
-            prevDay += 1;
+    setToday() {
+      this.focus = "";
+    },
+    prev() {
+      this.$refs.calendar.prev();
+    },
+    next() {
+      this.$refs.calendar.next();
+    },
+    showEvent({ nativeEvent, event }) {
+      const open = () => {
+        this.selectedEvent = event;
+        this.selectedElement = nativeEvent.target;
+        setTimeout(() => (this.selectedOpen = true), 10);
+      };
+
+      if (this.selectedOpen) {
+        this.selectedOpen = false;
+        setTimeout(open, 10);
+      } else {
+        open();
+      }
+
+      nativeEvent.stopPropagation();
+    },
+    updateRange() {
+      const events = [];
+
+      this.$axios
+        .get("/api/commute/monthNamelist", {
+          params: {
+            com_d8: this.$store.getters.getDate,
+          },
+        })
+        .then((res) => {
+          const rankList = [];
+          console.log(res.data);
+          for (let i = 0; i < res.data.length; i++) {
+            rankList.push(res.data[i]);
+
+            events.push({
+              name: rankList[i].name,
+              start: rankList[i].com_start,
+              end: rankList[i].com_end,
+              color: this.colors[this.rnd(0, this.colors.length - 1)],
+            });
           }
-        }
-        weekOfDays.push(day);
-        if (weekOfDays.length === 7) {
-          // 일주일 채우면
-          dates.push(weekOfDays);
-          weekOfDays = []; // 초기화
-        }
-        day += 1;
-      }
-      const len = weekOfDays.length;
-      if (len > 0 && len < 7) {
-        for (let k = 1; k <= 7 - len; k += 1) {
-          weekOfDays.push(k);
-        }
-      }
-      if (weekOfDays.length > 0) dates.push(weekOfDays); // 남은 날짜 추가
-      this.nextMonthStart = weekOfDays[0]; // 이번 달 마지막 주에서 제일 작은 날짜
-      return dates;
+        })
+        .then(() => {
+          ///////// 달력 안 이름 css
+          console.log("aldjaslkdjasldj");
+          document
+            .querySelectorAll(
+              ".v-calendar-monthly .v-calendar-weekly__week .v-event strong"
+            )
+            .forEach(function (each) {
+              each.style.display = "none";
+            });
+          document
+            .querySelectorAll(
+              ".v-calendar-monthly .v-calendar-weekly__week .v-event "
+            )
+            .forEach(function (each) {
+              each.style.width = "40%";
+              each.style.margin = "0px";
+            });
+          document
+            .querySelectorAll(".v-calendar .v-event")
+            .forEach(function (each) {
+              each.style.display = "inline-block";
+            });
+        });
+      this.events = events;
+    },
+    rnd(a, b) {
+      return Math.floor((b - a + 1) * Math.random()) + a;
+    },
+    com_detail() {
+      this.$router.push("/com_detail");
     },
   },
 };
 </script>
+<style scoped>
+strong {
+  display: none;
+}
+.v-calendar .v-event {
+  display: inline-block;
+}
+</style>

@@ -46,6 +46,7 @@
                   class="ma-4"
                   height="200"
                   width="200"
+                  @click="com_main(project)"
                 >
                   <v-card-title
                     >{{ project.prj_title }} <v-spacer></v-spacer>
@@ -61,14 +62,13 @@
                     ></v-card-title
                   >
 
-                  <v-card-text>
+                  <v-card-text class="cardText">
                     <v-btn
                       color="grey lighten-2"
                       light
-                      @click="onworkDialog = true"
+                      @click.stop="openonWorkDialog(project)"
                       :disabled="project.rmv_YN == 'Y'"
                       v-if="
-                        btnIn &&
                         $store.getters.getCurrentUser.authority !== 'ROLE_ROOT'
                       "
                     >
@@ -79,7 +79,6 @@
                       color="grey lighten-2"
                       light
                       @click="offworkDialog = true"
-                      :disabled="btnIn == true ? false : true"
                     >
                       퇴근
                     </v-btn>
@@ -88,8 +87,7 @@
                     <v-btn
                       color="grey lighten-2"
                       light
-                      @click="openReportDialog(project)"
-                      :disabled="project.rmv_YN == 'Y' || btnIn"
+                      @click.stop="openReportDialog(project)"
                       v-if="
                         $store.getters.getCurrentUser.authority !== 'ROLE_ROOT'
                       "
@@ -100,7 +98,7 @@
 
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn icon @click="openDialogView(project)">
+                    <v-btn icon @click.stop="openDialogView(project)">
                       <v-icon>mdi-information-outline</v-icon>
                     </v-btn>
                   </v-card-actions>
@@ -122,6 +120,7 @@
               class="pa-4"
               active-class="success"
               show-arrows
+              @click="com_main"
             >
               <v-slide-item
                 v-for="project in doneProjectList"
@@ -177,7 +176,7 @@
           </v-card>
         </v-dialog>
 
-        <v-dialog v-if="btnIn" v-model="onworkDialog" max-width="290">
+        <v-dialog v-model="onworkDialog" max-width="290">
           <v-card>
             <v-card-title>출근하시겠습니까?</v-card-title>
 
@@ -188,11 +187,11 @@
                 취소
               </v-btn>
 
-              <v-btn color="green darken-1" text @click="onWork"> 확인 </v-btn>
+              <v-btn color="green darken-1" text> 확인 </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-else v-model="offworkDialog" max-width="290">
+        <v-dialog v-model="offworkDialog" max-width="290">
           <v-card>
             <v-card-title>퇴근하시겠습니까?</v-card-title>
 
@@ -203,7 +202,7 @@
                 취소
               </v-btn>
 
-              <v-btn color="green darken-1" text @click="offWork"> 확인 </v-btn>
+              <v-btn color="green darken-1" text> 확인 </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -572,7 +571,6 @@ export default {
       deletedProject: "",
       followerList: [],
       message: "",
-      btnIn: true,
     };
   },
 
@@ -581,12 +579,9 @@ export default {
     vfooter, //풋터 컴포넌트 추가
   },
   mounted() {
-    this.getProjectList;
     this.getDoneProjectList;
     this.getUserInfo;
     this.getToday();
-    this.checkonWork();
-    this.rptCheck();
   },
   computed: {
     getUserInfo() {
@@ -616,7 +611,7 @@ export default {
           })
           .then((res) => {
             this.projectList = res.data;
-            // console.log(this.projectList);
+            console.log(this.projectList);
             // for (let i = 0; i < this.projectList.length; i++) {
             //   console.log(
             //     this.projectList[i].prj_no,
@@ -626,15 +621,31 @@ export default {
             // this.$store.commit("setProject", this.projectList);
             const userINProject = [];
             for (let i = 0; i < this.projectList.length; i++) {
+              console.log(this.projectList[0].prj_no);
+              console.log(this.projectList[1].prj_no);
+              console.log(new Date().toISOString().substr(0, 10));
+              console.log(this.$store.getters.getCurrentUser.email);
+              this.$axios
+                .post(
+                  "/api/commute/checkWork",
+                  {
+                    com_d8: new Date().toISOString().substr(0, 10),
+                    prj_no: this.projectList[i].prj_no,
+                    email: this.$store.getters.getCurrentUser.email,
+                  },
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  }
+                )
+                .then((res) => {});
               userINProject.push({
                 prj_in_no: this.projectList[i].prj_in_no,
                 prj_no: this.projectList[i].prj_no,
                 authority: this.projectList[i].authority,
+                prj_title: this.projectList[i].prj_title,
               });
-              // this.$store.commit("setProjectINinfo", {
-              //   prj_no: this.projectList[i].prj_no,
-              //   authority: this.projectList[i].authority,
-              // });
             }
             this.$store.commit("setProjectINinfo", userINProject);
             // console.log(this.$store.state.userINProject);
@@ -643,6 +654,7 @@ export default {
             // }
             return this.projectList;
           })
+
           .catch((e) => {
             console.log(e);
           });
@@ -669,9 +681,7 @@ export default {
           });
       });
     },
-    work() {
-      return this.btnIn;
-    },
+    work() {},
   },
   methods: {
     onScroll(e) {
@@ -682,7 +692,7 @@ export default {
     updateProject(selectedProject, leaderInfo, followerList) {
       this.$router.push({
         name: "prjWrite",
-        params: {
+        query: {
           flag: 1,
           project: selectedProject,
           leader: leaderInfo,
@@ -691,79 +701,12 @@ export default {
       });
     },
     prjWrite() {
-      this.$router.push({ name: "prjWrite", params: { flag: 0 } });
-    },
-    onWork() {
-      this.onworkDialog = false;
-
-      alert("출근등록");
-
-      this.$axios
-        .post(
-          "/api/commute/gotoWork",
-          {
-            com_d8: new Date().toISOString().substr(0, 10),
-            prj_no: this.$store.state.userINProject[0].prj_no,
-            email: this.$store.getters.getCurrentUser.email,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((res) => {});
+      this.$router.push({ name: "prjWrite", query: { flag: 0 } });
     },
 
-    checkonWork() {
-      this.$axios
-        .post(
-          "/api/commute/checkWork",
-          {
-            com_d8: new Date().toISOString().substr(0, 10),
-            prj_no: this.$store.state.userINProject[0].prj_no,
-            email: this.$store.getters.getCurrentUser.email,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res.data);
-
-          // 출근
-          if (res.data) {
-            this.btnIn = false;
-
-            // 미출근
-          } else {
-          }
-        });
-    },
-
-    offWork() {
-      this.offworkDialog = false;
-      alert("퇴근등록");
-
-      this.$axios
-        .post(
-          "http://localhost:8090/api/commute/offWork",
-          {
-            com_d8: new Date().toISOString().substr(0, 10),
-            prj_no: this.$store.state.userINProject[0].prj_no,
-            email: this.$store.getters.getCurrentUser.email,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-        });
+    openonWorkDialog(project) {
+      this.onworkDialog = true;
+      this.selectedProject = project;
     },
 
     add(k) {
@@ -853,37 +796,23 @@ export default {
           this.$router.push("/main");
         });
     },
-    rptCheck() {
-      this.$axios
-        .post(
-          "/api/commute/rptCheck",
-          {
-            com_d8: new Date().toISOString().substr(0, 10),
-            prj_no: this.$store.state.userINProject[0].prj_no,
-            email: this.$store.getters.getCurrentUser.email,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res.data);
 
-          // 업무일지 작성
-          if (res.data) {
-            console.log("업무일지 작성함");
-            this.btnIn = true;
-            // 업무일지 미작성
-          } else {
-            console.log("업무일지 미작성함");
-          }
-        });
+    com_main(project) {
+      this.$store.commit("setProjectINinfo", project);
+      this.$router.push({
+        name: "com_main",
+        query: { project: project },
+      });
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.ma-4 {
+  z-index: 0;
+}
+.cardText {
+  z-index: 3;
+}
 </style>

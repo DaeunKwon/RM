@@ -79,4 +79,9 @@ public class ComDAOImp implements ComDAO {
     public boolean rptCheck(ComVO cvo) {
         return sql.selectOne(ns + ".rptCheck", cvo) != null;
     }
+
+    @Override
+    public List<ComVO> monthNamelist(String com_d8) {
+        return sql.selectList(ns + ".monthNamelist", com_d8) ;
+    }
 }

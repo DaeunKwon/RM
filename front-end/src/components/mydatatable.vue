@@ -52,37 +52,6 @@ export default {
   created() {},
   mounted() {},
   computed: {
-    test() {
-      this.datepick = this.$store.getters.getDate;
-      const diff = moment().diff(end, "hours");
-      const days = Math.floor(diff / 24);
-      const final = days % 7;
-      return (this.week = [
-        {
-          Sun: moment(this.datepick)
-            .add(0 - final, "d")
-            .format("YYYY-MM-DD"),
-          Mon: moment(this.datepick)
-            .add(1 - final, "d")
-            .format("YYYY-MM-DD"),
-          Tue: moment(this.datepick)
-            .add(2 - final, "d")
-            .format("YYYY-MM-DD"),
-          Wed: moment(this.datepick)
-            .add(3 - final, "d")
-            .format("YYYY-MM-DD"),
-          Tur: moment(this.datepick)
-            .add(4 - final, "d")
-            .format("YYYY-MM-DD"),
-          Fri: moment(this.datepick)
-            .add(5 - final, "d")
-            .format("YYYY-MM-DD"),
-          Sat: moment(this.datepick)
-            .add(6 - final, "d")
-            .format("YYYY-MM-DD"),
-        },
-      ]);
-    },
     getweekTime() {
       this.datepick = this.$store.getters.getDate;
       this.$axios
@@ -90,7 +59,7 @@ export default {
           "http://localhost:8090/api/commute/weekTime",
           {
             com_d8: this.datepick,
-            prj_no: this.$store.state.userINProject[0].prj_no,
+            prj_no: this.$store.state.userINProject.prj_no,
             email: this.$store.getters.getCurrentUser.email,
           },
           {

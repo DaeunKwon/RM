@@ -285,7 +285,7 @@ COMMENT ON COLUMN roles.auth_level IS '권한 번호'
 --     com_end      DATE      NULL, 
 --     com_total    NUMBER    NULL, 
 --     prj_in_no    NUMBER    NOT NULL, 
---     CONSTRAINT primary☆key PRIMARY KEY (com_no)
+--     CONSTRAINT primary key PRIMARY KEY (com_no)
 -- )
 -- /
 

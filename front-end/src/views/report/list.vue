@@ -468,11 +468,11 @@ export default {
                 },
               })
               .then((res) => {
-                //console.log(res.data);
+                console.log(res.data);
                 for (let i = 0; i < res.data.length; i++) {
                   reportList.push(res.data[i]);
                 }
-                //console.log(reportList);
+                console.log(reportList);
               });
           } else if (
             this.$store.getters.getProjectINInfo[i].authority == "ROLE_USER"
@@ -486,17 +486,17 @@ export default {
                 },
               })
               .then((res) => {
-                //console.log("완료");
-                //console.log(res.data);
+                console.log("완료");
+                console.log(res.data);
                 for (let i = 0; i < res.data.length; i++) {
                   reportList.push(res.data[i]);
                 }
-                //console.log(reportList);
+                console.log(reportList);
               });
           }
         }
         this.reportList = reportList;
-        // console.log(this.reportList);
+        console.log(this.reportList);
 
         this.$store.commit("setReport", this.reportList);
         // console.log(this.$store.getters.getUserReport);
@@ -524,7 +524,7 @@ export default {
         this.reportDetailList = reportDetailList;
         //console.log(reportDetailList, reportDetailList.length);
         for (let i = 0; i < reportDetailList.length; i++) {
-          //console.log(reportDetailList[i].name);
+          console.log(reportDetailList[i].name);
           const startTime = this.$moment(
             reportDetailList[i].rpt_start_time
           ).format("YYYY-MM-DD HH:mm");
@@ -534,7 +534,7 @@ export default {
           const date = this.$moment(reportDetailList[i].rpt_start_time).format(
             "YYYY-MM-DD"
           );
-          //console.log(reportDetailList[i]);
+          console.log(reportDetailList[i]);
           events.push({
             name: reportDetailList[i].name,
             start: startTime,
@@ -547,7 +547,7 @@ export default {
             write_d8: date,
           });
         }
-        //console.log(events);
+        console.log(events);
         this.events = events;
       }, 500);
     },

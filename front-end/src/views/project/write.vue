@@ -4,18 +4,18 @@
     <v-container>
       <v-flex md6 offset-md3>
         <br />
-        <h5>프로젝트 {{ $route.params.flag == 0 ? "등록" : "수정" }}</h5>
+        <h5>프로젝트 {{ $route.query.flag == 0 ? "등록" : "수정" }}</h5>
         <br />
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
-            v-if="$route.params.flag == 1"
-            v-model="$route.params.project.prj_title"
+            v-if="$route.query.flag == 1"
+            v-model="$route.query.project.prj_title"
             label="프로젝트명"
             required
             outlined
           ></v-text-field>
           <v-text-field
-            v-else-if="$route.params.flag == 0"
+            v-else-if="$route.query.flag == 0"
             v-model="title"
             label="프로젝트명"
             required
@@ -23,15 +23,15 @@
           ></v-text-field>
 
           <v-select
-            v-if="$route.params.flag == 1"
-            v-model="$route.params.project.cond"
+            v-if="$route.query.flag == 1"
+            v-model="$route.query.project.cond"
             :items="cond_items"
             label="진행상황"
             required
             outlined
           ></v-select>
           <v-select
-            v-else-if="$route.params.flag == 0"
+            v-else-if="$route.query.flag == 0"
             :items="cond_items"
             v-model="cond"
             label="진행상황"
@@ -52,10 +52,10 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-if="$route.params.flag == 1"
+                    v-if="$route.query.flag == 1"
                     :value="
                       start_date.length <= 0
-                        ? $moment($route.params.project.start_d8).format(
+                        ? $moment($route.query.project.start_d8).format(
                             'YYYY-MM-DD'
                           )
                         : start_date
@@ -101,10 +101,10 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-if="$route.params.flag == 1"
+                    v-if="$route.query.flag == 1"
                     :value="
                       end_date.length <= 0
-                        ? $moment($route.params.project.end_d8).format(
+                        ? $moment($route.query.project.end_d8).format(
                             'YYYY-MM-DD'
                           )
                         : end_date
@@ -140,8 +140,8 @@
           </v-row>
 
           <v-select
-            v-if="$route.params.flag == 1"
-            v-model="$route.params.leader.email"
+            v-if="$route.query.flag == 1"
+            v-model="$route.query.leader.email"
             outlined
             :hint="`${leader.name}, ${leader.email}`"
             :items="userList"
@@ -152,7 +152,7 @@
             persistent-hint
           ></v-select>
           <v-select
-            v-else-if="$route.params.flag == 0"
+            v-else-if="$route.query.flag == 0"
             outlined
             v-model="leader"
             :hint="`${leader.name}, ${leader.email}`"
@@ -178,10 +178,10 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-if="$route.params.flag == 1"
+                    v-if="$route.query.flag == 1"
                     :value="
                       lead_in_date.length <= 0
-                        ? $moment($route.params.leader.prj_in_d8).format(
+                        ? $moment($route.query.leader.prj_in_d8).format(
                             'YYYY-MM-DD'
                           )
                         : lead_in_date
@@ -227,10 +227,10 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-if="$route.params.flag == 1"
+                    v-if="$route.query.flag == 1"
                     :value="
                       lead_out_date.length <= 0
-                        ? $moment($route.params.leader.prj_out_d8).format(
+                        ? $moment($route.query.leader.prj_out_d8).format(
                             'YYYY-MM-DD'
                           )
                         : lead_out_date
@@ -267,7 +267,7 @@
           <!-- <v-row>
             {{ inputs }}
           </v-row> -->
-          <div v-if="$route.params.flag == 1">
+          <div v-if="$route.query.flag == 1">
             <v-dialog v-model="openCalendarFlag" width="290px">
               <v-date-picker v-model="openCalendarDate" full-width>
                 <v-spacer></v-spacer>
@@ -460,14 +460,14 @@
           <br /><br /><br />
 
           <v-textarea
-            v-if="$route.params.flag == 1"
-            v-model="$route.params.project.prj_content"
+            v-if="$route.query.flag == 1"
+            v-model="$route.query.project.prj_content"
             outlined
             label="프로젝트 내용"
             required
           ></v-textarea>
           <v-textarea
-            v-else-if="$route.params.flag == 0"
+            v-else-if="$route.query.flag == 0"
             outlined
             v-model="content"
             label="프로젝트 내용"
@@ -475,14 +475,14 @@
           ></v-textarea>
 
           <v-textarea
-            v-if="$route.params.flag == 1"
-            v-model="$route.params.project.prj_remark"
+            v-if="$route.query.flag == 1"
+            v-model="$route.query.project.prj_remark"
             outlined
             label="특이사항"
             required
           ></v-textarea>
           <v-textarea
-            v-else-if="$route.params.flag == 0"
+            v-else-if="$route.query.flag == 0"
             outlined
             v-model="remark"
             label="특이사항"
@@ -491,7 +491,7 @@
 
           <br />
           <v-btn color="primary" class="mr-4" @click="prjWrite()">
-            {{ $route.params.flag == 0 ? "저장" : "수정" }}
+            {{ $route.query.flag == 0 ? "저장" : "수정" }}
           </v-btn>
           <v-btn color="success" @click="main"> 목록 </v-btn>
         </v-form>
@@ -554,8 +554,8 @@ export default {
   },
   mounted() {
     this.getUserList;
-    if (!!this.$route.params.follower) {
-      this.inputs = this.$route.params.follower;
+    if (!!this.$route.query.follower) {
+      this.inputs = this.$route.query.follower;
       this.inputs.forEach((input) => {
         input.prj_in_d8 = this.$moment(input.prj_in_d8).format("YYYY-MM-DD");
         input.prj_out_d8 = this.$moment(input.prj_out_d8).format("YYYY-MM-DD");
@@ -578,7 +578,7 @@ export default {
   },
   methods: {
     prjWrite() {
-      if (this.$route.params.flag == 0) {
+      if (this.$route.query.flag == 0) {
         //console.log("등록");
         const project = new FormData();
         project.append("title", this.title);
@@ -596,7 +596,7 @@ export default {
           leader.append("prj_in_d8", this.lead_in_date);
           leader.append("prj_out_d8", this.lead_out_date);
           leader.append("prj_no", res.data);
-          leader.append("flag", this.$route.params.flag);
+          leader.append("flag", this.$route.query.flag);
 
           this.$axios.post("/api/project/in/leader", leader);
 
@@ -606,7 +606,7 @@ export default {
             follower.append("prj_in_d8", this.inputs[i].in_date);
             follower.append("prj_out_d8", this.inputs[i].out_date);
             follower.append("prj_no", res.data);
-            follower.append("flag", this.$route.params.flag);
+            follower.append("flag", this.$route.query.flag);
           }
           // console.log(follower.getAll("email"));
 
@@ -618,26 +618,26 @@ export default {
       } else {
         // console.log("수정");
         const project = new FormData();
-        project.append("prj_no", this.$route.params.project.prj_no);
+        project.append("prj_no", this.$route.query.project.prj_no);
         // console.log(this.title);
         switch (true) {
           case this.title == "":
-            project.append("prj_title", this.$route.params.project.prj_title);
+            project.append("prj_title", this.$route.query.project.prj_title);
           case this.title !== "":
             project.append("prj_title", this.title);
 
           case this.cond == "":
-            project.append("cond", this.$route.params.project.cond);
+            project.append("cond", this.$route.query.project.cond);
           case this.cond !== "":
             project.append("cond", this.cond);
 
           case this.content == "":
-            project.append("content", this.$route.params.project.prj_content);
+            project.append("content", this.$route.query.project.prj_content);
           case this.content !== "":
             project.append("content", this.content);
 
           case this.remark == "":
-            project.append("remark", this.$route.params.project.prj_remark);
+            project.append("remark", this.$route.query.project.prj_remark);
           case this.remark !== "":
             project.append("remark", this.remark);
         }
@@ -645,7 +645,7 @@ export default {
           case this.start_date == "":
             project.append(
               "start_date",
-              this.$moment(this.$route.params.project.start_d8).format(
+              this.$moment(this.$route.query.project.start_d8).format(
                 "YYYY-MM-DD"
               )
             );
@@ -658,7 +658,7 @@ export default {
           case this.end_date == "":
             project.append(
               "end_date",
-              this.$moment(this.$route.params.project.end_d8).format(
+              this.$moment(this.$route.query.project.end_d8).format(
                 "YYYY-MM-DD"
               )
             );
@@ -681,7 +681,7 @@ export default {
           case this.lead_in_date == "":
             leader.append(
               "prj_in_d8",
-              this.$moment(this.$route.params.leader.prj_in_d8).format(
+              this.$moment(this.$route.query.leader.prj_in_d8).format(
                 "YYYY-MM-DD"
               )
             );
@@ -696,7 +696,7 @@ export default {
           case this.lead_out_date == "":
             leader.append(
               "prj_out_d8",
-              this.$moment(this.$route.params.leader.prj_out_d8).format(
+              this.$moment(this.$route.query.leader.prj_out_d8).format(
                 "YYYY-MM-DD"
               )
             );
@@ -707,9 +707,9 @@ export default {
               this.$moment(this.lead_out_date).format("YYYY-MM-DD")
             );
         }
-        leader.append("email", this.$route.params.leader.email);
-        leader.append("prj_no", this.$route.params.project.prj_no);
-        leader.append("flag", this.$route.params.flag);
+        leader.append("email", this.$route.query.leader.email);
+        leader.append("prj_no", this.$route.query.project.prj_no);
+        leader.append("flag", this.$route.query.flag);
 
         this.$axios
           .post("/api/project/in/update/leader", leader)
@@ -726,9 +726,9 @@ export default {
           }
           follower.append("prj_in_d8", this.inputs[i].prj_in_d8);
           follower.append("prj_out_d8", this.inputs[i].prj_out_d8);
-          follower.append("prj_no", this.$route.params.project.prj_no);
+          follower.append("prj_no", this.$route.query.project.prj_no);
         }
-        follower.append("flag", this.$route.params.flag);
+        follower.append("flag", this.$route.query.flag);
         // console.log(follower.getAll("email"));
         // console.log(this.inputs[0].email);
         // console.log(typeof this.inputs[1].email);

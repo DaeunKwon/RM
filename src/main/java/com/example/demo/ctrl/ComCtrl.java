@@ -53,7 +53,7 @@ public class ComCtrl {
 
     }
 
-    @PostMapping(value = "/checkWork")
+    @PostMapping(value = "/checkWork", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean checkWork(@RequestBody ComVO cvo) {
         log.info(">>>>>>>>>>>>>>>checkWork cvo.getCom_d8: " + cvo.getCom_d8());
         return comservice.checkWork(cvo);
@@ -109,5 +109,11 @@ public class ComCtrl {
     public boolean rptCheck(@RequestBody ComVO cvo) {
         log.info("<<<<<<<<<<<<rptCheck ComCTRL 진입");
         return comservice.rptCheck(cvo);
+    }
+
+    @GetMapping(value = "/monthNamelist")
+    public List<ComVO> monthNamelist(String com_d8) {
+        log.info("<<<<<<<<<<<<monthNamelist ComCTRL 진입");
+        return comservice.monthNamelist(com_d8);
     }
 }

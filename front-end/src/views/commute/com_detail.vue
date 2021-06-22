@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <Header />
+    <div><Header /></div>
 
     <v-container>
       <v-layout>
@@ -179,7 +179,7 @@ export default {
         "http://localhost:8090/api/commute/checkoffWork",
         {
           com_d8: nowdate,
-          prj_no: this.$store.state.userINProject[0].prj_no,
+          prj_no: this.$store.state.userINProject.prj_no,
           email: this.$store.getters.getCurrentUser.email,
         },
         {
@@ -226,7 +226,7 @@ export default {
           "http://localhost:8090/api/commute/gotoWork",
           {
             com_d8: nowdate,
-            prj_no: this.$store.state.userINProject[0].prj_no,
+            prj_no: this.$store.state.userINProject.prj_no,
             email: this.$store.getters.getCurrentUser.email,
           },
           {
@@ -251,7 +251,7 @@ export default {
           "http://localhost:8090/api/commute/offWork",
           {
             com_d8: nowdate,
-            prj_no: this.$store.state.userINProject[0].prj_no,
+            prj_no: this.$store.state.userINProject.prj_no,
             email: this.$store.getters.getCurrentUser.email,
           },
           {
@@ -272,7 +272,7 @@ export default {
           "http://localhost:8090/api/commute/checkWork",
           {
             com_d8: nowdate,
-            prj_no: this.$store.state.userINProject[0].prj_no,
+            prj_no: this.$store.state.userINProject.prj_no,
             email: this.$store.getters.getCurrentUser.email,
           },
           {

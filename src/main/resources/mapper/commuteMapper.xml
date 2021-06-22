@@ -85,6 +85,11 @@
         SELECT tr.prj_no FROM tbl_report tr
   WHERE prj_no=#{prj_no} AND RPT_WRITER = (SELECT PRJ_IN_NO FROM TBL_PROJECT_IN tpi JOIN (SELECT email FROM TBL_MEMBER)tm ON tm.EMAIL =tpi.EMAIL WHERE tm.EMAIL = #{email}) and TO_CHAR(RPT_WRITE_D8, 'YYYY-MM-DD') =#{com_d8}
     </select>
-
+    <select id="monthNamelist" parameterType="java.lang.String" resultType="com.example.demo.domain.ComVO">
+        <![CDATA[
+         SELECT tc.*,tpi.email,tm.name,da.day FROM TBL_COMMUTE tc JOIN TBL_PROJECT_IN tpi ON tc.PRJ_IN_NO = tpi.PRJ_IN_NO JOIN TBL_MEMBER tm ON tpi.email = tm.email 
+LEFT JOIN (SELECT TO_CHAR (FIRST_DAY + LEVEL - 1, 'YYYY-MM-DD') day FROM (SELECT TRUNC(TO_DATE(#{com_d8}), 'MM') FIRST_DAY FROM DUAL) CONNECT BY FIRST_DAY + LEVEL - 1 <= TRUNC(LAST_DAY(TO_DATE(#{com_d8})))) DA 
+ON da.DAY = tc.COM_D8 ORDER BY COM_D8, COM_START ]]>
+    </select>
 
 </mapper>

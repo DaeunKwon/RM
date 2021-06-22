@@ -64,4 +64,10 @@ public class ComServiceImp implements ComService {
         return comdao.rptCheck(cvo);
 
     }
+
+    @Override
+    public List<ComVO> monthNamelist(String com_d8) {
+        return comdao.monthNamelist(com_d8);
+
+    }
 }

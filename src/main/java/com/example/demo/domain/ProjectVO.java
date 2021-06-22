@@ -22,6 +22,7 @@ public class ProjectVO {
     private List<ProjectInVO> ulist;
     private int prj_in_no;
     private String authority;
+    private int rpt_no;
 
     public ProjectVO() {
     }

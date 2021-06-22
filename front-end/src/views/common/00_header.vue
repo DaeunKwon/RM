@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar fixed>
+    <v-app-bar>
       <v-toolbar-title type="button" @click="main"
         >Report Management</v-toolbar-title
       >
@@ -8,8 +8,6 @@
       <v-spacer></v-spacer>
 
       <v-btn text @click="rptList"> 업무일지 </v-btn>
-
-      <v-btn text @click="com_main"> 근태관리 </v-btn>
 
       <v-subheader> {{ $store.getters.getCurrentUser.name }} 님</v-subheader>
 
