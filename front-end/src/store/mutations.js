@@ -13,18 +13,16 @@ export default {
         state.week = payload
     },
 
-    setProject: function (state, payload) {
-        state.userProject = payload
-    },
-
     setProjectINinfo: function (state, payload) {
         state.userINProject = payload
     },
 
+    // 업무 일지 상세 내용
     setReport: function (state, payload) {
         state.userReport = payload
     },
 
+    // 업무 일지 목록
     setReportList: function (state, payload) {
         state.userReportList = payload
     }

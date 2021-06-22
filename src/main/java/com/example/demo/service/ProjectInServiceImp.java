@@ -33,7 +33,6 @@ public class ProjectInServiceImp implements ProjectInService {
 
     @Override
     public ProjectInVO getLeaderInfo(int prj_no) {
-        log.info(">>>>>>>>getleaderinfo service");
         return pINdao.getLeaderInfo(prj_no);
     }
 

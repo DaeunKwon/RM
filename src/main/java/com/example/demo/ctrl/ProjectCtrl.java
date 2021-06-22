@@ -44,20 +44,15 @@ public class ProjectCtrl {
         pvo.setPrj_mod_writer(req.getParameter("mod_writer"));
         pvo.setPrj_content(req.getParameter("content"));
         pvo.setPrj_remark(req.getParameter("remark"));
-        log.info(">>>>>>> project: " + pvo);
         projectService.write(pvo);
         return pvo.getPrj_no();
-        // log.info(">>>>>>>>>>>>project db에 넣기 성공");
-
     }
 
     @ResponseBody
     @GetMapping(value = "/main")
     public List<ProjectVO> list(HttpServletRequest req) {
-        log.info(">>>>>>project list get");
         String email = req.getParameter("email");
         String authority = req.getParameter("authority");
-        log.info(">>>>>controller" + authority);
         return projectService.getProjectList(email, authority);
 
     }
@@ -65,7 +60,6 @@ public class ProjectCtrl {
     @ResponseBody
     @GetMapping(value = "/main/done")
     public List<ProjectVO> getDoneProjectlist(HttpServletRequest req) {
-        log.info(">>>>>>project list get");
         String email = req.getParameter("email");
         String authority = req.getParameter("authority");
         return projectService.getDoneProjectList(email, authority);
@@ -75,7 +69,6 @@ public class ProjectCtrl {
     @ResponseBody
     @PostMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
     public void deleteProject(@RequestBody int prj_no) {
-        log.info(">>>>>delete project controller");
         projectService.deleteProject(prj_no);
     }
 
@@ -83,9 +76,6 @@ public class ProjectCtrl {
     @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
     public void updateProject(HttpServletRequest req) throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-
-        log.info(">>>>>>>>> update project controller");
-        log.info("project title" + req.getParameter("prj_title"));
         ProjectVO pvo = new ProjectVO();
         pvo.setPrj_no(Integer.parseInt(req.getParameter("prj_no")));
         pvo.setPrj_title(req.getParameter("prj_title"));

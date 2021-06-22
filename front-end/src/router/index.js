@@ -5,7 +5,6 @@ import join from '../components/user/join.vue'
 import main from '../views/project/main.vue';
 import prjWrite from '../views/project/write.vue';
 import rptList from '../views/report/list.vue';
-import prjDetail from '../views/project/detail.vue';
 import dailyRpt from '../views/report/daily.vue';
 import com_detail from '../views/commute/com_detail.vue'
 import com_main from '../views/commute/com_main.vue'
@@ -30,12 +29,21 @@ const router = new VueRouter({
             component: dailyRpt,
         },
         {
-            path: '/prjDetail',
-            component: prjDetail,
-        },
-        {
             path: '/rptList',
             component: rptList,
+            beforeEnter: function (to, from, next) {
+                let user
+                axios.get('/api/user/info')
+                    .then(res => {
+                        user = res.data
+                        if (!!user['email']) {
+                            next()
+                        } else {
+                            next('/')
+                        }
+                    })
+            },
+            props: true
         },
         {
             path: '/prjWrite',
@@ -50,7 +58,6 @@ const router = new VueRouter({
                 axios.get('/api/user/info')
                     .then(res => {
                         user = res.data
-                        //console.log(user)
                         if (!!user['email']) {
                             next()
                         } else {
@@ -68,7 +75,6 @@ const router = new VueRouter({
                 axios.get('/api/user/info')
                     .then(res => {
                         user = res.data
-                        //console.log(user)
                         if (!!user['email']) {
                             next('/main')
                         } else {

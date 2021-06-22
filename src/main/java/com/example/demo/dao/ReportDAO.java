@@ -11,8 +11,6 @@ public interface ReportDAO {
 
     public List<ReportVO> list();
 
-    public List<ReportDetailVO> getReportDetailList(int prj_in_no, int prj_no, String authority);
-
     public void writeDetail(List<ReportDetailVO> reportDetailList);
 
     public List<ReportDetailVO> getSelectedReport(Date rpt_write_d8);

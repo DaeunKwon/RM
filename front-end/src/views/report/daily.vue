@@ -1,14 +1,14 @@
 <template>
   <div>
     <Header />
-    <v-container
+    <v-container class="header-padding"
       ><br />
       <div align="left" class="display-1">업무 일지 목록 (전체)</div>
       <div align="right">
         <v-btn text color="primary" class="mr-2" @click="rptList">
-          Calendar
+          캘린더로 보기
         </v-btn>
-        <v-btn text color="primary" @click="daily"> List </v-btn>
+        <v-btn text color="primary" @click="daily"> 리스트로 보기 </v-btn>
       </div>
       <br />
       <v-card>
@@ -33,10 +33,10 @@
           class="elevation-2"
         >
           <template v-slot:[`item.rpt_write_d8`]="{ item }">
-            {{ item.rpt_write_d8 | moment("YYYY-MM-DD HH:mm:ss") }}
+            {{ item.rpt_write_d8 | moment("YYYY-MM-DD") }}
           </template>
           <template v-slot:[`item.rpt_mod_d8`]="{ item }">
-            {{ item.rpt_mod_d8 | moment("YYYY-MM-DD HH:mm:ss") }}
+            {{ item.rpt_mod_d8 | moment("YYYY-MM-DD") }}
           </template>
           <template v-slot:top>
             <v-toolbar flat>
@@ -51,10 +51,9 @@
           </template>
           <template v-slot:expanded-item="{ headers, item }">
             <br />
-            <div v-if="item.detailList.length < 1">
-              <tr :colspan="headers.length">
-                <span>No Contents.</span
-                ><br />
+            <div v-if="headers.length == 0">
+              <tr>
+                <td>No Content</td>
               </tr>
             </div>
             <tr
@@ -62,12 +61,13 @@
               v-for="detail in item.detailList"
               :key="detail.rpt_detail_no"
             >
-              <span
-                >{{ detail.rpt_start_time | moment("HH:mm:ss") }} ~
+              <td>
+                {{ detail.rpt_start_time | moment("HH:mm:ss") }} ~
                 {{ detail.rpt_end_time | moment("HH:mm:ss") }} :
-                {{ detail.rpt_content }}</span
-              ><br />
+                <pre>{{ detail.rpt_content }}</pre>
+              </td>
             </tr>
+
             <br />
           </template>
         </v-data-table>
@@ -103,7 +103,6 @@ export default {
         {
           text: "프로젝트명",
           align: "start",
-          // sortable: false,
           value: "prj_title",
         },
         { text: "작성자", value: "name" },
@@ -123,30 +122,13 @@ export default {
     this.getReports;
   },
   computed: {
-    // getReportList() {
-    //   this.$axios
-    //     .get("/api/report/list")
-    //     .then((res) => {
-    //       this.reportList = res.data;
-    //       console.log(this.reportList);
-    //       return this.reportList;
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //     });
-    // },
     getReports() {
-      if (this.$store.getters.getProjectINInfo[0].authority == null) {
+      if (this.$store.getters.getCurrentUser.authority == "ROLE_ROOT") {
         this.$axios.get("/api/report/getAll").then((res) => {
-          //this.$store.commit("setReportList", res.data);
-          // console.log(this.$store.getters.getReportList);
           this.reports = res.data;
-          //console.log(this.$store.getters.getReportList[0].detailList);
         });
       } else {
-        //const reportList = [];
         const reports = [];
-        //console.log(this.$store.getters.getProjectINInfo.length);
         for (let i = 0; i < this.$store.getters.getProjectINInfo.length; i++) {
           if (
             this.$store.getters.getProjectINInfo[i].authority == "ROLE_ADMIN"
@@ -161,7 +143,6 @@ export default {
                 for (let i = 0; i < res.data.length; i++) {
                   reports.push(res.data[i]);
                 }
-                // console.log(reports);
               });
           } else if (
             this.$store.getters.getProjectINInfo[i].authority == "ROLE_USER"
@@ -173,26 +154,17 @@ export default {
                 },
               })
               .then((res) => {
-                //console.log("완료");
-                //console.log(res.data);
                 for (let i = 0; i < res.data.length; i++) {
                   reports.push(res.data[i]);
                 }
-                // console.log(reports);
               });
           }
         }
 
         this.reports = reports;
-        // console.log(this.reports);
-
-        // this.$store.commit("setReportList", this.reports);
-        // console.log(this.$store.getters.getReportList);
       }
 
-      // console.log(this.$store.state.userReportList[0].detailList);
       setTimeout(() => {
-        //  console.log(this.reports.length);
         for (let i = 0; i < this.reports.length; i++) {
           this.$axios
             .get("/api/report/detail/setDetailList", {
@@ -201,16 +173,11 @@ export default {
               },
             })
             .then((res) => {
-              // console.log(res.data);
               this.reports[i].detailList = res.data;
-              //  console.log(this.reports[i].detailList);
             });
         }
-        //(this.reports);
         this.$store.commit("setReportList", this.reports);
-        // console.log(this.$store.getters.getReportList);
-        // console.log(this.$store.getters.getReportList[0].detailList);
-      }, 100);
+      }, 400);
     },
   },
   methods: {
@@ -223,3 +190,6 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+</style>

@@ -1,11 +1,13 @@
 <template>
   <div>
     <Header />
-    <v-container>
-      <v-flex md6 offset-md3>
+    <v-container class="header-padding">
+      <div align="left" class="display-1">
+        프로젝트 {{ $route.query.flag == 0 ? "등록" : "수정" }}
+      </div>
+      <v-container>
         <br />
-        <h5>프로젝트 {{ $route.query.flag == 0 ? "등록" : "수정" }}</h5>
-        <br />
+
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
             v-if="$route.query.flag == 1"
@@ -495,7 +497,7 @@
           </v-btn>
           <v-btn color="success" @click="main"> 목록 </v-btn>
         </v-form>
-      </v-flex>
+      </v-container>
       <br /><br />
       <Footer />
     </v-container>
@@ -568,7 +570,6 @@ export default {
         .get("/api/user/list")
         .then((res) => {
           this.userList = res.data;
-          //console.log(this.userList);
           return this.userList;
         })
         .catch((e) => {
@@ -579,7 +580,6 @@ export default {
   methods: {
     prjWrite() {
       if (this.$route.query.flag == 0) {
-        //console.log("등록");
         const project = new FormData();
         project.append("title", this.title);
         project.append("cond", this.cond);
@@ -608,7 +608,6 @@ export default {
             follower.append("prj_no", res.data);
             follower.append("flag", this.$route.query.flag);
           }
-          // console.log(follower.getAll("email"));
 
           this.$axios.post("/api/project/in/follower", follower).then((res) => {
             alert("프로젝트가 등록되었습니다.");
@@ -616,10 +615,8 @@ export default {
           });
         });
       } else {
-        // console.log("수정");
         const project = new FormData();
         project.append("prj_no", this.$route.query.project.prj_no);
-        // console.log(this.title);
         switch (true) {
           case this.title == "":
             project.append("prj_title", this.$route.query.project.prj_title);
@@ -729,14 +726,10 @@ export default {
           follower.append("prj_no", this.$route.query.project.prj_no);
         }
         follower.append("flag", this.$route.query.flag);
-        // console.log(follower.getAll("email"));
-        // console.log(this.inputs[0].email);
-        // console.log(typeof this.inputs[1].email);
 
         this.$axios
           .post("/api/project/in/update/follower", follower)
           .then((res) => {
-            // console.log("팀원 수정");
             alert("프로젝트가 수정되었습니다.");
             this.$router.push("/main");
           });

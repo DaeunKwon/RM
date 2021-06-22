@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="header-padding">
     <v-layout>
       <v-flex md6 offset-md3>
         <v-card>
@@ -34,11 +34,11 @@
                     type="submit"
                     @click="login"
                   >
-                    Login
+                    로그인
                   </v-btn>
 
                   <v-btn color="warning" @click="$router.replace('/join')">
-                    Join
+                    회원가입
                   </v-btn>
                 </v-col>
               </v-row>
@@ -62,9 +62,9 @@ export default {
   },
   data: () => ({
     email: "",
-    emailRules: [(v) => !!v || "E-mail is required"],
+    emailRules: [(v) => !!v || "이메일을 입력하세요."],
     password: "",
-    passwordRules: [(v) => !!v || "Password is required"],
+    passwordRules: [(v) => !!v || "비밀번호를 입력하세요."],
   }),
   methods: {
     login() {

@@ -34,7 +34,6 @@ public class UserCtrl {
         @Autowired
         private UserAuthoritiesDAO authoritiesDAO;
 
-        // @RequestMapping(value = "/joinPOST", method = RequestMethod.POST)
         @PostMapping(value = "/join", produces = MediaType.APPLICATION_JSON_VALUE)
         @ResponseBody
         public void joinPOST(@RequestBody UserVO uvo) {
@@ -57,15 +56,12 @@ public class UserCtrl {
         @PostMapping(value = "/emailCheck", produces = MediaType.APPLICATION_JSON_VALUE)
         @ResponseBody
         public boolean emailCheck(@RequestBody String email) {
-                log.info(">>>>>return : " + userService.emailCheck(email));
                 return userService.emailCheck(email);
         }
 
         @ResponseBody
         @GetMapping(value = "/list")
         public List<UserVO> userList() {
-                log.info(">>>>>> get user list");
-                log.info(">>>>>>>>user list: " + userService.getlist());
                 return userService.getlist();
         }
 

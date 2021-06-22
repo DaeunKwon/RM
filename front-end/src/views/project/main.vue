@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <v-container>
+    <v-container class="header-padding">
       <br />
       <div align="left" class="display-1">프로젝트 목록</div>
       <div align="right">
@@ -28,7 +28,7 @@
             <div>진행중인 프로젝트</div>
             <div v-if="projectList.length == 0">
               <br /><br /><br />
-              <h5>No project</h5>
+              <h5>프로젝트가 없습니다.</h5>
               <br /><br /><br />
             </div>
             <v-slide-group
@@ -112,7 +112,7 @@
             ><br />완료된 프로젝트
             <div v-if="doneProjectList.length == 0">
               <br /><br /><br />
-              <h5>No project</h5>
+              <h5>프로젝트가 없습니다.</h5>
               <br /><br /><br />
             </div>
             <v-slide-group
@@ -534,8 +534,8 @@
       </div>
 
       <br /><br />
-      <vfooter />
     </v-container>
+    <vfooter />
   </div>
 </template>
 
@@ -570,7 +570,6 @@ export default {
       leaderInfo: "",
       deletedProject: "",
       followerList: [],
-      message: "",
     };
   },
 
@@ -587,19 +586,12 @@ export default {
     getUserInfo() {
       this.$axios.get("/api/user/info").then((res) => {
         this.$store.commit("setCurrentUser", res.data);
-        // console.log(this.$store.getters.getCurrentUser);
-        // console.log(this.$store.getters.getCurrentUser.email);
-        // console.log(this.$store.getters.getCurrentUser.authority);
 
         this.$axios
           .get("/api/project/in/info", {
             params: { email: this.$store.getters.getCurrentUser.email },
           })
-          .then((res) => {
-            // console.log(res.data);
-            // this.$store.commit("setUserProjectInfo", res.data);
-            // console.log(this.$store.getters.getUserProjectInfo.prj_no);
-          });
+          .then((res) => {});
 
         //projectList 안에 프로젝트 번호에 해당되는 권한도 가져옴
         this.$axios
@@ -611,14 +603,6 @@ export default {
           })
           .then((res) => {
             this.projectList = res.data;
-            console.log(this.projectList);
-            // for (let i = 0; i < this.projectList.length; i++) {
-            //   console.log(
-            //     this.projectList[i].prj_no,
-            //     this.projectList[i].authority
-            //   );
-            // }
-            // this.$store.commit("setProject", this.projectList);
             const userINProject = [];
             for (let i = 0; i < this.projectList.length; i++) {
               console.log(this.projectList[0].prj_no);
@@ -648,10 +632,6 @@ export default {
               });
             }
             this.$store.commit("setProjectINinfo", userINProject);
-            // console.log(this.$store.state.userINProject);
-            // for (let i = 0; i < this.$store.state.userProject.length; i++) {
-            //   console.log(this.$store.state.userProject[i].prj_no);
-            // }
             return this.projectList;
           })
 
@@ -667,14 +647,8 @@ export default {
             },
           })
           .then((res) => {
-            // console.log(res.data);
-            if (res.data.length == 0) {
-              this.message = "No Project";
-              //console.log("no project");
-            } else {
-              this.doneProjectList = res.data;
-              return this.getDoneProjectList;
-            }
+            this.doneProjectList = res.data;
+            return this.getDoneProjectList;
           })
           .catch((e) => {
             //console.log(e);
@@ -721,7 +695,6 @@ export default {
     openDialogView(project) {
       this.dialogView = true;
       this.selectedProject = project;
-      // console.log(this.selectedProject.prj_no);
 
       this.$axios
         .get("/api/project/in/leader/info", {
@@ -729,7 +702,6 @@ export default {
         })
         .then((res) => {
           this.leaderInfo = res.data;
-          //console.log(this.leaderInfo.email);
         });
 
       this.$axios
@@ -738,7 +710,6 @@ export default {
         })
         .then((res) => {
           this.followerList = res.data;
-          //console.log(this.followerList);
         });
     },
     openReportDialog(project) {
@@ -753,7 +724,6 @@ export default {
       report.append("rpt_mod_writer", this.selectedProject.prj_in_no);
 
       this.$axios.post("/api/report/write", report).then((res) => {
-        // console.log(res.data);
         const reportDetail = new FormData();
         for (let i = 0; i < this.inputs.length; i++) {
           reportDetail.append(
@@ -783,7 +753,6 @@ export default {
       this.selectedProject = project;
     },
     deleteProject() {
-      // console.log(this.selectedProject.prj_no);
       this.$axios
         .post("/api/project/delete", this.selectedProject.prj_no, {
           headers: {

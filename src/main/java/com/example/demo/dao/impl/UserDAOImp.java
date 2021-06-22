@@ -24,26 +24,11 @@ public class UserDAOImp implements UserDAO {
 
     @Override
     public void join(UserVO uvo) {
-        log.info(">>>>>>>>>>>>>>>>>userdao 진입");
         sql.insert(ns + ".join", uvo);
-        log.info(">>>>>>>>>>>>>>>>>user 정보 넣기 성공");
-    }
-
-    @Override
-    public void update(UserVO uvo) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void delete(String email) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public UserVO getUserfindByEmail(String email) {
-        log.info(">>>>>>" + email);
         return sql.selectOne(ns + ".getUserfindByEmail", email);
     }
 

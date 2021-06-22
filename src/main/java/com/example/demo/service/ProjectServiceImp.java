@@ -19,20 +19,7 @@ public class ProjectServiceImp implements ProjectService {
 
     @Override
     public int write(ProjectVO pvo) {
-        log.info(">>>>>project post service");
         return pdao.insert(pvo);
-    }
-
-    @Override
-    public void modify(ProjectVO pvo) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void remove(ProjectVO pvo) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
