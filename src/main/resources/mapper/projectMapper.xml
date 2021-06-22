@@ -31,13 +31,14 @@
         <selectKey keyProperty="prj_no" resultType="Integer" order="AFTER"> SELECT tbl_project_seq.currval FROM dual </selectKey>
     </insert>
     <select id="getProjectList" parameterType="java.lang.String" resultType="com.example.demo.domain.ProjectVO">
-        SELECT tp.*, tpi.authority, tpi.prj_in_no, 
-        tr.RPT_NO 
+        SELECT tp.*, tpi.authority, tpi.prj_in_no, tr.RPT_NO, tc.COM_START, tc.COM_END 
         FROM TBL_PROJECT tp
         JOIN TBL_PROJECT_IN tpi
         ON tp.PRJ_NO = tpi.PRJ_NO
         LEFT JOIN tbl_report tr 
         ON tr.RPT_WRITER = tpi.PRJ_IN_NO AND TO_CHAR(tr.RPT_WRITE_D8, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+        LEFT JOIN TBL_COMMUTE tc 
+        ON tpi.PRJ_IN_NO = tc.PRJ_IN_NO AND tc.COM_D8  = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
         where cond IN ('예정', '진행중')
         AND tp.rmv_YN in ('N') AND tpi.email = #{email}
     </select>

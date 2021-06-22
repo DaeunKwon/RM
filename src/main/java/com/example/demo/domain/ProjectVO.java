@@ -23,6 +23,8 @@ public class ProjectVO {
     private int prj_in_no;
     private String authority;
     private int rpt_no;
+    private Date com_start;
+    private Date com_end;
 
     public ProjectVO() {
     }

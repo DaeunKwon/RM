@@ -69,7 +69,8 @@
                       @click.stop="openonWorkDialog(project)"
                       :disabled="project.rmv_YN == 'Y'"
                       v-if="
-                        $store.getters.getCurrentUser.authority !== 'ROLE_ROOT'
+                        $store.getters.getCurrentUser.authority !==
+                          'ROLE_ROOT' || project.com_start == undefined
                       "
                     >
                       출근
@@ -78,7 +79,11 @@
                       v-else
                       color="grey lighten-2"
                       light
-                      @click="offworkDialog = true"
+                      @click.stop="openoffWorkDialog(project)"
+                      :disabled="
+                        (project.rpt_no == 0 && project.com_end == null) ||
+                        (project.com_end !== null && project.rpt_no !== 0)
+                      "
                     >
                       퇴근
                     </v-btn>
@@ -90,6 +95,9 @@
                       @click.stop="openReportDialog(project)"
                       v-if="
                         $store.getters.getCurrentUser.authority !== 'ROLE_ROOT'
+                      "
+                      :disabled="
+                        project.rpt_no !== 0 || project.com_start == undefined
                       "
                     >
                       업무일지
@@ -187,7 +195,13 @@
                 취소
               </v-btn>
 
-              <v-btn color="green darken-1" text> 확인 </v-btn>
+              <v-btn
+                color="green darken-1"
+                text
+                @click="[gotoWork(), (onworkDialog = false)]"
+              >
+                확인
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -202,7 +216,13 @@
                 취소
               </v-btn>
 
-              <v-btn color="green darken-1" text> 확인 </v-btn>
+              <v-btn
+                color="green darken-1"
+                text
+                @click="[offWork(), (offworkDialog = false)]"
+              >
+                확인
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -678,11 +698,6 @@ export default {
       this.$router.push({ name: "prjWrite", query: { flag: 0 } });
     },
 
-    openonWorkDialog(project) {
-      this.onworkDialog = true;
-      this.selectedProject = project;
-    },
-
     add(k) {
       this.inputs.push({ start_time: null, end_time: null, content: "" });
     },
@@ -772,6 +787,53 @@ export default {
         name: "com_main",
         query: { project: project },
       });
+    },
+    openonWorkDialog(project) {
+      this.onworkDialog = true;
+      this.selectedProject = project;
+      console.log(this.selectedProject.prj_no);
+    },
+    gotoWork() {
+      alert("출근등록");
+
+      this.$axios
+        .post(
+          "http://localhost:8090/api/commute/gotoWork",
+          {
+            com_d8: new Date().toISOString().substr(0, 10),
+            prj_no: this.selectedProject.prj_no,
+            email: this.$store.getters.getCurrentUser.email,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {});
+    },
+    openoffWorkDialog(project) {
+      this.offworkDialog = true;
+      this.selectedProject = project;
+    },
+    offWork() {
+      alert("퇴근등록");
+
+      this.$axios
+        .post(
+          "http://localhost:8090/api/commute/offWork",
+          {
+            com_d8: new Date().toISOString().substr(0, 10),
+            prj_no: this.selectedProject.prj_no,
+            email: this.$store.getters.getCurrentUser.email,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {});
     },
   },
 };
