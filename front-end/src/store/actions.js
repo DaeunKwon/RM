@@ -13,6 +13,7 @@ export default {
             })
     },
 
+    // 업무 일지 상세 내용 가져오기
     getReportAll: async function (context) {
         await axios.get('/api/report/detail/getAll').then(res => {
             context.commit('setReport', res.data)
@@ -38,6 +39,7 @@ export default {
         })
     },
 
+    // 업무 일지 목록 가져오기
     getReportListAll: async function (context) {
         await axios.get('/api/report/getAll').then(res => {
             context.commit('setReportList', res.data)

@@ -13,15 +13,18 @@ export default {
         var Month = state.comDate.toISOString().substr(0, 7);
         return Month;
     },
+
+    // 프로젝트 참여 정보
     getProjectINInfo(state) {
         return state.userINProject;
     },
-    getProjectInfo(state) {
-        state => state.userProject;
-    },
+
+    // 업무 일지 상세 내용
     getUserReport(state) {
         return state.userReport;
     },
+
+    // 업무 일지 목록
     getReportList(state) {
         return state.userReportList;
     }
