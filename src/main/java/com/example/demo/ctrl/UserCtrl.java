@@ -34,7 +34,6 @@ public class UserCtrl {
         @Autowired
         private UserAuthoritiesDAO authoritiesDAO;
 
-        // @RequestMapping(value = "/joinPOST", method = RequestMethod.POST)
         @PostMapping(value = "/join", produces = MediaType.APPLICATION_JSON_VALUE)
         @ResponseBody
         public void joinPOST(@RequestBody UserVO uvo) {

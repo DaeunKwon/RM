@@ -25,7 +25,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    // private final Logger log = LoggerFactory.getLogger(WebSecurityConfig.class);
 
     @Autowired
     private UserService userService;
@@ -59,7 +58,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll().antMatchers(HttpMethod.GET, "/**")
                 .authenticated().antMatchers(HttpMethod.POST, "/**").permitAll().antMatchers("/main").authenticated()
-                // .antMatchers("/api/user/**").permitAll().antMatchers("/api/admin/**").authenticated()
                 .and().cors().and();
 
         http.formLogin().usernameParameter("email").passwordParameter("password").loginPage("/")
@@ -77,7 +75,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("*");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
-        // configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

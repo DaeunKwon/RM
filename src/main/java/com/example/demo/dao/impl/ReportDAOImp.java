@@ -36,17 +36,6 @@ public class ReportDAOImp implements ReportDAO {
     }
 
     @Override
-    public List<ReportDetailVO> getReportDetailList(int prj_in_no, int prj_no, String authority) {
-        if (authority.equals("ROLE_ADMIN")) {
-            return sql.selectList(ns + ".getReportDetailList_ADMIN", prj_no);
-        } else if (authority.equals("ROLE_USER")) {
-            return sql.selectList(ns + ".getReportDetailList_USER", prj_in_no);
-        } else {
-            return sql.selectList(ns + ".getReportDetailList_ROOT");
-        }
-    }
-
-    @Override
     public void writeDetail(List<ReportDetailVO> reportDetailList) {
         sql.insert(ns + ".writeDetail", reportDetailList);
     }

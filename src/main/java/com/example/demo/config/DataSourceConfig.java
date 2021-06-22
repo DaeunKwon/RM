@@ -16,7 +16,7 @@ public class DataSourceConfig {
     public SqlSessionFactory sqlSessionFactory(DataSource datasource) throws Exception {
         SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
         sqlSessionFactory.setDataSource(datasource);
-        // mapper 워치에 따라서 classpath*:static/mappers/**/*Mapper.xml 이부분을 조정
+        // mapper 위치에 따라서 classpath*:static/mappers/**/*Mapper.xml 이부분을 조정
         sqlSessionFactory.setMapperLocations(
                 new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*Mapper.xml"));
         return sqlSessionFactory.getObject();

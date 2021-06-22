@@ -35,12 +35,6 @@ public class ProjectDAOImp implements ProjectDAO {
     }
 
     @Override
-    public void delete(Integer prj_no) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public List<ProjectVO> getProjectList(String email, String authority) {
         log.info(">>>>>>" + authority);
         if (authority.equals("ROLE_ROOT")) {

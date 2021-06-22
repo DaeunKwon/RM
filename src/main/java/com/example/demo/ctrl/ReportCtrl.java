@@ -83,34 +83,6 @@ public class ReportCtrl {
     @ResponseBody
     @GetMapping(value = "/detail/list")
     public List<ReportDetailVO> getReportDetailList(String email) {
-        // List<JSONObject> list = new ArrayList<>();
-        // for (int i = 0; i < data.length; i++) {
-        // JSONObject json = new JSONObject();
-        // json.put("name", data[i]);
-        // json.put("age", data[i]);
-        // list.add(json);
-        // }
-        // log.info(">>>>>>>>list: " + list);
-
-        // String[] s = req.getParameterValues("data");
-        // String st = req.getParameter("data");
-        // log.info(">>>>>>>>>>request array: " + s);
-        // // log.info(">>>>>>>>>>request: " + s[0]);
-
-        // log.info(">>>>>>>>>>request: " + st);
-
-        // for (int i = 0; i < s.length; i++) {
-        // log.info(">>>>>>>>req: " + s[i]);
-        // }
-        // log.info(">>>>>>>>get report detail list" + INinfo.get(0).getPrj_in_no());
-        // log.info(">>>>>>>>info: " + INinfo.get(0).getPrj_no());
-        // log.info(">>>>>>>>>>info: " + req.getParameterValues("INinfo"));
-        // log.info(">>>>>>>>>>>req: " + req.getParameter("prj_in_no"));
-        // int prj_in_no = Integer.parseInt(req.getParameter("prj_in_no"));
-        // log.info(">>>>>>>>> prj_in_no: " + prj_in_no);
-        // int prj_no = Integer.parseInt(req.getParameter("prj_no"));
-        // String authority = req.getParameter("authority");
-        // return reportService.getReportDetailList(prj_in_no, prj_no, authority);
         return reportService.getReportDetailList(email);
     }
 

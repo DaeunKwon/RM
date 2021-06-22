@@ -24,18 +24,6 @@ public class ProjectServiceImp implements ProjectService {
     }
 
     @Override
-    public void modify(ProjectVO pvo) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void remove(ProjectVO pvo) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public List<ProjectVO> getProjectList(String email, String authority) {
         return pdao.getProjectList(email, authority);
     }

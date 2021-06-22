@@ -30,18 +30,6 @@ public class UserDAOImp implements UserDAO {
     }
 
     @Override
-    public void update(UserVO uvo) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void delete(String email) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public UserVO getUserfindByEmail(String email) {
         log.info(">>>>>>" + email);
         return sql.selectOne(ns + ".getUserfindByEmail", email);

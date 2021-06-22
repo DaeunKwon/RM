@@ -46,25 +46,6 @@ public class UserServiceImp implements UserService, UserDetailsService {
         udao.join(user);
     }
 
-    // @Override
-    // public void join(UserVO uvo) {
-    // log.info(">>>>>>>>>>>>>>userservice join 진입");
-    // udao.join(uvo);
-    // log.info(">>>>>>>>>>>>>>userservice join 성공");
-    // }
-
-    @Override
-    public void modify(UserVO uvo) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void remove(String email) {
-        // TODO Auto-generated method stub
-
-    }
-
     @Override
     public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         log.info(">>>>>>>>>>>email: " + email);

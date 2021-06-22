@@ -36,11 +36,6 @@ public class ProjectInController {
     public void write(HttpServletRequest req) throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         ProjectInVO pINvo = new ProjectInVO();
-        // log.info(">>>>>>>>>>" + req.getParameter("email"));
-        // log.info(">>>>>>>>>>" + req.getParameter("prj_in_d8"));
-        // log.info(">>>>>>>>>>" + req.getParameter("prj_out_d8"));
-        // log.info(">>>>>>>>>>" + req.getParameter("prj_no"));
-        // log.info(">>>>>>>>>>" + req.getParameter("flag"));
 
         pINvo.setEmail(req.getParameter("email"));
         pINvo.setPrj_in_d8(df.parse(req.getParameter("prj_in_d8")));

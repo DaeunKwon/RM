@@ -47,8 +47,6 @@ public class ProjectCtrl {
         log.info(">>>>>>> project: " + pvo);
         projectService.write(pvo);
         return pvo.getPrj_no();
-        // log.info(">>>>>>>>>>>>project db에 넣기 성공");
-
     }
 
     @ResponseBody
