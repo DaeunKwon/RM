@@ -43,7 +43,7 @@
           </v-menu>
         </v-toolbar>
       </v-sheet>
-      <v-sheet height="600">
+      <v-sheet height="734">
         <v-calendar
           ref="calendar"
           v-model="focus"
@@ -54,7 +54,7 @@
           @click:event="showEvent"
           @click:more="viewDay"
           @click:date="viewDay"
-          @change="updateRange"
+          @change="monthNamelist"
         ></v-calendar>
         <v-menu
           v-model="selectedOpen"
@@ -164,13 +164,14 @@ export default {
 
       nativeEvent.stopPropagation();
     },
-    updateRange() {
+    monthNamelist() {
       const events = [];
 
       this.$axios
         .get("/api/commute/monthNamelist", {
           params: {
             com_d8: this.$store.getters.getDate,
+            prj_no: this.$store.state.userINProject.prj_no,
           },
         })
         .then((res) => {
@@ -202,7 +203,7 @@ export default {
               ".v-calendar-monthly .v-calendar-weekly__week .v-event "
             )
             .forEach(function (each) {
-              each.style.width = "40%";
+              each.style.width = "100%";
               each.style.margin = "0px";
             });
           document

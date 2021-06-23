@@ -5,15 +5,20 @@
       <br />
       <div align="left" class="display-1">근태관리 메인페이지</div>
       <v-layout>
-        <v-flex style="width: 500px">
-          <v-container style="height: 800px">
+        <v-flex style="width: 300px">
+          <v-container class="left">
             <br />
             <v-layout>
               <v-flex>
                 <Datepicker :date="this.date" />
               </v-flex>
               <v-flex>
-                <v-text-field v-model="projectTitle" readonly> </v-text-field>
+                <v-text-field
+                  v-model="projectTitle"
+                  readonly
+                  style="width: 80%"
+                >
+                </v-text-field>
               </v-flex>
             </v-layout>
             <v-layout
@@ -60,11 +65,11 @@
                 </template>
               </v-row>
             </v-col>
-            <v-col> 월 근무일수 </v-col>
+            <v-col> {{ getMonth }}월 근무일수 </v-col>
             <v-col>
               <v-row align="center" justify="center">
                 <template>
-                  <v-simple-table>
+                  <v-simple-table style="width: 350px">
                     <template v-slot:default>
                       <thead>
                         <tr>
@@ -131,6 +136,9 @@ export default {
   },
   created() {},
   computed: {
+    getMonth() {
+      return this.$store.getters.getDate.substring(5, 7);
+    },
     projectTitle() {
       return this.$store.state.userINProject.prj_title;
     },
@@ -150,6 +158,7 @@ export default {
         .get("/api/commute/rank", {
           params: {
             com_d8: this.$store.getters.getDate,
+            prj_no: this.$store.state.userINProject.prj_no,
           },
         })
         .then((res) => {
@@ -165,6 +174,7 @@ export default {
         .get("/api/commute/gotocount", {
           params: {
             com_d8: this.$store.getters.getDate,
+            prj_no: this.$store.state.userINProject.prj_no,
           },
         })
         .then((res) => {
@@ -179,6 +189,7 @@ export default {
           "/api/commute/monthlist",
           {
             com_d8: this.$store.getters.getDate,
+            prj_no: this.$store.state.userINProject.prj_no,
           },
           {
             headers: {
@@ -201,4 +212,8 @@ export default {
 </script>
 
 <style scoped>
+.left {
+  width: 330px;
+  height: 800px;
+}
 </style>

@@ -17,13 +17,13 @@ public interface ComService {
 
     public int prjpeople(int prj_no);
 
-    public List<ComVO> ranklist(String com_d8);
+    public List<ComVO> ranklist(ComVO cvo);
 
-    public int gotocount(String com_d8);
+    public int gotocount(ComVO cvo);
 
     public List<ComVO> monthlist(ComVO cvo);
 
     public boolean rptCheck(ComVO cvo);
 
-    public List<ComVO> monthNamelist(String com_d8);
+    public List<ComVO> monthNamelist(ComVO cvo);
 }

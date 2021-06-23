@@ -1,6 +1,10 @@
 package com.example.demo.ctrl;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.example.demo.domain.ComVO;
 import com.example.demo.service.ComService;
@@ -88,15 +92,18 @@ public class ComCtrl {
     }
 
     @GetMapping(value = "/rank")
-    public List<ComVO> ranklist(String com_d8) {
+    public List<ComVO> ranklist(HttpServletRequest req) throws ParseException {
+        ComVO cvo = new ComVO();
+        cvo.setCom_d8(req.getParameter("com_d8"));
+        cvo.setPrj_no(Integer.parseInt(req.getParameter("prj_no")));
         log.info("<<<<<<<<<<<<ComCTRL 진입");
-        return comservice.ranklist(com_d8);
+        return comservice.ranklist(cvo);
     }
 
     @GetMapping(value = "/gotocount")
-    public int gotocount(String com_d8) {
+    public int gotocount(ComVO cvo) {
         log.info("<<<<<<<<<<<<ComCTRL 진입");
-        return comservice.gotocount(com_d8);
+        return comservice.gotocount(cvo);
     }
 
     @PostMapping(value = "/monthlist", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -112,8 +119,8 @@ public class ComCtrl {
     }
 
     @GetMapping(value = "/monthNamelist")
-    public List<ComVO> monthNamelist(String com_d8) {
+    public List<ComVO> monthNamelist(ComVO cvo) {
         log.info("<<<<<<<<<<<<monthNamelist ComCTRL 진입");
-        return comservice.monthNamelist(com_d8);
+        return comservice.monthNamelist(cvo);
     }
 }

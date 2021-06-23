@@ -45,13 +45,13 @@ public class ComServiceImp implements ComService {
     }
 
     @Override
-    public List<ComVO> ranklist(String com_d8) {
-        return comdao.ranklist(com_d8);
+    public List<ComVO> ranklist(ComVO cvo) {
+        return comdao.ranklist(cvo);
     }
 
     @Override
-    public int gotocount(String com_d8) {
-        return comdao.gotocount(com_d8);
+    public int gotocount(ComVO cvo) {
+        return comdao.gotocount(cvo);
     }
 
     @Override
@@ -66,8 +66,8 @@ public class ComServiceImp implements ComService {
     }
 
     @Override
-    public List<ComVO> monthNamelist(String com_d8) {
-        return comdao.monthNamelist(com_d8);
+    public List<ComVO> monthNamelist(ComVO cvo) {
+        return comdao.monthNamelist(cvo);
 
     }
 }

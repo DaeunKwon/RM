@@ -70,7 +70,7 @@
                       :disabled="project.rmv_YN == 'Y'"
                       v-if="
                         $store.getters.getCurrentUser.authority !==
-                          'ROLE_ROOT' || project.com_start == undefined
+                          'ROLE_ROOT' && project.com_start == undefined
                       "
                     >
                       출근

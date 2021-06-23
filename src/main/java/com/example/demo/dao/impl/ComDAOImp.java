@@ -59,15 +59,15 @@ public class ComDAOImp implements ComDAO {
     }
 
     @Override
-    public List<ComVO> ranklist(String com_d8) {
+    public List<ComVO> ranklist(ComVO cvo) {
         log.info(">>>>>>>>>>>>> comdao ranklist 진입");
-        log.info(">>>>>>>>>>>>> com_d8=" + com_d8);
-        return sql.selectList(ns + ".ranklist", com_d8);
+        log.info(">>>>>>>>>>>>> com_d8=" + cvo);
+        return sql.selectList(ns + ".ranklist", cvo);
     }
 
     @Override
-    public int gotocount(String com_d8) {
-        return sql.selectOne(ns + ".gotocount", com_d8);
+    public int gotocount(ComVO cvo) {
+        return sql.selectOne(ns + ".gotocount", cvo);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ComDAOImp implements ComDAO {
     }
 
     @Override
-    public List<ComVO> monthNamelist(String com_d8) {
-        return sql.selectList(ns + ".monthNamelist", com_d8) ;
+    public List<ComVO> monthNamelist(ComVO cvo) {
+        return sql.selectList(ns + ".monthNamelist", cvo);
     }
 }
