@@ -139,7 +139,8 @@
                       icon
                       @click="openDeleteDialog(project)"
                       v-if="
-                        $store.getters.getCurrentUser.authority == 'ROLE_ROOT'
+                        $store.getters.getCurrentUser.authority ==
+                          'ROLE_ROOT' && project.rmv_YN == 'N'
                       "
                     >
                       <v-icon>mdi-delete-outline</v-icon></v-btn
@@ -505,6 +506,10 @@
                       :value="selectedProject.prj_remark"
                     ></v-textarea>
                     <v-text-field
+                      v-if="
+                        this.$store.getters.getCurrentUser.authority ==
+                        'ROLE_ROOT'
+                      "
                       label="삭제여부"
                       required
                       outlined
