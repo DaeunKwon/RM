@@ -112,7 +112,7 @@ export default {
           dataType: "Date",
         },
         { text: "수정일자", value: "rpt_mod_d8" },
-        { text: "삭제여부", value: "rmv_YN" },
+        //{ text: "삭제여부", value: "rmv_YN" },
         { text: "", value: "data-table-expand" },
       ],
     };
