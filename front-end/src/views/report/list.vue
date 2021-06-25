@@ -53,7 +53,7 @@
                       {{ reportDetail.rpt_end_time | moment("HH:mm:ss") }}
 
                       <br />
-                      <pre v-html="reportDetail.rpt_content"></pre>
+                      <span v-html="reportDetail.rpt_content"></span>
                     </v-card-text>
                   </v-card>
                   <br />
