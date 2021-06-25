@@ -52,7 +52,7 @@
                     >{{ project.prj_title }} <v-spacer></v-spacer>
                     <v-btn
                       icon
-                      @click="openDeleteDialog(project)"
+                      @click.stop="openDeleteDialog(project)"
                       v-if="
                         $store.getters.getCurrentUser.authority ==
                           'ROLE_ROOT' && project.rmv_YN == 'N'
@@ -146,7 +146,7 @@
                     >{{ project.prj_title }}<v-spacer></v-spacer>
                     <v-btn
                       icon
-                      @click="openDeleteDialog(project)"
+                      @click.stop="openDeleteDialog(project)"
                       v-if="
                         $store.getters.getCurrentUser.authority ==
                           'ROLE_ROOT' && project.rmv_YN == 'N'
