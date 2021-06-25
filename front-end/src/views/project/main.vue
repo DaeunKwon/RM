@@ -76,7 +76,9 @@
                       출근
                     </v-btn>
                     <v-btn
-                      v-else
+                      v-else-if="
+                        $store.getters.getCurrentUser.authority !== 'ROLE_ROOT'
+                      "
                       color="grey lighten-2"
                       light
                       @click.stop="openoffWorkDialog(project)"
@@ -627,6 +629,7 @@ export default {
             },
           })
           .then((res) => {
+            console.log("완료");
             this.projectList = res.data;
             const userINProject = [];
             for (let i = 0; i < this.projectList.length; i++) {
