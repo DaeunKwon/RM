@@ -50,11 +50,14 @@
 
         <![CDATA[
         SELECT NVL(TC.COM_TOTAL,'0') COM_TOTAL, TC.COM_D8, DA.DAY
-       from
-       (SELECT to_char(day + LEVEL - 1, 'yyyy-mm-dd') as DAY FROM 
-        ( SELECT trunc(TO_DATE(#{com_d8},'yyyy-mm-dd'),'DAY') as DAY FROM dual )
-        CONNECT BY LEVEL
-        <= 7) DA, (SELECT COM_D8, COM_TOTAL FROM tbl_commute WHERE prj_in_no = (SELECT PRJ_IN_NO FROM TBL_PROJECT_IN tpi WHERE EMAIL = #{email} AND PRJ_NO = #{prj_no})) TC  WHERE DA.DAY = TC.COM_D8(+) ORDER BY DA.DAY
+        from
+        (SELECT to_char(day + LEVEL - 1, 'yyyy-mm-dd') as DAY FROM 
+        (SELECT trunc(TO_DATE(#{com_d8},'yyyy-mm-dd'),'DAY') as DAY FROM dual)
+        CONNECT BY LEVEL<= 7) DA, 
+        (SELECT COM_D8, COM_TOTAL FROM tbl_commute 
+        WHERE prj_in_no = (SELECT PRJ_IN_NO FROM TBL_PROJECT_IN tpi 
+        WHERE EMAIL = #{email} AND PRJ_NO = #{prj_no})) TC  
+        WHERE DA.DAY = TC.COM_D8(+) ORDER BY DA.DAY
         ]]>
 
     </select>

@@ -82,7 +82,7 @@
                       @click.stop="openoffWorkDialog(project)"
                       :disabled="
                         (project.rpt_no == 0 && project.com_end == null) ||
-                        (project.com_end !== null && project.rpt_no !== 0)
+                        (project.rpt_no !== 0 && project.com_end !== null)
                       "
                     >
                       퇴근
