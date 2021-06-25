@@ -40,7 +40,7 @@
         LEFT JOIN TBL_COMMUTE tc 
         ON tpi.PRJ_IN_NO = tc.PRJ_IN_NO AND tc.COM_D8  = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
         where cond IN ('예정', '진행중')
-        AND tp.rmv_YN in ('N') AND tpi.email = #{email} ORDER BY PRJ_NO
+        AND tp.rmv_YN in ('N') AND tpi.email = #{email} ORDER BY tp.PRJ_NO
     </select>
     <select id="getAllProjectList" resultType="com.example.demo.domain.ProjectVO">
         select * from tbl_project
