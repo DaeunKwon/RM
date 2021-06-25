@@ -26,4 +26,6 @@ public interface ComService {
     public boolean rptCheck(ComVO cvo);
 
     public List<ComVO> monthNamelist(ComVO cvo);
+
+    // public List<ComVO> chkTime(String com_d8);
 }

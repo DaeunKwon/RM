@@ -123,4 +123,10 @@ public class ComCtrl {
         log.info("<<<<<<<<<<<<monthNamelist ComCTRL 진입");
         return comservice.monthNamelist(cvo);
     }
+
+    // @GetMapping(value = "/chkTime")
+    // public List<ComVO> chkTime(String com_d8) {
+    // log.info("<<<<<<<<<<<<chkTime ComCTRL 진입");
+    // return comservice.chkTime(com_d8);
+    // }
 }

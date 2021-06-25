@@ -87,9 +87,15 @@
     </select>
     <select id="monthNamelist" parameterType="com.example.demo.domain.ComVO" resultType="com.example.demo.domain.ComVO">
         <![CDATA[
-         SELECT tc.*,tpi.email,tm.name,da.day FROM TBL_COMMUTE tc JOIN TBL_PROJECT_IN tpi ON tc.PRJ_IN_NO = tpi.PRJ_IN_NO JOIN TBL_MEMBER tm ON tpi.email = tm.email 
-LEFT JOIN (SELECT TO_CHAR (FIRST_DAY + LEVEL - 1, 'YYYY-MM-DD') day FROM (SELECT TRUNC(TO_DATE(#{com_d8}), 'MM') FIRST_DAY FROM DUAL) CONNECT BY FIRST_DAY + LEVEL - 1 <= TRUNC(LAST_DAY(TO_DATE(#{com_d8})))) DA 
-ON da.DAY = tc.COM_D8 WHERE tpi.PRJ_NO = #{prj_no} ORDER BY COM_D8, COM_START ]]>
+         SELECT tc.*,tpi.email,tm.name,da.day 
+         FROM TBL_COMMUTE tc 
+         JOIN TBL_PROJECT_IN tpi ON tc.PRJ_IN_NO = tpi.PRJ_IN_NO 
+         JOIN TBL_MEMBER tm ON tpi.email = tm.email 
+         LEFT JOIN (SELECT TO_CHAR (FIRST_DAY + LEVEL - 1, 'YYYY-MM-DD') day 
+         FROM (SELECT TRUNC(TO_DATE(#{com_d8}), 'MM') FIRST_DAY FROM DUAL) 
+         CONNECT BY FIRST_DAY + LEVEL - 1 <= TRUNC(LAST_DAY(TO_DATE(#{com_d8})))) DA 
+         ON da.DAY = tc.COM_D8 WHERE tpi.PRJ_NO = #{prj_no} ORDER BY COM_D8, COM_START 
+         ]]>
     </select>
 
 </mapper>

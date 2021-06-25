@@ -625,10 +625,6 @@ export default {
             this.projectList = res.data;
             const userINProject = [];
             for (let i = 0; i < this.projectList.length; i++) {
-              console.log(this.projectList[0].prj_no);
-              console.log(this.projectList[1].prj_no);
-              console.log(new Date().toISOString().substr(0, 10));
-              console.log(this.$store.getters.getCurrentUser.email);
               this.$axios
                 .post(
                   "/api/commute/checkWork",
@@ -655,9 +651,7 @@ export default {
             return this.projectList;
           })
 
-          .catch((e) => {
-            console.log(e);
-          });
+          .catch((e) => {});
 
         this.$axios
           .get("/api/project/main/done", {
@@ -670,9 +664,7 @@ export default {
             this.doneProjectList = res.data;
             return this.getDoneProjectList;
           })
-          .catch((e) => {
-            //console.log(e);
-          });
+          .catch((e) => {});
       });
     },
     work() {},
@@ -791,10 +783,9 @@ export default {
     openonWorkDialog(project) {
       this.onworkDialog = true;
       this.selectedProject = project;
-      console.log(this.selectedProject.prj_no);
     },
     gotoWork() {
-      alert("출근등록");
+      alert("출근등록 완료 되었습니다.");
 
       this.$axios
         .post(
@@ -810,14 +801,16 @@ export default {
             },
           }
         )
-        .then((res) => {});
+        .then((res) => {
+          location.reload();
+        });
     },
     openoffWorkDialog(project) {
       this.offworkDialog = true;
       this.selectedProject = project;
     },
     offWork() {
-      alert("퇴근등록");
+      alert("퇴근등록 완료 되었습니다");
 
       this.$axios
         .post(
@@ -833,7 +826,9 @@ export default {
             },
           }
         )
-        .then((res) => {});
+        .then((res) => {
+          location.reload();
+        });
     },
   },
 };
