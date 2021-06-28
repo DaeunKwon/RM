@@ -4,6 +4,8 @@
     <v-container class="header-padding">
       <div align="left" class="display-1">
         프로젝트 {{ $route.query.flag == 0 ? "등록" : "수정" }}
+        <!-- {{ this.$route.query.project }}
+        {{ this.$store.getters.getUpdatingProject }} -->
       </div>
       <v-container>
         <br />
@@ -11,7 +13,7 @@
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
             v-if="$route.query.flag == 1"
-            v-model="$route.query.project.prj_title"
+            v-model="this.$route.query.project.prj_title"
             label="프로젝트명"
             required
             outlined
@@ -266,9 +268,7 @@
               </v-menu>
             </v-col>
           </v-row>
-          <!-- <v-row>
-            {{ inputs }}
-          </v-row> -->
+
           <div v-if="$route.query.flag == 1">
             <v-dialog v-model="openCalendarFlag" width="290px">
               <v-date-picker v-model="openCalendarDate" full-width>
@@ -344,6 +344,18 @@
           </div>
 
           <div v-else>
+            <v-dialog v-model="openCalendarFlag" width="290px">
+              <v-date-picker v-model="openCalendarDate" full-width>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="openCalendarFlag = false"
+                  >취소</v-btn
+                >
+                <v-btn text color="primary" @click="saveCalendarDate()"
+                  >저장</v-btn
+                >
+              </v-date-picker>
+            </v-dialog>
+
             <v-row v-for="(input, k) in inputs" :key="k">
               <v-col cols="12">
                 <v-select
@@ -361,76 +373,24 @@
                 </v-select>
               </v-col>
               <v-col cols="12">
-                <v-dialog
-                  ref="dialog"
-                  v-model="follow_in_d8"
-                  :return-value.sync="input.in_date"
-                  width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="input.in_date"
-                      :id="'in_date' + k"
-                      label="참여 시작 날짜"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                      outlined
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-if="follow_in_d8"
-                    v-model="input.in_date"
-                    :id="'in_date' + k"
-                    full-width
-                  >
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="follow_in_d8 = false"
-                      >Cancel</v-btn
-                    >
-                    <v-btn
-                      text
-                      color="primary"
-                      @click="$refs.dialog[k].save(input.in_date)"
-                      >OK</v-btn
-                    >
-                  </v-date-picker>
-                </v-dialog>
-
-                <v-dialog
-                  ref="dialog2"
-                  v-model="follow_out_d8"
-                  :return-value.sync="input.out_date"
-                  width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="input.out_date"
-                      :id="'out_date' + k"
-                      label="참여 종료 날짜"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                      outlined
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-if="follow_out_d8"
-                    v-model="input.out_date"
-                    full-width
-                  >
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="follow_out_d8 = false"
-                      >Cancel</v-btn
-                    >
-                    <v-btn
-                      text
-                      color="primary"
-                      @click="$refs.dialog2[k].save(input.out_date)"
-                      >OK</v-btn
-                    >
-                  </v-date-picker>
-                </v-dialog>
+                <v-text-field
+                  v-model="input.in_date"
+                  :id="'in_date' + k"
+                  label="참여 시작 날짜"
+                  readonly
+                  outlined
+                  @click="openCalendar(inputs, k, 'in_date')"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="input.out_date"
+                  :id="'out_date' + k"
+                  label="참여 종료 날짜"
+                  readonly
+                  outlined
+                  @click="openCalendar(inputs, k, 'out_date')"
+                ></v-text-field>
 
                 <v-btn
                   class="sm-2 mr-4"
@@ -538,9 +498,7 @@ export default {
       leader: { name: "", email: "" },
       lead_in_d8: false,
       lead_out_d8: false,
-      inputs: [
-        { follower: { name: "", email: "" }, in_date: null, out_date: null },
-      ],
+      inputs: [{ in_date: null, out_date: null }],
       follow_in_d8: false,
       follow_out_d8: false,
       content: "",
@@ -550,18 +508,20 @@ export default {
       openCalendarFlag: false,
       openCalendarValues: [],
       openCalendarType: "",
-      openCalendarIndex: -1,
+      openCalendarIndex: 0,
       openCalendarDate: "",
     };
   },
   mounted() {
     this.getUserList;
+    this.setUpdatingProject;
     if (!!this.$route.query.follower) {
       this.inputs = this.$route.query.follower;
       this.inputs.forEach((input) => {
         input.prj_in_d8 = this.$moment(input.prj_in_d8).format("YYYY-MM-DD");
         input.prj_out_d8 = this.$moment(input.prj_out_d8).format("YYYY-MM-DD");
       });
+      this.$store.commit("setUpdatingProject", this.$route.query.project);
     }
   },
   computed: {
