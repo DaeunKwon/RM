@@ -204,7 +204,6 @@
                 >
                 </v-text-field>
               </v-col>
-              <!-- <v-col> {{ inputs }} </v-col> -->
               <v-dialog v-model="openTimeFlag" width="290px">
                 <v-time-picker v-model="openTime" full-width>
                   <v-spacer></v-spacer>
