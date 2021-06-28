@@ -353,7 +353,7 @@
                 >
               </v-date-picker>
             </v-dialog>
-
+            {{ inputs }}
             <v-row v-for="(input, k) in inputs" :key="k">
               <v-col cols="12">
                 <v-select
@@ -548,22 +548,22 @@ export default {
     prjWrite() {
       if (this.$route.query.flag == 0) {
         if (
-          this.title == "" ||
-          this.cond == "" ||
-          this.start_date == "" ||
-          this.end_date == "" ||
-          this.writer == "" ||
-          this.mod_writer == "" ||
-          this.content == "" ||
-          this.leader.email == "" ||
-          this.lead_in_date == "" ||
-          this.lead_out_date ||
-          this.inputs.follower.email == "" ||
-          this.inputs.in_date == "" ||
-          this.inputs.out_date == ""
+          this.title !== "" &&
+          this.cond !== "" &&
+          this.start_date !== "" &&
+          this.end_date !== "" &&
+          this.writer !== "" &&
+          this.mod_writer !== "" &&
+          this.content !== "" &&
+          this.leader.email !== "" &&
+          this.lead_in_date !== "" &&
+          this.lead_out_date !== "" &&
+          this.inputs.length > 0 &&
+          this.inputs.follower.length > 0 &&
+          this.inputs.in_date !== null &&
+          this.inputs.out_date !== null
         ) {
-          alert("빈 칸을 작성해주세요.");
-        } else {
+          console.log("확인");
           const project = new FormData();
           project.append("title", this.title);
           project.append("cond", this.cond);
@@ -603,6 +603,8 @@ export default {
                 this.$router.push("/main");
               });
           });
+        } else {
+          alert("빈 칸을 작성해주세요.");
         }
       } else {
         const project = new FormData();
