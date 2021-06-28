@@ -46,6 +46,21 @@
                         )
     </select>
 
+    <select id="worktime" parameterType="com.example.demo.domain.ComVO" resultType="com.example.demo.domain.ComVO">
+        SELECT 
+             NVL(max(com_start),'')com_start,NVL(max(com_end),'')com_end  
+        FROM tbl_commute  
+        WHERE com_d8 = #{com_d8}
+        AND PRJ_IN_NO = (SELECT 
+                                PRJ_IN_NO 
+                        FROM TBL_PROJECT_IN tpi 
+                        WHERE EMAIL = #{email}
+                        AND PRJ_NO = #{prj_no}
+                        )   
+                        
+
+    </select>
+
     <select id="weekTime" parameterType="com.example.demo.domain.ComVO" resultType="com.example.demo.domain.ComVO">
 
         <![CDATA[
@@ -66,7 +81,7 @@
     </select>
 
     <select id="ranklist" parameterType="com.example.demo.domain.ComVO" resultType="com.example.demo.domain.ComVO">
-        SELECT tc.*,tpi.email,tm.name FROM TBL_COMMUTE tc JOIN TBL_PROJECT_IN tpi ON tc.PRJ_IN_NO = tpi.PRJ_IN_NO JOIN TBL_MEMBER tm ON tpi.email = tm.email where com_d8 = #{com_d8}AND tpi.prj_no= #{prj_no}
+        SELECT tc.*,tpi.email,tm.name FROM TBL_COMMUTE tc JOIN TBL_PROJECT_IN tpi ON tc.PRJ_IN_NO = tpi.PRJ_IN_NO JOIN TBL_MEMBER tm ON tpi.email = tm.email where com_d8 = #{com_d8}AND tpi.prj_no= #{prj_no} order by tc.com_start
                
     </select>
 
@@ -85,8 +100,8 @@
      ]]>
     </select>
     <select id="rptCheck" parameterType="com.example.demo.domain.ComVO" resultType="com.example.demo.domain.ComVO">
-        SELECT tr.prj_no FROM tbl_report tr
-  WHERE prj_no=#{prj_no} AND RPT_WRITER = (SELECT PRJ_IN_NO FROM TBL_PROJECT_IN tpi JOIN (SELECT email FROM TBL_MEMBER)tm ON tm.EMAIL =tpi.EMAIL WHERE tm.EMAIL = #{email}) and TO_CHAR(RPT_WRITE_D8, 'YYYY-MM-DD') =#{com_d8}
+  SELECT tr.rpt_no FROM tbl_report tr
+  WHERE prj_no=#{prj_no} AND RPT_WRITER = (SELECT PRJ_IN_NO FROM TBL_PROJECT_IN tpi JOIN (SELECT email FROM TBL_MEMBER)tm ON tm.EMAIL =tpi.EMAIL WHERE tm.EMAIL = #{email}AND  tpi.PRJ_NO =#{prj_no}) and TO_CHAR(RPT_WRITE_D8, 'YYYY-MM-DD') =#{com_d8}
     </select>
     <select id="monthNamelist" parameterType="com.example.demo.domain.ComVO" resultType="com.example.demo.domain.ComVO">
         <![CDATA[

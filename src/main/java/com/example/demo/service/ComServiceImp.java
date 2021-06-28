@@ -70,4 +70,9 @@ public class ComServiceImp implements ComService {
         return comdao.monthNamelist(cvo);
 
     }
+
+    @Override
+    public List<ComVO> worktime(ComVO cvo) {
+        return comdao.worktime(cvo);
+    }
 }

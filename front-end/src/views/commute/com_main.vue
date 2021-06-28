@@ -143,6 +143,7 @@ export default {
       return this.$store.state.userINProject.prj_title;
     },
     peoplecount() {
+      console.log(this.$route.query.project.prj_no);
       this.$axios
         .get("/api/commute/prjpeople", {
           params: { prj_no: this.$store.state.userINProject.prj_no },

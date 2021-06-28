@@ -27,5 +27,5 @@ public interface ComService {
 
     public List<ComVO> monthNamelist(ComVO cvo);
 
-    // public List<ComVO> chkTime(String com_d8);
+    public List<ComVO> worktime(ComVO cvo);
 }

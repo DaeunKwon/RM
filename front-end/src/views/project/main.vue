@@ -76,7 +76,9 @@
                       출근
                     </v-btn>
                     <v-btn
-                      v-else
+                      v-else-if="
+                        $store.getters.getCurrentUser.authority !== 'ROLE_ROOT'
+                      "
                       color="grey lighten-2"
                       light
                       @click.stop="openoffWorkDialog(project)"
@@ -97,7 +99,7 @@
                         $store.getters.getCurrentUser.authority !== 'ROLE_ROOT'
                       "
                       :disabled="
-                        project.rpt_no !== 0 || project.com_start == undefined
+                        project.rpt_no !== 0 || project.com_start == null
                       "
                     >
                       업무일지

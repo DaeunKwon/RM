@@ -10,7 +10,7 @@
 
       <v-layout fluid grid-list-sm pa-15>
         <ul style="list-style: none">
-          <li>
+          <li style="margin-bottom: 50px; margin-top: -70px">
             <div align="right">
               <v-dialog v-model="dialog" persistent max-width="290">
                 <template v-slot:activator="{ on, attrs }">
@@ -85,27 +85,64 @@
               </v-dialog>
             </div>
           </li>
-          <li></li>
-          <li style="width: 300px">
-            <Datepicker :date="this.date" />
-          </li>
-          <li></li>
-          <li align="left">
-            현재시간
-            <v-text-field style="width: 300px" v-model="time" readonly solo>
-            </v-text-field>
-          </li>
-          <li align="left">
-            근무상태
 
-            <v-text-field
-              style="width: 300px"
-              v-model="work"
-              solo
-              readonly
-            ></v-text-field>
+          <li>
+            <v-row>
+              <v-col>
+                <Datepicker2
+                  style="height: 300px; margin-top: 10px"
+                  :date="this.date"
+                />
+              </v-col>
+              <v-col style="margin-top: -50px">
+                <div style="margin-top: 50px">
+                  <ul style="list-style: none">
+                    <li align="left">
+                      현재 프로젝트
+                      <v-text-field
+                        style="width: 300px"
+                        v-model="prj_title"
+                        readonly
+                        solo
+                      >
+                      </v-text-field>
+                    </li>
+
+                    <li align="left">
+                      현재시간
+                      <v-text-field
+                        style="width: 300px"
+                        v-model="time"
+                        readonly
+                        solo
+                      >
+                      </v-text-field>
+                    </li>
+
+                    <li align="left">
+                      근무상태
+
+                      <v-text-field
+                        style="width: 300px"
+                        v-model="work"
+                        solo
+                        readonly
+                      ></v-text-field>
+                    </li>
+                    <li align="left">근무시간</li>
+                    <v-text-field
+                      style="width: 300px"
+                      v-model="worktime"
+                      solo
+                      readonly
+                    ></v-text-field>
+                  </ul>
+                </div>
+              </v-col>
+            </v-row>
           </li>
-          <li><Mydatatable /></li>
+
+          <li style="margin-top: -30px"><Mydatatable /></li>
         </ul>
       </v-layout>
     </v-container>
@@ -118,7 +155,7 @@
 import Header from "../../views/common/00_header"; //import 헤더 추가
 import Footer from "../../views/common/90_footer"; //import 풋터 추가
 import Mydatatable from "../../components/mydatatable"; // 주간 표 추가
-import Datepicker from "../../components/datepicker.vue"; //날짜 선택컴포넌트
+import Datepicker2 from "../../components/datepicker2.vue"; //날짜 선택컴포넌트
 var nowdate = new Date().toISOString().substr(0, 10);
 
 export default {
@@ -136,6 +173,9 @@ export default {
       test: "",
       test2: "",
       work: "출근전",
+      start: "",
+      end: "",
+      prj_title: this.$store.state.userINProject.prj_title,
 
       // test
     };
@@ -146,13 +186,13 @@ export default {
     Header, //헤더 컴포넌트 추가
     Footer, //풋터 컴포넌트 추가
     Mydatatable, // 주간 표
-    Datepicker,
+    Datepicker2,
   },
 
   created() {
     this.getNow();
     this.checkwork();
-
+    this.rptcheck();
     this.$axios
       .post(
         "http://localhost:8090/api/commute/checkoffWork",
@@ -180,12 +220,15 @@ export default {
   },
 
   computed: {
-    chkTime() {
+    worktime() {
+      this.datepick = this.$store.getters.getDate;
       this.$axios
-        .get(
-          "http://localhost:8090/api/commute/chkTime",
+        .post(
+          "http://localhost:8090/api/commute/worktime",
           {
-            com_d8: nowdate,
+            com_d8: this.datepick,
+            prj_no: this.$store.state.userINProject.prj_no,
+            email: this.$store.getters.getCurrentUser.email,
           },
           {
             headers: {
@@ -194,9 +237,29 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res.data);
+          if (res.data[0] == null) {
+            this.start = "";
+            this.end = "";
+          } else if (res.data[0] !== null) {
+            if (res.data[0].com_start == null && res.data[0].com_end == null) {
+              this.start = "";
+              this.end = "";
+            } else if (
+              res.data[0].com_start !== null &&
+              res.data[0].com_end == null
+            ) {
+              this.start = res.data[0].com_start.substring(10);
+              this.end = "";
+            } else if (
+              res.data[0].com_start !== null &&
+              res.data[0].com_end !== null
+            ) {
+              this.start = res.data[0].com_start.substring(10);
+              this.end = res.data[0].com_end.substring(10);
+            }
+          }
         });
-      return;
+      return this.start + " ~ " + this.end;
     },
   },
   methods: {
@@ -292,6 +355,29 @@ export default {
             this.test = false;
             this.test2 = true;
             this.work = "출근전";
+          }
+        });
+    },
+    rptcheck() {
+      this.$axios
+        .post(
+          "http://localhost:8090/api/commute/rptCheck",
+          {
+            com_d8: nowdate,
+            prj_no: this.$store.state.userINProject.prj_no,
+            email: this.$store.getters.getCurrentUser.email,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data == false) {
+            this.test2 = true;
+          } else {
+            this.test2 = false;
           }
         });
     },

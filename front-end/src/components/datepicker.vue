@@ -13,7 +13,6 @@
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
             v-model="today"
-            label="Picker in menu"
             prepend-icon="mdi-calendar"
             readonly
             v-bind="attrs"
@@ -43,7 +42,9 @@ export default {
     date: "",
     menu: false,
   }),
-  created() {},
+  created() {
+    this.now();
+  },
   computed: {
     today: {
       get() {
@@ -56,7 +57,9 @@ export default {
   methods: {
     dateCommand() {
       this.$store.commit("setComdate", this.date);
-      console.log(this.$store.getters.getDate);
+    },
+    now() {
+      this.date = new Date().toISOString().substr(0, 10);
     },
   },
 };
