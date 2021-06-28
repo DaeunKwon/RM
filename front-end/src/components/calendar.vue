@@ -131,9 +131,15 @@ export default {
   mounted() {
     this.$refs.calendar.checkChange();
   },
+  computed: {
+    datepick() {
+      return (this.focus = this.$store.getters.getDate);
+    },
+  },
   methods: {
     viewDay({ date }) {
       this.focus = date;
+      this.$store.commit("setComdate", this.focus);
       this.type = "day";
     },
     getEventColor(event) {

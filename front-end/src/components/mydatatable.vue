@@ -70,7 +70,7 @@ export default {
         )
         .then((res) => {
           this.weeklist = res.data;
-          console.log(res.data);
+
           let sum = 0;
           this.weeklist.forEach((day) => {
             sum += Number(day.com_total);

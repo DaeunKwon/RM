@@ -26,4 +26,6 @@ public interface ComDAO {
     public boolean rptCheck(ComVO cvo);
 
     public List<ComVO> monthNamelist(ComVO cvo);
+
+    public List<ComVO> worktime(ComVO cvo);
 }

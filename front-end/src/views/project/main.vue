@@ -99,7 +99,7 @@
                         $store.getters.getCurrentUser.authority !== 'ROLE_ROOT'
                       "
                       :disabled="
-                        project.rpt_no !== 0 || project.com_start == undefined
+                        project.rpt_no !== 0 || project.com_start == null
                       "
                     >
                       업무일지

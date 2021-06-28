@@ -84,4 +84,9 @@ public class ComDAOImp implements ComDAO {
     public List<ComVO> monthNamelist(ComVO cvo) {
         return sql.selectList(ns + ".monthNamelist", cvo);
     }
+
+    @Override
+    public List<ComVO> worktime(ComVO cvo) {
+        return sql.selectList(ns + ".worktime", cvo);
+    }
 }

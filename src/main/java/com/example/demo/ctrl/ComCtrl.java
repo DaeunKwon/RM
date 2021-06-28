@@ -1,7 +1,6 @@
 package com.example.demo.ctrl;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -124,9 +123,9 @@ public class ComCtrl {
         return comservice.monthNamelist(cvo);
     }
 
-    // @GetMapping(value = "/chkTime")
-    // public List<ComVO> chkTime(String com_d8) {
-    // log.info("<<<<<<<<<<<<chkTime ComCTRL 진입");
-    // return comservice.chkTime(com_d8);
-    // }
+    @PostMapping(value = "/worktime", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ComVO> worktime(@RequestBody ComVO cvo) {
+        log.info("<<<<<<<<<<<<worktime ComCTRL 진입");
+        return comservice.worktime(cvo);
+    }
 }
