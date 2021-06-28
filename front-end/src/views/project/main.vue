@@ -266,7 +266,7 @@
                   </v-time-picker>
                 </v-dialog>
               </v-row>
-
+              {{ inputs }}
               <v-row v-for="(input, k) in inputs" :key="k">
                 <v-col cols="12">
                   <v-text-field
@@ -702,13 +702,19 @@ export default {
     },
     saveReport() {
       //로그인한 유저의 프로젝트 참여 번호도 보내야 함
+      // if (
+      //   this.inputs.start_time == null ||
+      //   this.inputs.end_time == null ||
+      //   this.inputs.content == ""
+      // ) {
+      //   alert("업무 일지 내용을 작성해주세요.");
+      // } else
       if (
-        this.inputs.start_time == null ||
-        this.inputs.end_time == null ||
-        this.inputs.content == ""
+        this.inputs.length > 0 &&
+        this.inputs.start_time !== null &&
+        this.inputs.end_time !== null &&
+        this.inputs.content !== ""
       ) {
-        alert("업무 일지 내용을 작성해주세요.");
-      } else {
         const report = new FormData();
         report.append("prj_no", this.selectedProject.prj_no);
         report.append("rpt_writer", this.selectedProject.prj_in_no);
@@ -738,6 +744,8 @@ export default {
               this.$router.push("/rptList");
             });
         });
+      } else {
+        alert("업무 일지 내용을 작성해주세요.");
       }
     },
     openDeleteDialog(project) {
