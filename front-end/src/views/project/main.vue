@@ -236,127 +236,87 @@
               <span class="headline">업무 일지 작성</span>
             </v-card-title>
             <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6">
-                    <v-text-field
-                      label="Project title"
-                      required
-                      readonly
-                      outlined
-                      v-model="selectedProject.prj_title"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="today"
-                      label="Date"
-                      required
-                      readonly
-                      outlined
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    label="Project title"
+                    required
+                    readonly
+                    outlined
+                    v-model="selectedProject.prj_title"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    v-model="today"
+                    label="Date"
+                    required
+                    readonly
+                    outlined
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-dialog v-model="openTimeFlag" width="290px">
+                  <v-time-picker v-model="openTime" full-width>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="openTimeFlag = false"
+                      >취소</v-btn
                     >
-                    </v-text-field>
-                  </v-col>
+                    <v-btn text color="primary" @click="saveTime()">저장</v-btn>
+                  </v-time-picker>
+                </v-dialog>
+              </v-row>
 
-                  <v-col cols="12" v-for="(input, k) in inputs" :key="k">
-                    <v-dialog
-                      ref="startDialog"
-                      v-model="startModel"
-                      :return-value.sync="input.start_time"
-                      width="290px"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="input.start_time"
-                          :id="'start_time' + k"
-                          label="시작 시간"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                          outlined
-                        ></v-text-field>
-                      </template>
-                      <v-time-picker
-                        v-if="startModel"
-                        v-model="input.start_time"
-                        :id="'start_time' + k"
-                        full-width
-                      >
-                        <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="startModel = false"
-                          >취소</v-btn
-                        >
-                        <v-btn
-                          text
-                          color="primary"
-                          @click="$refs.startDialog[k].save(input.start_time)"
-                          >저장</v-btn
-                        >
-                      </v-time-picker>
-                    </v-dialog>
+              <v-row v-for="(input, k) in inputs" :key="k">
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="input.start_time"
+                    :id="'start_time' + k"
+                    label="시작 시간"
+                    readonly
+                    outlined
+                    @click="openTimeSaver(inputs, k, 'start_time')"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="input.end_time"
+                    :id="'end_time' + k"
+                    label="끝난 시간"
+                    readonly
+                    outlined
+                    @click="openTimeSaver(inputs, k, 'end_time')"
+                  ></v-text-field>
+                </v-col>
 
-                    <v-dialog
-                      ref="endDialog"
-                      v-model="endModel"
-                      :return-value.sync="input.end_time"
-                      width="290px"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="input.end_time"
-                          :id="'end_time' + k"
-                          label="끝난 시간"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                          outlined
-                        ></v-text-field>
-                      </template>
-                      <v-time-picker
-                        v-if="endModel"
-                        v-model="input.end_time"
-                        full-width
-                      >
-                        <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="endModel = false"
-                          >취소</v-btn
-                        >
-                        <v-btn
-                          text
-                          color="primary"
-                          @click="$refs.endDialog[k].save(input.end_time)"
-                          >저장</v-btn
-                        >
-                      </v-time-picker>
-                    </v-dialog>
-                    <v-textarea
-                      label="업무 내용"
-                      required
-                      outlined
-                      :id="'content' + k"
-                      v-model="input.content"
-                    ></v-textarea>
-                    <v-btn
-                      fab
-                      dark
-                      small
-                      color="indigo"
-                      @click="remove(k)"
-                      v-show="k || (!k && inputs.length > 1)"
-                      ><v-icon dark>mdi-minus</v-icon></v-btn
-                    >&nbsp;&nbsp;
-                    <v-btn
-                      fab
-                      dark
-                      small
-                      color="indigo"
-                      @click="add(k)"
-                      v-show="k === inputs.length - 1"
-                      ><v-icon dark>mdi-plus</v-icon></v-btn
-                    >
-                  </v-col>
-                </v-row>
-              </v-container>
+                <v-col cols="12">
+                  <v-textarea
+                    label="업무 내용"
+                    required
+                    outlined
+                    :id="'content' + k"
+                    v-model="input.content"
+                  ></v-textarea>
+                  <v-btn
+                    fab
+                    dark
+                    small
+                    color="indigo"
+                    @click="remove(k)"
+                    v-show="k || (!k && inputs.length > 1)"
+                    ><v-icon dark>mdi-minus</v-icon></v-btn
+                  >&nbsp;&nbsp;
+                  <v-btn
+                    fab
+                    dark
+                    small
+                    color="indigo"
+                    @click="add(k)"
+                    v-show="k === inputs.length - 1"
+                    ><v-icon dark>mdi-plus</v-icon></v-btn
+                  >
+                </v-col>
+              </v-row>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -597,6 +557,11 @@ export default {
       leaderInfo: "",
       deletedProject: "",
       followerList: [],
+      openTimeFlag: false,
+      openTimeValues: [],
+      openTimeIndex: 0,
+      openTimeType: "",
+      openTime: "",
     };
   },
 
@@ -629,7 +594,7 @@ export default {
             },
           })
           .then((res) => {
-            console.log("완료");
+            //console.log("완료");
             this.projectList = res.data;
             const userINProject = [];
             for (let i = 0; i < this.projectList.length; i++) {
@@ -779,6 +744,17 @@ export default {
           this.deleteDialog = false;
           this.$router.push("/main");
         });
+    },
+    openTimeSaver(inputs, k, type) {
+      this.openTimeFlag = true;
+      this.openTimeValues = inputs;
+      this.openTimeIndex = k;
+      this.openTimeType = type;
+    },
+    saveTime() {
+      this.openTimeFlag = false;
+      this.openTimeValues[this.openTimeIndex][this.openTimeType] =
+        this.openTime;
     },
 
     com_main(project) {
