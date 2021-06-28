@@ -649,6 +649,10 @@ export default {
       this.fab = top > 0;
     },
     updateProject(selectedProject, leaderInfo, followerList) {
+      console.log(selectedProject);
+      this.$store.commit("setUpdatingProject", selectedProject);
+      this.$store.commit("setUpdatingLeader", leaderInfo);
+      this.$store.commit("setUpdatingFollower", followerList);
       this.$router.push({
         name: "prjWrite",
         query: {

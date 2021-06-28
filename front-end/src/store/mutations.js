@@ -1,4 +1,5 @@
 import router from "../router";
+import state from "./state";
 
 export default {
     setCurrentUser: function (state, payload) {
@@ -25,5 +26,17 @@ export default {
     // 업무 일지 목록
     setReportList: function (state, payload) {
         state.userReportList = payload
-    }
+    },
+
+    setUpdatingProject: function (state, payload) {
+        state.updatingProject = payload
+    },
+
+    setUpdatingLeader: function (state, payload) {
+        state.updatingLeader = payload
+    },
+
+    setUpdatingFollower: function (state, payload) {
+        state.updatingFollower = payload
+    },
 }

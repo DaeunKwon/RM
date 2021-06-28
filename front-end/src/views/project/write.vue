@@ -4,8 +4,6 @@
     <v-container class="header-padding">
       <div align="left" class="display-1">
         프로젝트 {{ $route.query.flag == 0 ? "등록" : "수정" }}
-        <!-- {{ this.$route.query.project }}
-        {{ this.$store.getters.getUpdatingProject }} -->
       </div>
       <v-container>
         <br />
@@ -13,7 +11,7 @@
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
             v-if="$route.query.flag == 1"
-            v-model="this.$route.query.project.prj_title"
+            v-model="this.$store.getters.getUpdatingProject.prj_title"
             label="프로젝트명"
             required
             outlined
@@ -28,7 +26,7 @@
 
           <v-select
             v-if="$route.query.flag == 1"
-            v-model="$route.query.project.cond"
+            v-model="this.$store.getters.getUpdatingProject.cond"
             :items="cond_items"
             label="진행상황"
             required
@@ -59,9 +57,9 @@
                     v-if="$route.query.flag == 1"
                     :value="
                       start_date.length <= 0
-                        ? $moment($route.query.project.start_d8).format(
-                            'YYYY-MM-DD'
-                          )
+                        ? $moment(
+                            $store.getters.getUpdatingProject.start_d8
+                          ).format('YYYY-MM-DD')
                         : start_date
                     "
                     label="프로젝트 시작 날짜"
@@ -108,9 +106,9 @@
                     v-if="$route.query.flag == 1"
                     :value="
                       end_date.length <= 0
-                        ? $moment($route.query.project.end_d8).format(
-                            'YYYY-MM-DD'
-                          )
+                        ? $moment(
+                            $store.getters.getUpdatingProject.end_d8
+                          ).format('YYYY-MM-DD')
                         : end_date
                     "
                     label="프로젝트 종료 날짜"
@@ -145,7 +143,7 @@
 
           <v-select
             v-if="$route.query.flag == 1"
-            v-model="$route.query.leader.email"
+            v-model="this.$store.getters.getUpdatingLeader"
             outlined
             :hint="`${leader.name}, ${leader.email}`"
             :items="userList"
@@ -185,9 +183,9 @@
                     v-if="$route.query.flag == 1"
                     :value="
                       lead_in_date.length <= 0
-                        ? $moment($route.query.leader.prj_in_d8).format(
-                            'YYYY-MM-DD'
-                          )
+                        ? $moment(
+                            $store.getters.getUpdatingLeader.prj_in_d8
+                          ).format('YYYY-MM-DD')
                         : lead_in_date
                     "
                     label="참여 시작 날짜"
@@ -234,9 +232,9 @@
                     v-if="$route.query.flag == 1"
                     :value="
                       lead_out_date.length <= 0
-                        ? $moment($route.query.leader.prj_out_d8).format(
-                            'YYYY-MM-DD'
-                          )
+                        ? $moment(
+                            $store.getters.getUpdatingLeader.prj_out_d8
+                          ).format('YYYY-MM-DD')
                         : lead_out_date
                     "
                     label="참여 종료 날짜"
@@ -423,7 +421,7 @@
 
           <v-textarea
             v-if="$route.query.flag == 1"
-            v-model="$route.query.project.prj_content"
+            v-model="this.$store.getters.getUpdatingProject.prj_content"
             outlined
             label="프로젝트 내용"
             required
@@ -438,7 +436,7 @@
 
           <v-textarea
             v-if="$route.query.flag == 1"
-            v-model="$route.query.project.prj_remark"
+            v-model="this.$store.getters.getUpdatingProject.prj_remark"
             outlined
             label="특이사항"
             required
@@ -514,14 +512,16 @@ export default {
   },
   mounted() {
     this.getUserList;
-    this.setUpdatingProject;
+    // this.setUpdatingProject;
     if (!!this.$route.query.follower) {
-      this.inputs = this.$route.query.follower;
+      this.inputs = this.$store.getters.getUpdatingFollower;
       this.inputs.forEach((input) => {
         input.prj_in_d8 = this.$moment(input.prj_in_d8).format("YYYY-MM-DD");
         input.prj_out_d8 = this.$moment(input.prj_out_d8).format("YYYY-MM-DD");
       });
-      this.$store.commit("setUpdatingProject", this.$route.query.project);
+      // console.log(this.$route.query.project);
+      // this.$store.commit("setUpdatingProject", this.$route.query.project);
+      // console.log(this.$store.getters.getUpdatingProject);
     }
   },
   computed: {
@@ -536,6 +536,13 @@ export default {
           console.log(e);
         });
     },
+    // setUpdatingProject() {
+    //   if (this.$route.query.flag == 1) {
+    //     this.$store.commit("setUpdatingProject", this.$route.query.project);
+    //   } else {
+    //   }
+    //   console.log(this.$store.getters.getUpdatingProject);
+    // },
   },
   methods: {
     prjWrite() {

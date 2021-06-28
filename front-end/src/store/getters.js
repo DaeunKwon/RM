@@ -27,6 +27,18 @@ export default {
     // 업무 일지 목록
     getReportList(state) {
         return state.userReportList;
-    }
+    },
+
+    getUpdatingProject(state) {
+        return state.updatingProject;
+    },
+
+    getUpdatingLeader(state) {
+        return state.updatingLeader;
+    },
+
+    getUpdatingFollower(state) {
+        return state.updatingFollower;
+    },
 
 }
