@@ -540,40 +540,63 @@ export default {
   methods: {
     prjWrite() {
       if (this.$route.query.flag == 0) {
-        const project = new FormData();
-        project.append("title", this.title);
-        project.append("cond", this.cond);
-        project.append("start_date", this.start_date);
-        project.append("end_date", this.end_date);
-        project.append("writer", this.$store.getters.getCurrentUser.email);
-        project.append("mod_writer", this.$store.getters.getCurrentUser.email);
-        project.append("content", this.content);
-        project.append("remark", this.remark);
+        if (
+          this.title == "" ||
+          this.cond == "" ||
+          this.start_date == "" ||
+          this.end_date == "" ||
+          this.writer == "" ||
+          this.mod_writer == "" ||
+          this.content == "" ||
+          this.leader.email == "" ||
+          this.lead_in_date == "" ||
+          this.lead_out_date ||
+          this.inputs.follower.email == "" ||
+          this.inputs.in_date == "" ||
+          this.inputs.out_date == ""
+        ) {
+          alert("빈 칸을 작성해주세요.");
+        } else {
+          const project = new FormData();
+          project.append("title", this.title);
+          project.append("cond", this.cond);
+          project.append("start_date", this.start_date);
+          project.append("end_date", this.end_date);
+          project.append("writer", this.$store.getters.getCurrentUser.email);
+          project.append(
+            "mod_writer",
+            this.$store.getters.getCurrentUser.email
+          );
+          project.append("content", this.content);
+          project.append("remark", this.remark);
 
-        this.$axios.post("/api/project/write", project).then((res) => {
-          const leader = new FormData();
-          leader.append("email", this.leader.email);
-          leader.append("prj_in_d8", this.lead_in_date);
-          leader.append("prj_out_d8", this.lead_out_date);
-          leader.append("prj_no", res.data);
-          leader.append("flag", this.$route.query.flag);
+          this.$axios.post("/api/project/write", project).then((res) => {
+            const leader = new FormData();
+            leader.append("email", this.leader.email);
+            leader.append("prj_in_d8", this.lead_in_date);
+            leader.append("prj_out_d8", this.lead_out_date);
+            leader.append("prj_no", res.data);
+            leader.append("flag", this.$route.query.flag);
 
-          this.$axios.post("/api/project/in/leader", leader);
+            this.$axios.post("/api/project/in/leader", leader);
 
-          const follower = new FormData();
-          for (let i = 0; i < this.inputs.length; i++) {
-            follower.append("email", this.inputs[i].follower.email);
-            follower.append("prj_in_d8", this.inputs[i].in_date);
-            follower.append("prj_out_d8", this.inputs[i].out_date);
-            follower.append("prj_no", res.data);
-            follower.append("flag", this.$route.query.flag);
-          }
+            const follower = new FormData();
+            for (let i = 0; i < this.inputs.length; i++) {
+              follower.append("email", this.inputs[i].follower.email);
+              follower.append("prj_in_d8", this.inputs[i].in_date);
+              follower.append("prj_out_d8", this.inputs[i].out_date);
+              follower.append("prj_no", res.data);
+              follower.append("flag", this.$route.query.flag);
+            }
 
-          this.$axios.post("/api/project/in/follower", follower).then((res) => {
-            alert("프로젝트가 등록되었습니다.");
-            this.$router.push("/main");
+            this.$axios
+              .post("/api/project/in/follower", follower)
+              .then((res) => {
+                alert("프로젝트가 등록되었습니다.");
+                this.$router.push("/main");
+              });
           });
-        });
+        }
       } else {
         const project = new FormData();
         project.append("prj_no", this.$route.query.project.prj_no);

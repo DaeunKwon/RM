@@ -323,7 +323,7 @@
               <v-btn color="blue darken-1" text @click="reportDialog = false">
                 닫기
               </v-btn>
-              <v-btn color="blue darken-1" text @click="saveReport">
+              <v-btn color="blue darken-1" text @click="saveReport(inputs)">
                 저장
               </v-btn>
             </v-card-actions>
@@ -698,35 +698,43 @@ export default {
     },
     saveReport() {
       //로그인한 유저의 프로젝트 참여 번호도 보내야 함
-      const report = new FormData();
-      report.append("prj_no", this.selectedProject.prj_no);
-      report.append("rpt_writer", this.selectedProject.prj_in_no);
-      report.append("rpt_mod_writer", this.selectedProject.prj_in_no);
+      if (
+        this.inputs.start_time == null ||
+        this.inputs.end_time == null ||
+        this.inputs.content == ""
+      ) {
+        alert("업무 일지 내용을 작성해주세요.");
+      } else {
+        const report = new FormData();
+        report.append("prj_no", this.selectedProject.prj_no);
+        report.append("rpt_writer", this.selectedProject.prj_in_no);
+        report.append("rpt_mod_writer", this.selectedProject.prj_in_no);
+        //상세 내용 없으면 저장시 오류
+        this.$axios.post("/api/report/write", report).then((res) => {
+          const reportDetail = new FormData();
+          for (let i = 0; i < this.inputs.length; i++) {
+            reportDetail.append(
+              "start_time",
+              this.today + " " + this.inputs[i].start_time
+            );
+            reportDetail.append(
+              "end_time",
+              this.today + " " + this.inputs[i].end_time
+            );
+            reportDetail.append("content", this.inputs[i].content);
+            reportDetail.append("rpt_no", res.data);
+          }
+          reportDetail.append("flag", 0);
 
-      this.$axios.post("/api/report/write", report).then((res) => {
-        const reportDetail = new FormData();
-        for (let i = 0; i < this.inputs.length; i++) {
-          reportDetail.append(
-            "start_time",
-            this.today + " " + this.inputs[i].start_time
-          );
-          reportDetail.append(
-            "end_time",
-            this.today + " " + this.inputs[i].end_time
-          );
-          reportDetail.append("content", this.inputs[i].content);
-          reportDetail.append("rpt_no", res.data);
-        }
-        reportDetail.append("flag", 0);
-
-        this.$axios
-          .post("/api/report/write/detail", reportDetail)
-          .then((res) => {
-            alert("업무 일지가 등록되었습니다.");
-            this.reportDialog = false;
-            this.$router.push("/rptList");
-          });
-      });
+          this.$axios
+            .post("/api/report/write/detail", reportDetail)
+            .then((res) => {
+              alert("업무 일지가 등록되었습니다.");
+              this.reportDialog = false;
+              this.$router.push("/rptList");
+            });
+        });
+      }
     },
     openDeleteDialog(project) {
       this.deleteDialog = true;
