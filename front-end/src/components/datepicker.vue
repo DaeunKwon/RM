@@ -5,14 +5,14 @@
         ref="menu"
         v-model="menu"
         :close-on-content-click="false"
-        :return-value.sync="today"
+        :return-value.sync="date"
         transition="scale-transition"
         offset-y
         min-width="auto"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
-            v-model="today"
+            v-model="date"
             prepend-icon="mdi-calendar"
             readonly
             v-bind="attrs"
