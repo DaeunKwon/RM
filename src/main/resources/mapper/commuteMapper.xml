@@ -76,8 +76,8 @@
         ]]>
 
     </select>
-    <select id="prjpeople" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-         SELECT count(*) FROM TBL_PROJECT_IN tpi WHERE PRJ_NO = #{prj_no} AND sysdate BETWEEN tpi.PRJ_IN_D8  AND tpi.PRJ_OUT_D8 
+    <select id="prjpeople" parameterType="com.example.demo.domain.ComVO" resultType="java.lang.Integer">
+         SELECT count(*) FROM TBL_PROJECT_IN tpi WHERE PRJ_NO = #{prj_no} AND TO_DATE(#{com_d8}) BETWEEN tpi.PRJ_IN_D8  AND tpi.PRJ_OUT_D8 
     </select>
 
     <select id="ranklist" parameterType="com.example.demo.domain.ComVO" resultType="com.example.demo.domain.ComVO">
@@ -91,17 +91,21 @@
     <select id="monthlist" parameterType="com.example.demo.domain.ComVO" resultType="com.example.demo.domain.ComVO">
         <![CDATA[
         SELECT L.monthC, L.monthS, tm.name, L.prj_no FROM TBL_MEMBER tm join
-    (SELECT tpi.email email , com.pin , com.monthC monthC, com.monthS monthS, tpi.PRJ_NO prj_no
-    FROM TBL_PROJECT_IN tpi 
-   join (SELECT count(TC.COM_d8) monthC ,sum(TC.COM_total) monthS ,tc.prj_in_no pin 
-      FROM 
-     (SELECT TO_CHAR (FIRST_DAY + LEVEL - 1, 'YYYY-MM-DD') day FROM (SELECT TRUNC(TO_DATE(#{com_d8}), 'MM') FIRST_DAY FROM DUAL) CONNECT BY FIRST_DAY + LEVEL - 1 <= TRUNC(LAST_DAY(TO_DATE(#{com_d8})))) DA  , 
-     (SELECT COM_D8, COM_TOTAL, PRJ_IN_NO FROM tbl_commute) TC  WHERE DA.DAY = TC.COM_D8(+) group BY tc.prj_in_no) com ON tpi.PRJ_IN_NO = com.pin) L ON L.email = tm.email WHERE L.prj_no=#{prj_no} ORDER BY monthC desc,monthS desc
-     ]]>
+        (SELECT tpi.email email , com.pin , com.monthC monthC, com.monthS monthS, tpi.PRJ_NO prj_no
+        FROM TBL_PROJECT_IN tpi 
+        join (SELECT count(TC.COM_d8) monthC ,sum(TC.COM_total) monthS ,tc.prj_in_no pin 
+        FROM 
+        (SELECT TO_CHAR (FIRST_DAY + LEVEL - 1, 'YYYY-MM-DD') day 
+        FROM (SELECT TRUNC(TO_DATE(#{com_d8}), 'MM') FIRST_DAY FROM DUAL) 
+        CONNECT BY FIRST_DAY + LEVEL - 1 <= TRUNC(LAST_DAY(TO_DATE(#{com_d8})))) DA  , 
+        (SELECT COM_D8, COM_TOTAL, PRJ_IN_NO FROM tbl_commute) TC  
+        WHERE DA.DAY = TC.COM_D8(+) group BY tc.prj_in_no) com ON tpi.PRJ_IN_NO = com.pin)
+        L ON L.email = tm.email WHERE L.prj_no=#{prj_no} ORDER BY monthC desc,monthS desc
+        ]]>
     </select>
     <select id="rptCheck" parameterType="com.example.demo.domain.ComVO" resultType="com.example.demo.domain.ComVO">
-  SELECT tr.rpt_no FROM tbl_report tr
-  WHERE prj_no=#{prj_no} AND RPT_WRITER = (SELECT PRJ_IN_NO FROM TBL_PROJECT_IN tpi JOIN (SELECT email FROM TBL_MEMBER)tm ON tm.EMAIL =tpi.EMAIL WHERE tm.EMAIL = #{email}AND  tpi.PRJ_NO =#{prj_no}) and TO_CHAR(RPT_WRITE_D8, 'YYYY-MM-DD') =#{com_d8}
+        SELECT tr.rpt_no FROM tbl_report tr
+        WHERE prj_no=#{prj_no} AND RPT_WRITER = (SELECT PRJ_IN_NO FROM TBL_PROJECT_IN tpi JOIN (SELECT email FROM TBL_MEMBER)tm ON tm.EMAIL =tpi.EMAIL WHERE tm.EMAIL = #{email}AND  tpi.PRJ_NO =#{prj_no}) and TO_CHAR(RPT_WRITE_D8, 'YYYY-MM-DD') =#{com_d8}
     </select>
     <select id="monthNamelist" parameterType="com.example.demo.domain.ComVO" resultType="com.example.demo.domain.ComVO">
         <![CDATA[

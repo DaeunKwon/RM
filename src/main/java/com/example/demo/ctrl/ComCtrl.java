@@ -34,60 +34,45 @@ public class ComCtrl {
 
     @GetMapping(value = "/com_main")
     public String com_main(Model model) {
-        log.info(">>>>>>com_main");
         return "index.html";
 
     }
 
     @GetMapping(value = "/com_detail")
     public String com_detail(Model model) {
-        log.info(">>>>>>com_detail");
         return "index.html";
 
     }
 
     @PostMapping(value = "/gotoWork", produces = MediaType.APPLICATION_JSON_VALUE)
     public void gotoWork(@RequestBody ComVO cvo) {
-        log.info("<<<<<<<<<<<<< ComCtrl 진입");
-
-        log.info(">>>>>>>>>>>>> cvo.getCom_d8: " + cvo.getCom_d8());
-        log.info(">>>>>>>>>>>>> cvo.getPrj_no: " + cvo.getPrj_no());
         comservice.gotoWork(cvo);
 
     }
 
     @PostMapping(value = "/checkWork", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean checkWork(@RequestBody ComVO cvo) {
-        log.info(">>>>>>>>>>>>>>>checkWork cvo.getCom_d8: " + cvo.getCom_d8());
         return comservice.checkWork(cvo);
     }
 
     @PostMapping(value = "/checkoffWork")
     public boolean checkoffWork(@RequestBody ComVO cvo) {
-        log.info(">>>>>>>>>>>>>>>checkoffWork cvo.getCom_d8: " + cvo.getCom_d8());
         return comservice.checkoffWork(cvo);
     }
 
     @PostMapping(value = "/offWork", produces = MediaType.APPLICATION_JSON_VALUE)
     public void offWork(@RequestBody ComVO cvo) {
-        log.info("<<<<<<<<<<<<< ComCtrl 진입");
-
-        log.info(">>>>>>>>>>>>> cvo.getCom_d8: " + cvo.getCom_d8());
         comservice.offWork(cvo);
     }
 
     @PostMapping(value = "/weekTime", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ComVO> weekTime(@RequestBody ComVO cvo) {
-        log.info("<<<<<<<<<<<<< ComCtrl 진입");
-        log.info(">>>>>>>>>>>>> cvo.getCom_d8: " + cvo.getCom_d8());
         return comservice.weekTime(cvo);
     }
 
-    @GetMapping(value = "/prjpeople")
-    public int prjpeople(int prj_no) {
-        log.info("<<<<<<<<<< ComCtrl 진입");
-        log.info("<<<<<<<<<< prj_no = " + prj_no);
-        return comservice.prjpeople(prj_no);
+    @PostMapping(value = "/prjpeople")
+    public int prjpeople(@RequestBody ComVO cvo) {
+        return comservice.prjpeople(cvo);
     }
 
     @GetMapping(value = "/rank")
@@ -95,37 +80,31 @@ public class ComCtrl {
         ComVO cvo = new ComVO();
         cvo.setCom_d8(req.getParameter("com_d8"));
         cvo.setPrj_no(Integer.parseInt(req.getParameter("prj_no")));
-        log.info("<<<<<<<<<<<<ComCTRL 진입");
         return comservice.ranklist(cvo);
     }
 
     @GetMapping(value = "/gotocount")
     public int gotocount(ComVO cvo) {
-        log.info("<<<<<<<<<<<<ComCTRL 진입");
         return comservice.gotocount(cvo);
     }
 
     @PostMapping(value = "/monthlist", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ComVO> monthlist(@RequestBody ComVO cvo) {
-        log.info("<<<<<<<<<<<<month ComCTRL 진입");
         return comservice.monthlist(cvo);
     }
 
     @PostMapping(value = "/rptCheck", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean rptCheck(@RequestBody ComVO cvo) {
-        log.info("<<<<<<<<<<<<rptCheck ComCTRL 진입");
         return comservice.rptCheck(cvo);
     }
 
     @GetMapping(value = "/monthNamelist")
     public List<ComVO> monthNamelist(ComVO cvo) {
-        log.info("<<<<<<<<<<<<monthNamelist ComCTRL 진입");
         return comservice.monthNamelist(cvo);
     }
 
     @PostMapping(value = "/worktime", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ComVO> worktime(@RequestBody ComVO cvo) {
-        log.info("<<<<<<<<<<<<worktime ComCTRL 진입");
         return comservice.worktime(cvo);
     }
 }

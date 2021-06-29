@@ -15,7 +15,7 @@ public interface ComDAO {
 
     public List<ComVO> weekTime(ComVO cvo);
 
-    public int prjpeople(int prj_no);
+    public int prjpeople(ComVO cvo);
 
     public List<ComVO> ranklist(ComVO cvo);
 

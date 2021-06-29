@@ -40,8 +40,8 @@ public class ComServiceImp implements ComService {
     }
 
     @Override
-    public int prjpeople(int prj_no) {
-        return comdao.prjpeople(prj_no);
+    public int prjpeople(ComVO cvo) {
+        return comdao.prjpeople(cvo);
     }
 
     @Override
