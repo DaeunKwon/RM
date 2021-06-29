@@ -17,7 +17,7 @@
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search"
+            label="검색할 내용을 입력하세요."
             single-line
             hide-details
           ></v-text-field>

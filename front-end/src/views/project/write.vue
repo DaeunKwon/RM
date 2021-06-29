@@ -272,14 +272,13 @@
               <v-date-picker v-model="openCalendarDate" full-width>
                 <v-spacer></v-spacer>
                 <v-btn text color="primary" @click="openCalendarFlag = false"
-                  >Cancel</v-btn
+                  >취소</v-btn
                 >
                 <v-btn text color="primary" @click="saveCalendarDate()"
-                  >OK</v-btn
+                  >저장</v-btn
                 >
               </v-date-picker>
             </v-dialog>
-            {{ inputs }}
             <v-row v-for="(input, k) in inputs" :key="k">
               <v-col cols="12">
                 <v-select

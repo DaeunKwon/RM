@@ -239,7 +239,7 @@
               <v-row>
                 <v-col cols="12" sm="6">
                   <v-text-field
-                    label="Project title"
+                    label="프로젝트명"
                     required
                     readonly
                     outlined
@@ -249,7 +249,7 @@
                 <v-col cols="12" sm="6">
                   <v-text-field
                     v-model="today"
-                    label="Date"
+                    label="작성일자"
                     required
                     readonly
                     outlined
