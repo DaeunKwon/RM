@@ -77,7 +77,7 @@
 
     </select>
     <select id="prjpeople" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-         SELECT count(*) FROM TBL_PROJECT_IN tpi WHERE prj_no = #{prj_no}
+         SELECT count(*) FROM TBL_PROJECT_IN tpi WHERE PRJ_NO = #{prj_no} AND sysdate BETWEEN tpi.PRJ_IN_D8  AND tpi.PRJ_OUT_D8 
     </select>
 
     <select id="ranklist" parameterType="com.example.demo.domain.ComVO" resultType="com.example.demo.domain.ComVO">

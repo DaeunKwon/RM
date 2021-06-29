@@ -90,14 +90,14 @@
             <v-row>
               <v-col>
                 <Datepicker2
-                  style="height: 300px; margin-top: 10px"
+                  style="height: 300px; margin-top: 0px"
                   :date="this.date"
                 />
               </v-col>
               <v-col style="margin-top: -50px">
                 <div style="margin-top: 50px">
                   <ul style="list-style: none">
-                    <li align="left">
+                    <li class="textF" align="left">
                       현재 프로젝트
                       <v-text-field
                         style="width: 300px"
@@ -108,7 +108,7 @@
                       </v-text-field>
                     </li>
 
-                    <li align="left">
+                    <li class="textF" align="left">
                       현재시간
                       <v-text-field
                         style="width: 300px"
@@ -119,7 +119,7 @@
                       </v-text-field>
                     </li>
 
-                    <li align="left">
+                    <li class="textF" align="left">
                       근무상태
 
                       <v-text-field
@@ -129,7 +129,7 @@
                         readonly
                       ></v-text-field>
                     </li>
-                    <li align="left">근무시간</li>
+                    <li class="textF" align="left">근무시간</li>
                     <v-text-field
                       style="width: 300px"
                       v-model="worktime"
@@ -142,7 +142,7 @@
             </v-row>
           </li>
 
-          <li style="margin-top: -30px"><Mydatatable /></li>
+          <li style="margin-top: -20px"><Mydatatable /></li>
         </ul>
       </v-layout>
     </v-container>
@@ -176,8 +176,6 @@ export default {
       start: "",
       end: "",
       prj_title: this.$store.state.userINProject.prj_title,
-
-      // test
     };
   },
 
@@ -197,7 +195,7 @@ export default {
       .post(
         "http://localhost:8090/api/commute/checkoffWork",
         {
-          com_d8: nowdate,
+          com_d8: new Date().toISOString().substr(0, 10),
           prj_no: this.$store.state.userINProject.prj_no,
           email: this.$store.getters.getCurrentUser.email,
         },
@@ -213,6 +211,7 @@ export default {
         if (res.data) {
           this.test2 = true;
           this.work = "퇴근";
+          console.log(this.work);
           // 미퇴근
         } else {
         }
@@ -286,7 +285,7 @@ export default {
         .post(
           "http://localhost:8090/api/commute/gotoWork",
           {
-            com_d8: nowdate,
+            com_d8: new Date().toISOString().substr(0, 10),
             prj_no: this.$store.state.userINProject.prj_no,
             email: this.$store.getters.getCurrentUser.email,
           },
@@ -297,10 +296,9 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res.data);
           this.test = true;
-          this.test2 = false;
-          this.work = "근무중";
+          this.test2 = true;
+          console.log(res.data);
         });
     },
 
@@ -323,8 +321,6 @@ export default {
         )
         .then((res) => {
           console.log(res.data);
-          this.test2 = true;
-          this.work = "퇴근";
         });
     },
     checkwork() {
@@ -332,7 +328,7 @@ export default {
         .post(
           "http://localhost:8090/api/commute/checkWork",
           {
-            com_d8: nowdate,
+            com_d8: new Date().toISOString().substr(0, 10),
             prj_no: this.$store.state.userINProject.prj_no,
             email: this.$store.getters.getCurrentUser.email,
           },
@@ -344,17 +340,19 @@ export default {
         )
         .then((res) => {
           console.log(res.data);
-          console.log(this.$store.getters.getCurrentUser.email);
+
           // 출근
           if (res.data) {
             this.test = true;
-            this.test2 = false;
+            this.test2 = true;
             this.work = "근무중";
+            console.log(this.work);
             // 미출근
           } else {
             this.test = false;
             this.test2 = true;
             this.work = "출근전";
+            console.log(this.work);
           }
         });
     },
@@ -363,7 +361,7 @@ export default {
         .post(
           "http://localhost:8090/api/commute/rptCheck",
           {
-            com_d8: nowdate,
+            com_d8: new Date().toISOString().substr(0, 10),
             prj_no: this.$store.state.userINProject.prj_no,
             email: this.$store.getters.getCurrentUser.email,
           },
@@ -394,6 +392,9 @@ export default {
 }
 .v-progress-linear {
   width: 300px;
+}
+.textF {
+  margin-top: -5px;
 }
 </style>
 
