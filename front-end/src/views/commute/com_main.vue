@@ -145,13 +145,11 @@ export default {
       return this.$store.state.userINProject.prj_title;
     },
     peoplecount() {
-      console.log(this.$route.query.project.prj_no);
       this.$axios
         .get("/api/commute/prjpeople", {
           params: { prj_no: this.$store.state.userINProject.prj_no },
         })
         .then((res) => {
-          console.log(res.data);
           this.pcount = res.data;
         });
       return this.pcount;
@@ -165,7 +163,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data);
           this.ranklist = res.data;
         });
     },
@@ -181,7 +178,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data);
           this.gotocount = res.data;
         });
       return this.gotocount;
@@ -201,7 +197,6 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res.data);
           this.monthlist = res.data;
         });
     },

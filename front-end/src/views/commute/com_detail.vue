@@ -206,12 +206,12 @@ export default {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        
         //퇴근
         if (res.data) {
           this.test2 = true;
           this.work = "퇴근";
-          console.log(this.work);
+        
           // 미퇴근
         } else {
         }
@@ -298,7 +298,7 @@ export default {
         .then((res) => {
           this.test = true;
           this.test2 = true;
-          console.log(res.data);
+       
         });
     },
 
@@ -320,7 +320,7 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res.data);
+    
         });
     },
     checkwork() {
@@ -339,20 +339,20 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res.data);
+      
 
           // 출근
           if (res.data) {
             this.test = true;
             this.test2 = true;
             this.work = "근무중";
-            console.log(this.work);
+        
             // 미출근
           } else {
             this.test = false;
             this.test2 = true;
             this.work = "출근전";
-            console.log(this.work);
+         
           }
         });
     },
