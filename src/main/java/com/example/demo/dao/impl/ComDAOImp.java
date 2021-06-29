@@ -24,13 +24,11 @@ public class ComDAOImp implements ComDAO {
 
     @Override
     public void gotoWork(ComVO cvo) {
-        log.info(">>>>>>>>>>>>>>comdao gotoWork 진입");
         sql.insert(ns + ".gotoWork", cvo);
     }
 
     @Override
     public void offWork(ComVO cvo) {
-        log.info(">>>>>>>>>>>>>>comdao offWork 진입");
         sql.update(ns + ".offWork", cvo);
     }
 
@@ -46,22 +44,16 @@ public class ComDAOImp implements ComDAO {
 
     @Override
     public List<ComVO> weekTime(ComVO cvo) {
-        log.info(">>>>>>>>>>>>>>comdao weekTime 진입");
-        log.info(cvo.getCom_d8());
         return sql.selectList(ns + ".weekTime", cvo);
     }
 
     @Override
-    public int prjpeople(int prj_no) {
-        log.info(">>>>>>>>>>>>>> comdao prjpeople 진입");
-        log.info(">>>>>>>>>>>>>> prj_no=" + prj_no);
-        return sql.selectOne(ns + ".prjpeople", prj_no);
+    public int prjpeople(ComVO cvo) {
+        return sql.selectOne(ns + ".prjpeople", cvo);
     }
 
     @Override
     public List<ComVO> ranklist(ComVO cvo) {
-        log.info(">>>>>>>>>>>>> comdao ranklist 진입");
-        log.info(">>>>>>>>>>>>> com_d8=" + cvo);
         return sql.selectList(ns + ".ranklist", cvo);
     }
 

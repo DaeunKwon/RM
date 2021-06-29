@@ -29,7 +29,7 @@
                 >출근<br />{{ getgotocount }}명</v-avatar
               >
               <v-avatar style="margin: 20px" color="grey" rounded size="93"
-                >미출근<br />{{ peoplecount - getgotocount }}명</v-avatar
+                >미출근<br />{{ Notwork }}명</v-avatar
               >
             </v-layout>
             <v-col>
@@ -126,6 +126,7 @@ export default {
     ranklist: [],
     gotocount: "",
     monthlist: [],
+    nowork: "",
   }),
 
   components: {
@@ -138,6 +139,13 @@ export default {
     this.$store.commit("setComdate", new Date().toISOString().substr(0, 10));
   },
   computed: {
+    Notwork() {
+      this.nowork = this.pcount - this.gotocount;
+      if (this.nowork < 0) {
+        this.nowork = 0;
+      }
+      return this.nowork;
+    },
     getMonth() {
       return this.$store.getters.getDate.substring(5, 7);
     },
@@ -146,9 +154,19 @@ export default {
     },
     peoplecount() {
       this.$axios
-        .get("/api/commute/prjpeople", {
-          params: { prj_no: this.$store.state.userINProject.prj_no },
-        })
+        .post(
+          "/api/commute/prjpeople",
+          {
+            prj_no: this.$store.state.userINProject.prj_no,
+            com_d8: this.$store.getters.getDate,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+
         .then((res) => {
           this.pcount = res.data;
         });
