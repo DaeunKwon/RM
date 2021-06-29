@@ -351,7 +351,7 @@ export default {
             selectedDateReport.push(this.$store.getters.getUserReport[i]);
           }
         }
-      }, 400);
+      }, 500);
       this.selectedDateReport = selectedDateReport;
     }
   },
