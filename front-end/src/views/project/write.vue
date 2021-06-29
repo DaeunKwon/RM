@@ -11,7 +11,7 @@
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
             v-if="$route.query.flag == 1"
-            v-model="this.$store.getters.getUpdatingProject.prj_title"
+            v-model="$route.query.project.prj_title"
             label="프로젝트명"
             required
             outlined
@@ -26,7 +26,7 @@
 
           <v-select
             v-if="$route.query.flag == 1"
-            v-model="this.$store.getters.getUpdatingProject.cond"
+            v-model="$route.query.project.cond"
             :items="cond_items"
             label="진행상황"
             required
@@ -57,9 +57,9 @@
                     v-if="$route.query.flag == 1"
                     :value="
                       start_date.length <= 0
-                        ? $moment(
-                            $store.getters.getUpdatingProject.start_d8
-                          ).format('YYYY-MM-DD')
+                        ? $moment($route.query.project.start_d8).format(
+                            'YYYY-MM-DD'
+                          )
                         : start_date
                     "
                     label="프로젝트 시작 날짜"
@@ -106,9 +106,9 @@
                     v-if="$route.query.flag == 1"
                     :value="
                       end_date.length <= 0
-                        ? $moment(
-                            $store.getters.getUpdatingProject.end_d8
-                          ).format('YYYY-MM-DD')
+                        ? $moment($route.query.project.end_d8).format(
+                            'YYYY-MM-DD'
+                          )
                         : end_date
                     "
                     label="프로젝트 종료 날짜"
@@ -143,7 +143,7 @@
 
           <v-select
             v-if="$route.query.flag == 1"
-            v-model="this.$store.getters.getUpdatingLeader"
+            v-model="$route.query.leader.email"
             outlined
             :hint="`${leader.name}, ${leader.email}`"
             :items="userList"
@@ -183,9 +183,9 @@
                     v-if="$route.query.flag == 1"
                     :value="
                       lead_in_date.length <= 0
-                        ? $moment(
-                            $store.getters.getUpdatingLeader.prj_in_d8
-                          ).format('YYYY-MM-DD')
+                        ? $moment($route.query.leader.prj_in_d8).format(
+                            'YYYY-MM-DD'
+                          )
                         : lead_in_date
                     "
                     label="참여 시작 날짜"
@@ -232,9 +232,9 @@
                     v-if="$route.query.flag == 1"
                     :value="
                       lead_out_date.length <= 0
-                        ? $moment(
-                            $store.getters.getUpdatingLeader.prj_out_d8
-                          ).format('YYYY-MM-DD')
+                        ? $moment($route.query.leader.prj_out_d8).format(
+                            'YYYY-MM-DD'
+                          )
                         : lead_out_date
                     "
                     label="참여 종료 날짜"
@@ -279,7 +279,7 @@
                 >
               </v-date-picker>
             </v-dialog>
-
+            {{ inputs }}
             <v-row v-for="(input, k) in inputs" :key="k">
               <v-col cols="12">
                 <v-select
@@ -353,7 +353,6 @@
                 >
               </v-date-picker>
             </v-dialog>
-            {{ inputs }}
             <v-row v-for="(input, k) in inputs" :key="k">
               <v-col cols="12">
                 <v-select
@@ -421,7 +420,7 @@
 
           <v-textarea
             v-if="$route.query.flag == 1"
-            v-model="this.$store.getters.getUpdatingProject.prj_content"
+            v-model="$route.query.project.prj_content"
             outlined
             label="프로젝트 내용"
             required
@@ -436,7 +435,7 @@
 
           <v-textarea
             v-if="$route.query.flag == 1"
-            v-model="this.$store.getters.getUpdatingProject.prj_remark"
+            v-model="$route.query.project.prj_remark"
             outlined
             label="특이사항"
             required
@@ -514,7 +513,7 @@ export default {
     this.getUserList;
     // this.setUpdatingProject;
     if (!!this.$route.query.follower) {
-      this.inputs = this.$store.getters.getUpdatingFollower;
+      this.inputs = this.$route.query.follower;
       this.inputs.forEach((input) => {
         input.prj_in_d8 = this.$moment(input.prj_in_d8).format("YYYY-MM-DD");
         input.prj_out_d8 = this.$moment(input.prj_out_d8).format("YYYY-MM-DD");
@@ -558,55 +557,68 @@ export default {
           this.leader.email !== "" &&
           this.lead_in_date !== "" &&
           this.lead_out_date !== "" &&
-          this.inputs.length > 0 &&
-          this.inputs.follower.length > 0 &&
-          this.inputs.in_date !== null &&
-          this.inputs.out_date !== null
+          this.inputs.length > 0
         ) {
-          console.log("확인");
-          const project = new FormData();
-          project.append("title", this.title);
-          project.append("cond", this.cond);
-          project.append("start_date", this.start_date);
-          project.append("end_date", this.end_date);
-          project.append("writer", this.$store.getters.getCurrentUser.email);
-          project.append(
-            "mod_writer",
-            this.$store.getters.getCurrentUser.email
-          );
-          project.append("content", this.content);
-          project.append("remark", this.remark);
-
-          this.$axios.post("/api/project/write", project).then((res) => {
-            const leader = new FormData();
-            leader.append("email", this.leader.email);
-            leader.append("prj_in_d8", this.lead_in_date);
-            leader.append("prj_out_d8", this.lead_out_date);
-            leader.append("prj_no", res.data);
-            leader.append("flag", this.$route.query.flag);
-
-            this.$axios.post("/api/project/in/leader", leader);
-
-            const follower = new FormData();
-            for (let i = 0; i < this.inputs.length; i++) {
-              follower.append("email", this.inputs[i].follower.email);
-              follower.append("prj_in_d8", this.inputs[i].in_date);
-              follower.append("prj_out_d8", this.inputs[i].out_date);
-              follower.append("prj_no", res.data);
-              follower.append("flag", this.$route.query.flag);
+          var nullflag = 0;
+          for (let i = 0; i < this.inputs.length; i++) {
+            if (
+              this.inputs[i].in_date == null ||
+              this.inputs[i].out_date == null
+            ) {
+              alert("빈 칸을 작성해주세요.");
+            } else {
+              nullflag++;
             }
+          }
 
-            this.$axios
-              .post("/api/project/in/follower", follower)
-              .then((res) => {
-                alert("프로젝트가 등록되었습니다.");
-                this.$router.push("/main");
-              });
-          });
+          if (nullflag == this.inputs.length) {
+            const project = new FormData();
+            project.append("title", this.title);
+            project.append("cond", this.cond);
+            project.append("start_date", this.start_date);
+            project.append("end_date", this.end_date);
+            project.append("writer", this.$store.getters.getCurrentUser.email);
+            project.append(
+              "mod_writer",
+              this.$store.getters.getCurrentUser.email
+            );
+            project.append("content", this.content);
+            project.append("remark", this.remark);
+
+            this.$axios.post("/api/project/write", project).then((res) => {
+              const leader = new FormData();
+              leader.append("email", this.leader.email);
+              leader.append("prj_in_d8", this.lead_in_date);
+              leader.append("prj_out_d8", this.lead_out_date);
+              leader.append("prj_no", res.data);
+              leader.append("flag", this.$route.query.flag);
+
+              this.$axios.post("/api/project/in/leader", leader);
+
+              const follower = new FormData();
+              for (let i = 0; i < this.inputs.length; i++) {
+                follower.append("email", this.inputs[i].follower.email);
+                follower.append("prj_in_d8", this.inputs[i].in_date);
+                follower.append("prj_out_d8", this.inputs[i].out_date);
+                follower.append("prj_no", res.data);
+                follower.append("flag", this.$route.query.flag);
+              }
+
+              this.$axios
+                .post("/api/project/in/follower", follower)
+                .then((res) => {
+                  alert("프로젝트가 등록되었습니다.");
+                  this.$router.push("/main");
+                });
+            });
+          }
         } else {
           alert("빈 칸을 작성해주세요.");
         }
       } else {
+        // console.log(typeof this.title);
+        // console.log(this.title);
+        // console.log(this.$store.getters.getUpdatingProject.prj_title);
         const project = new FormData();
         project.append("prj_no", this.$route.query.project.prj_no);
         switch (true) {
@@ -713,6 +725,7 @@ export default {
           } else {
             follower.append("email", this.inputs[i].email);
           }
+          //follower.append("email", this.inputs[i].follower.email);
           follower.append("prj_in_d8", this.inputs[i].prj_in_d8);
           follower.append("prj_out_d8", this.inputs[i].prj_out_d8);
           follower.append("prj_no", this.$route.query.project.prj_no);
