@@ -163,7 +163,7 @@
                         color="secondary"
                         @click="selectedOpen = false"
                       >
-                        Cancel
+                        닫기
                       </v-btn>
                     </v-card-actions>
                   </v-card>
@@ -187,7 +187,7 @@
             <v-row>
               <v-col cols="12" sm="6">
                 <v-text-field
-                  label="Project title"
+                  label="프로젝트명"
                   required
                   readonly
                   outlined
@@ -197,7 +197,7 @@
               <v-col cols="12" sm="6">
                 <v-text-field
                   v-model="selectedReportDetail.write_d8"
-                  label="Date"
+                  label="작성일자"
                   required
                   readonly
                   outlined
@@ -361,6 +361,10 @@ export default {
       const report = new FormData();
       report.append("rpt_no", this.selectedReportDetail.rpt_no);
       report.append("rpt_mod_writer", this.selectedReportDetail.rpt_writer);
+
+      this.$axios.post("/api/report/update", report).then((res) => {
+        console.log("수정");
+      });
 
       const reportDetail = new FormData();
       for (let i = 0; i < this.inputs.length; i++) {
