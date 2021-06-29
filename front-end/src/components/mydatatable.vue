@@ -1,17 +1,26 @@
 <template>
   <div>
-    <v-simple-table>
+    <v-simple-table style="border: 1px solid black">
       <template v-slot:default>
-        <thead>
-          <tr>
-            <td class="text-left" v-for="item in getweeklist" :key="item.name">
+        <thead style="background-color: #e6e6fa">
+          <tr style="border: 1px solid black">
+            <td
+              style="border: 1px solid black"
+              class="text-left"
+              v-for="item in getweeklist"
+              :key="item.name"
+            >
               {{ item.day }}
             </td>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td v-for="item in getweeklist" :key="item.name">
+          <tr style="border: 1px solid black">
+            <td
+              style="border: 1px solid black"
+              v-for="item in getweeklist"
+              :key="item.name"
+            >
               {{ Math.floor(item.com_total / 60) }} 시간
               {{ item.com_total % 60 }} 분
             </td>
@@ -19,9 +28,9 @@
         </tbody>
       </template>
     </v-simple-table>
-    <div align="center" justify="center">
+    <div align="right" justify="center">
       <br />
-      이번주 총 근무시간 : {{ sumsum }} {{ getweekTime }}
+      일주일 근무시간 : {{ sumsum }} {{ getweekTime }}
     </div>
   </div>
 </template>

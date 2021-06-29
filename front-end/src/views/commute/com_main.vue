@@ -35,9 +35,9 @@
             <v-col>
               <v-row align="center" justify="center">
                 <template>
-                  <v-simple-table>
+                  <v-simple-table style="width: 350px">
                     <template v-slot:default>
-                      <thead>
+                      <thead style="background-color: #e6e6fa">
                         <tr>
                           <th class="text-center">순위{{ rank }}</th>
                           <th class="text-center">이름</th>
@@ -71,7 +71,7 @@
                 <template>
                   <v-simple-table style="width: 350px">
                     <template v-slot:default>
-                      <thead>
+                      <thead style="background-color: #e6e6fa">
                         <tr>
                           <th class="text-center">이름{{ month }}</th>
                           <th class="text-center">출근일수</th>
@@ -134,7 +134,9 @@ export default {
     Calendar,
     Datepicker,
   },
-  created() {},
+  created() {
+    this.$store.commit("setComdate", new Date().toISOString().substr(0, 10));
+  },
   computed: {
     getMonth() {
       return this.$store.getters.getDate.substring(5, 7);
@@ -143,13 +145,11 @@ export default {
       return this.$store.state.userINProject.prj_title;
     },
     peoplecount() {
-      console.log(this.$route.query.project.prj_no);
       this.$axios
         .get("/api/commute/prjpeople", {
           params: { prj_no: this.$store.state.userINProject.prj_no },
         })
         .then((res) => {
-          console.log(res.data);
           this.pcount = res.data;
         });
       return this.pcount;
@@ -163,7 +163,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data);
           this.ranklist = res.data;
         });
     },
@@ -179,7 +178,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data);
           this.gotocount = res.data;
         });
       return this.gotocount;
@@ -199,7 +197,6 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res.data);
           this.monthlist = res.data;
         });
     },

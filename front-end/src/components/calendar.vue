@@ -81,7 +81,7 @@
             </v-card-text>
             <v-card-actions>
               <v-btn text color="secondary" @click="selectedOpen = false">
-                Cancel
+                Cancel{{ datepick }}
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -117,23 +117,15 @@ export default {
       "orange",
       "grey darken-1",
     ],
-    names: [
-      "Meeting",
-      "Holiday",
-      "PTO",
-      "Travel",
-      "Event",
-      "Birthday",
-      "Conference",
-      "Party",
-    ],
+    names: [],
   }),
   mounted() {
     this.$refs.calendar.checkChange();
+    this.datepick();
   },
   computed: {
     datepick() {
-      return (this.focus = this.$store.getters.getDate);
+      this.focus = this.$store.getters.getDate;
     },
   },
   methods: {
@@ -182,7 +174,7 @@ export default {
         })
         .then((res) => {
           const rankList = [];
-          console.log(res.data);
+
           for (let i = 0; i < res.data.length; i++) {
             rankList.push(res.data[i]);
 
@@ -196,7 +188,7 @@ export default {
         })
         .then(() => {
           ///////// 달력 안 이름 css
-          console.log("aldjaslkdjasldj");
+
           document
             .querySelectorAll(
               ".v-calendar-monthly .v-calendar-weekly__week .v-event strong"
