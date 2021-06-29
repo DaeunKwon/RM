@@ -11,7 +11,10 @@
       <v-layout fluid grid-list-sm pa-15>
         <ul style="list-style: none">
           <li style="margin-bottom: 50px; margin-top: -70px">
-            <div align="right">
+            <div
+              v-if="$store.getters.getCurrentUser.authority !== 'ROLE_ROOT'"
+              align="right"
+            >
               <v-dialog v-model="dialog" persistent max-width="290">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -206,12 +209,11 @@ export default {
         }
       )
       .then((res) => {
-        
         //퇴근
         if (res.data) {
           this.test2 = true;
           this.work = "퇴근";
-        
+
           // 미퇴근
         } else {
         }
@@ -298,7 +300,6 @@ export default {
         .then((res) => {
           this.test = true;
           this.test2 = true;
-       
         });
     },
 
@@ -319,9 +320,7 @@ export default {
             },
           }
         )
-        .then((res) => {
-    
-        });
+        .then((res) => {});
     },
     checkwork() {
       this.$axios
@@ -339,20 +338,17 @@ export default {
           }
         )
         .then((res) => {
-      
-
           // 출근
           if (res.data) {
             this.test = true;
             this.test2 = true;
             this.work = "근무중";
-        
+
             // 미출근
           } else {
             this.test = false;
             this.test2 = true;
             this.work = "출근전";
-         
           }
         });
     },
