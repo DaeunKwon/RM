@@ -61,6 +61,7 @@ public class ProjectInDAOImp implements ProjectInDAO {
     public void updateFollower(List<ProjectInVO> projectInList, int num) {
         sql.delete(ns + ".deleteFollower", num);
         sql.insert(ns + ".addFollower", projectInList);
+        // sql.update(ns + ".updateFollower", projectInList);
     }
 
 }

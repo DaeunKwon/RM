@@ -78,11 +78,11 @@
     <update id="updateFollower" parameterType="java.util.List">
         <foreach collection="list" item="pINvo" index="index" separator=";" open="DECLARE BEGIN" close="; END;">
             update tbl_project_in
-            set email = #{email},
+            set email = #{pINvo.email},
             authority = 'ROLE_USER',
-            prj_in_d8 = #{prj_in_d8},
-            prj_out_d8 = #{prj_out_d8}
-            where prj_no = #{prj_no}
+            prj_in_d8 = #{pINvo.prj_in_d8},
+            prj_out_d8 = #{pINvo.prj_out_d8}
+            where prj_no = #{pINvo.prj_no}
         </foreach>
     </update>
     <delete id="deleteFollower" parameterType="Integer">
